@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="ListView.buttons">
+        <t t-jquery="button" t-operation="replace">
+            <t t-if="widget != undefined">
+                <button t-if="widget.modelName == 'sale.order.management'"
+                    class="btn btn-secondary invisible-button"
+                    type="button" style="display: none;">Invisible</button>
+                <button t-if="widget.modelName != 'sale.order.management'"
+                        class="btn btn-primary o_list_button_add" accesskey="c"
+                        type="button">Create</button>
+            </t>
+        </t>
+    </t>
+
+    <t t-extend="ImportView.import_button">
+        <t t-jquery="button.o_button_import" t-operation="replace">
+            <t t-if="widget !== undefined">
+                <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_import"
+                        type="button">Import</button>
+                <button t-if="widget.modelName != 'sale.order.management'"
+                        class="btn btn-secondary o_button_import"
+                        type="button">Import</button>
+            </t>
+        </t>
+    </t>
+</templates>

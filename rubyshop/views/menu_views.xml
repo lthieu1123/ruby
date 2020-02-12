@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- This Menu Item will appear in the Upper bar, that's why It needs NO parent or action -->
+        <menuitem id="sale_order_management_menu_root" name="Sale Order Management" sequence="1"/>
+            <!-- This Menu Item must have a parent and an action -->
+            <menuitem id="sale_order_management_menu_act"
+                        name="Sale Order"
+                        parent="sale_order_management_menu_root"
+                        action="sale_order_management_action"
+                        sequence="1"/>
+
+            <!-- Delivered -->
+            <menuitem id="set_order_to_delivered_act"
+                        name="Delivered Order"
+                        parent="sale_order_management_menu_root"
+                        action="set_order_to_delivered_action"
+                        sequence="2"/>
+            
+            <!-- Returned -->
+            <menuitem id="set_order_to_returned_act"
+                        name="Returned Order"
+                        parent="sale_order_management_menu_root"
+                        action="set_order_to_returned_action"
+                        sequence="3"/>
+            <!-- This Menu Item Must have a parent -->
+            <menuitem id="sale_order_menagement_shop_menu_act"
+                        name="Shop"
+                        parent="sale_order_management_menu_root"
+                        action="sale_order_management_shop_action"
+                        sequence="4"/>
+    </data>
+</odoo>
