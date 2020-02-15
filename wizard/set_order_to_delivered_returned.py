@@ -32,6 +32,22 @@ class SetOrderAsb(models.AbstractModel):
     delta = fields.Integer(string='Delta')
     tracking_code_not_found = fields.Integer('Number of Tracking Code Not Found', readonly=True, default=0)
 
+    @api.model
+    def find_order(self,args):
+        tracking_id = None
+        if self._name == 'set.order.to.delivered':
+            tracking_id = self.env['sale.order.management'].search([
+                ('tracking_code','=',args.get('order_number')),
+                ('state','=','pending')
+            ])
+        if self._name == 'set.order.to.returned':
+            tracking_id = self.env['sale.order.management'].search([
+                ('tracking_code','=',args.get('order_number')),
+                ('state','=','delivered')
+            ])
+        return True if len(tracking_id) else False
+
+
 class SetOrderToDelivered(models.TransientModel):
     _name = 'set.order.to.delivered'
     _inherit = ['set.order.abs']
