@@ -38,6 +38,7 @@ class Import(models.TransientModel):
                 ('code','=',file_name)
             ])
             if not len(shop_id):
+                result_ids.unlink()
                 return {
                     'messages': [{
                         'type': 'error',

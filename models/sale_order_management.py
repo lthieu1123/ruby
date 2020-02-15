@@ -93,4 +93,4 @@ class SaleOrderManagment(models.Model):
                                 ('returned','Returned'),
                                 ('done','Done')
                             ],string='State',default='pending')
-    shop_id = fields.Many2one('sale.order.management.shop','Shop Name')
+    shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
