@@ -151,7 +151,7 @@ class SetOrderToReturned(models.TransientModel):
     @api.multi
     def btn_apply(self):
         self.ensure_one()
-        res = self.tracking_code_ids.write({'state': 'returned'})
+        res = self.tracking_code_show.write({'state': 'returned'})
         context = self.env.context.copy()
         if res:
             order_number = self.tracking_code_show.mapped(lambda r: r.order_number)
