@@ -20,6 +20,20 @@ class ShopAnnounce(models.TransientModel):
         return self.env.context.get('default_message', False)
 
     name = fields.Char('name', default=_get_default_message)
+    
+    @api.multi
+    def btn_ok(self):
+        context = self.env.context
+        res_model = context.get('res_model')
+        return {
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': False,
+            'res_model': res_model,
+            'context': context,
+            'target': 'main',
+            'type': 'ir.actions.act_window',
+        }
 
 class SetOrderAsb(models.AbstractModel):
     _name = "set.order.abs"
@@ -64,9 +78,13 @@ class SetOrderToDelivered(models.TransientModel):
                     ('tracking_code','=',rec.tracking_code_ids),
                     ('state','=','pending')
                 ])
-                if len(tracking_id) and not (tracking_id in rec.tracking_code_show):
-                    rec.tracking_code_show = rec.tracking_code_show + tracking_id
-                    order_number = tracking_id.mapped(lambda r: r.order_number)
+                tracking_ids = tracking_id.ids
+                tracking_show_ids = rec.tracking_code_show.ids
+                _list_show_ids = [i for i in tracking_ids if i not in tracking_show_ids]
+                if len(_list_show_ids):
+                    sale_object = self.env['sale.order.management'].browse(_list_show_ids)
+                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
                     rec.tracking_code_count = rec.tracking_code_count + len(delta)
@@ -76,23 +94,17 @@ class SetOrderToDelivered(models.TransientModel):
             rec.tracking_code_ids = False
                 
 
-    # @api.depends('tracking_code_show')
-    # def _count_tracking_code(self):
-    #     for rec in self:
-    #         rec.tracking_code_count = len(rec.tracking_code_show)
-
-    @api.onchange('tracking_code_count')
-    def _onchange_code_count(self):
-        print(self.tracking_code_count)
-
     @api.multi
     def btn_apply(self):
         self.ensure_one()
         res = self.tracking_code_show.write({'state': 'delivered'})
         context = self.env.context.copy()
         if res:
-            mess = _('{} orders have been delivered').format(context.get('count'))
+            order_number = self.tracking_code_show.mapped(lambda r: r.order_number)
+            count = len(list(dict.fromkeys(order_number)))
+            mess = _('{} orders have been delivered').format(count)
             context['default_message'] = mess
+            context['res_model'] = self._name
             act = {
                 'name': 'Anounce',
                 'view_type': 'form',
@@ -110,7 +122,7 @@ class SetOrderToReturned(models.TransientModel):
     _inherit = ['set.order.abs']
     _description = 'Set Order To Returned'
 
-    tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code', compute="_show_tracking_code")
+    tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code',)
 
     @api.onchange('tracking_code_ids')
     @api.multi
@@ -121,9 +133,13 @@ class SetOrderToReturned(models.TransientModel):
                     ('tracking_code','=',rec.tracking_code_ids),
                     ('state','=','delivered')
                 ])
-                if len(tracking_id) and not (tracking_id in rec.tracking_code_show):
-                    rec.tracking_code_show = rec.tracking_code_show + tracking_id
-                    order_number = tracking_id.mapped(lambda r: r.order_number)
+                tracking_ids = tracking_id.ids
+                tracking_show_ids = rec.tracking_code_show.ids
+                _list_show_ids = [i for i in tracking_ids if i not in tracking_show_ids]
+                if len(_list_show_ids):
+                    sale_object = self.env['sale.order.management'].browse(_list_show_ids)
+                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
                     rec.tracking_code_count = rec.tracking_code_count + len(delta)
@@ -138,8 +154,11 @@ class SetOrderToReturned(models.TransientModel):
         res = self.tracking_code_ids.write({'state': 'returned'})
         context = self.env.context.copy()
         if res:
-            mess = _('{} orders have been returned').format(context.get('count'))
+            order_number = self.tracking_code_show.mapped(lambda r: r.order_number)
+            count = len(list(dict.fromkeys(order_number)))
+            mess = _('{} orders have been returned').format(count)
             context['default_message'] = mess
+            context['res_model'] = self._name
             act = {
                 'name': 'Anounce',
                 'view_type': 'form',

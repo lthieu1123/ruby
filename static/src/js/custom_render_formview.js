@@ -9,7 +9,7 @@ odoo.define('rubyshop.custom_form_view', function (require) {
         _updateEnv: function () {
             this._super.apply(this, arguments);
             var btn = $('.o_form_buttons_edit');
-            var breadcrumb = $('li.breadcrumb-item.active')
+            var breadcrumb = $('li.breadcrumb-item.active');
             if (this.model && this.model.get && this.handle && btn && btn.removeClass && btn.addClass) {
                 var count = 0;
                 var delayCount = 0;
@@ -17,13 +17,19 @@ odoo.define('rubyshop.custom_form_view', function (require) {
                 if (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned'){
                     var iid = setInterval(function(){
                         if (btn && btn.length){
+                            btn.addClass('o_invisible_modifier');
+                            breadcrumb = $('li.breadcrumb-item.active')[0]
+                            if (d.model=='set.order.to.delivered'){
+                                breadcrumb.innerText = "Delivered Order";
+                            }else if (d.model=='set.order.to.returned'){
+                                breadcrumb.innerText = "Returned Order";
+                            }
                             clearInterval(iid);
                         }
                         if (delayCount++ < 3) return;
                         btn = $('.o_form_buttons_edit');
                         if (count++ >= 30) clearInterval(iid);    
                     },300);
-                    btn.addClass('o_invisible_modifier');
                 }
             }
            
