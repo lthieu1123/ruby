@@ -4,16 +4,17 @@
 from odoo import api, models, fields
 from odoo.tools.translate import _
 
-class EccBillValueSupplierReport(models.Model):
+class RubyReportDelivered(models.Model):
     _name = 'sale.order.management.report'
-    _inherit = ['ecc.base.report']
+    _inherit = ['base.report']
     _description = 'Bill and Value supplier report'
     _auto = False
 
-    ecc_row = fields.Date('Created Date')
-    ecc_col = fields.Many2one('sale.order.management.shop', 'Shop', required=True)
-    ecc_measure = fields.Integer('# of Lines',readonly=True)
-    ecc_value = fields.Float('Value',readonly=True)
+    # Allow override model fields
+    row = fields.Date(string='Created Date')
+    measure = fields.Float('# of Value', required=True)
+    col = fields.Many2one('sale.order.management.shop', string="Shop")
+    unit_price = fields.Float('Unit Price', required=True)
 
     # --------------------------------------- functions -------------------------------------------------
 
@@ -23,16 +24,24 @@ class EccBillValueSupplierReport(models.Model):
         """
         sql = [
             """
-                select 
-                row_number() OVER () as id,
-                count(*) as ecc_measure,
-                sm.order_item_id as order_item,
-                sm.created_at as create_date,
-                sm.shop_id as shop,
-                sm.unit_price as unit_price
+                select row_number() OVER () as id,
+                count(*) as measure,
+                sm.created_at as row,
+                sm.unit_price as unit_price,
+                sm.shop_id as col
             """
         ]
+        return super()._select(sql)
 
+    def _where(self, sql = ''):
+        """ SQL to filter fields
+            @param {SQL} Query
+        """
+        sql = [ 
+            """
+                where sm.state = 'delivered'
+            """
+        ]
         return super()._select(sql)
 
     def _group_by(self, sql = ''):
@@ -41,7 +50,10 @@ class EccBillValueSupplierReport(models.Model):
         """
         sql = [
             """
-                group by cs.id, t.x, t.y
+                group by
+                    sm.created_at,
+                    sm.unit_price,
+                    sm.shop_id
             """
         ]
         return super()._select(sql)
@@ -50,8 +62,7 @@ class EccBillValueSupplierReport(models.Model):
         """ SQL to group fields
             @param {SQL} Query
         """
-        from_sql = 'from ecc_contract_supplier cs'
-        sql = [from_sql]
+        sql = ['from sale_order_management sm']
         return super()._select(sql)
 
     def _join(self, sql = ''):
@@ -60,14 +71,8 @@ class EccBillValueSupplierReport(models.Model):
         """
         sql = [
             """
-                left join project_project p on p.id = cs.ecc_project_id
-                left join account_invoice inv on inv.partner_id = cs.ecc_partner and inv.type = 'out_invoice'
-                left join account_payment pay on pay.partner_id = cs.ecc_partner and pay.payment_type = 'outbound'
-                cross join lateral (values('Contract Value',cs.ecc_amount_total),('Invoice Value',inv.amount_total_signed),('Payment Value',pay.amount)) as t(x,y)
-                where p.active=true
             """
         ]
-
         return super()._join(sql)
 
     @api.model_cr

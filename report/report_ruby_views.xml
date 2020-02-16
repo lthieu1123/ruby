@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_claim_reeport_pivot" model="ir.ui.view">
+            <field name="name">sale.order.management.report.pivot</field>
+            <field name="model">sale.order.management.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Delivered Report">
+                    <field name="row" interval="day" type="row"/>
+                    <field name="col" type="col"/>
+                    <field name="measure" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record id="view_claim_report_graph" model="ir.ui.view">
+            <field name="name">sale.order.management.report.graphs</field>
+            <field name="model">sale.order.management.report</field>
+            <field name="arch" type="xml">
+                <graph string="Delivered Report" type="bar">
+                    <field name="row" interval="day" type="row"/>
+                    <field name="col" type="col"/>
+                    <field name="measure" type="measure"/>
+                 </graph>
+             </field>
+        </record>
+
+        <record id="view_claim_report_search" model="ir.ui.view">
+            <field name="name">sale.order.management.report.search</field>
+            <field name="model">sale.order.management.report</field>
+            <field name="arch" type="xml">
+                <search string="Delivered Report">
+                    <field name="col"/>
+                    <field name="row"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_claim_report_act" model="ir.actions.act_window">
+            <field name="name">Unit Price For Claim Planing</field>
+            <field name="res_model">sale.order.management.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,pivot</field>
+            <field name="help">This report allows you to analyse the unit price for claim planing</field>
+        </record>
+    </data>
+</odoo>

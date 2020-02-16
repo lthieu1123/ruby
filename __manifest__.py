@@ -17,6 +17,7 @@
         'views/sale_order_management_view.xml',
         'static/src/xml/custom_render_formview_template.xml',
         'views/sale_order_management_shop_views.xml',
+        'report/report_ruby_views.xml',
         'views/menu_views.xml'
     ],
     'demo': [],

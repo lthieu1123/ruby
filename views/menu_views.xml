@@ -29,5 +29,11 @@
                         parent="sale_order_management_menu_root"
                         action="sale_order_management_shop_action"
                         sequence="4"/>
+                        
+            <menuitem id="sale_order_report_menu_act"
+                        name="Report"
+                        parent="sale_order_management_menu_root"
+                        action="action_claim_report_act"
+                        sequence="5"/>
     </data>
 </odoo>
