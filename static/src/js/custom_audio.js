@@ -119,7 +119,6 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                     }
                                 ]
                             }).then(function(isFound){
-                                console.log('isFound: ',isFound);
                                 if (isFound){
                                     var e = document.getElementById("audioFound");
                                     e.play();

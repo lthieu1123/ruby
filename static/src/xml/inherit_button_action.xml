@@ -14,14 +14,11 @@
     </t>
 
     <t t-extend="ImportView.import_button">
-        <t t-jquery="button.o_button_import" t-operation="replace">
+        <t t-jquery="button.o_button_import" t-operation="after">
             <t t-if="widget !== undefined">
                 <button t-if="widget.modelName == 'sale.order.management'"
-                        class="btn btn-primary o_button_import"
-                        type="button">Import</button>
-                <button t-if="widget.modelName != 'sale.order.management'"
-                        class="btn btn-secondary o_button_import"
-                        type="button">Import</button>
+                        class="btn btn-primary o_button_process_csv"
+                        type="button">Process Update</button>
             </t>
         </t>
     </t>

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # Import libs
+import os
+import pandas as pd
+
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
 
@@ -94,3 +97,14 @@ class SaleOrderManagment(models.Model):
                                 ('done','Done')
                             ],string='State',default='pending')
     shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
+
+    @api.multi
+    def btn_process_csv(self):
+        _import_directory = '/mnt/d/readcsv/import'
+        _accounting_director = '/mnt/d/readcsv/accouting'
+        import_directory_file = os.listdir(_import_directory)
+        for entry in import_directory_file:
+            directory = "{}/{}".format(_import_directory,entry)
+            result = pd.read_csv(directory,encoding='utf8')
+            print('csv')
+            print(result)
