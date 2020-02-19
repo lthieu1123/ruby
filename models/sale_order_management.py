@@ -6,6 +6,22 @@ import pandas as pd
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
+from ..commons.ruby_constant import *
+
+_li_key = ['Order Item Id','Order Type','Order Flag','Lazada Id','Seller SKU',\
+            'Lazada SKU','Created at','Updated at','Order Number','Invoice Required',\
+                'Customer Name','Customer Email','National Registration Number','Shipping Name',\
+                'Shipping Address','Shipping Address2','Shipping Address3','Shipping Address4',\
+                'Shipping Address5','Shipping Phone Number','Shipping Phone Number2',\
+                'Shipping City','Shipping Postcode','Shipping Country','Shipping Region',\
+                'Billing Name','Billing Address','Billing Address2','Billing Address3',\
+                'Billing Address4','Billing Address5','Billing Phone Number','Billing Phone Number2',\
+                'Billing City','Billing Postcode','Billing Country','Tax Code','Branch Number','Tax Invoice requested',\
+                'Payment Method','Paid Price','Unit Price','Shipping Fee','Wallet Credits','Item Name','Variation',\
+                'CD Shipping Provider','Shipping Provider','Shipment Type Name','Shipping Provider Type','CD Tracking Code',\
+                'Tracking Code','Tracking URL','Shipping Provider (first mile)','Tracking Code (first mile)',\
+                'Tracking URL (first mile)','Promised shipping time','Premium','Status','Cancel / Return Initiator',\
+                'Reason','Reason Detail','Editor','Bundle ID','Bundle Discount','Refund Amount']
 
 class SaleOrderManagmentShop(models.Model):
     _name = 'sale.order.management.shop'
@@ -100,11 +116,78 @@ class SaleOrderManagment(models.Model):
 
     @api.multi
     def btn_process_csv(self):
+        self._cr.execute('SAVEPOINT import')
         _import_directory = '/mnt/d/readcsv/import'
         _accounting_director = '/mnt/d/readcsv/accouting'
         import_directory_file = os.listdir(_import_directory)
+        msg = ""
+        #Checking shop code before run
         for entry in import_directory_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            if not len(shop_id):
+                return {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': (_('Cannot find shop with shop code is: "[{}]"').format(shop_code)),
+                    }]
+                }
+        
+        #Adding data from csv to database
+        for entry in import_directory_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
             directory = "{}/{}".format(_import_directory,entry)
-            result = pd.read_csv(directory,encoding='utf8')
-            print('csv')
-            print(result)
+            #Reading csv file
+            result = pd.read_csv(directory,sep=';',encoding='utf8')
+            del_count = 0
+            #browse data from dataframe pandas
+            for index, row in result.iterrows():
+                #Checking existed item in database, if existed -> unlink
+                existed_item = self.search([
+                    ('order_item_id','=',row['Order Item Id'])
+                ])
+                if existed_item.id:
+                    existed_item.unlink()
+                    del_count +=1
+                #Adding shop_id in vals before add vals from csv
+                vals = {
+                    'shop_id': shop_id.id
+                }
+                #Get data from csv row and add it to dict
+                for key in _li_key:
+                    _header = header.get(key)
+                    _data = row[key]
+                    vals.update({
+                        _header :  _data if str(_data) != 'nan' else None
+                    })
+                #Create new data
+                try:
+                    self.create(vals)
+                except Exception as err:
+                    return {
+                        'messages': [{
+                            'type': 'Error',
+                            'message': (_('Cannot create data as error: {}').format(str(err))),
+                        }]
+                    }
+            msg += (_('Shop: {} - Create: {} - Delete: {}\n')).format(shop_id.name,index+1,del_count)
+        self._cr.execute('RELEASE SAVEPOINT import')
+        #Return mess when done
+        return {
+            'messages': [{
+                'type': 'Completed',
+                'message': msg,
+            }]
+        }
+            
+                
+                
+
+                
+                
+

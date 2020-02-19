@@ -1,7 +1,9 @@
 odoo.define('ruby.custom_list_view', function (require) {
     'use strict';
-
-    const core = require('web.core');
+    
+    var Dialog = require("web.Dialog");
+    var core = require("web.core");
+    var _t = core._t;
     let ListController = require('web.ListController');
     ListController.include({
         renderButtons: function($node) {
@@ -19,7 +21,15 @@ odoo.define('ruby.custom_list_view', function (require) {
                 method: 'btn_process_csv',
                 args: [{}]
             }).then(function(data){
-                return console.log(data)
+                var msg_type = data.messages[0].type
+                var msg = data.messages[0].message
+                Dialog.alert(this, msg,{
+                $content: $("<main/>", {
+                    role: "alert",
+                    text: _t(msg)
+                }),
+                title: _t(msg_type)
+                });
             })
         },
 
