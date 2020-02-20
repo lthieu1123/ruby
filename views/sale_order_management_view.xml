@@ -25,10 +25,11 @@
             <field name="arch" type="xml">
                 <tree delete="false">
                     <field name="shop_id"/>
-                    <field name="tracking_code"/>
                     <field name="order_item_id"/>
+                    <field name="tracking_code"/>
                     <field name="order_number"/>
                     <field name="order_type"/>
+                    <field name="created_at"/>
                     <field name="shipping_provider"/>
                     <field name="billing_name"/>
                     <field name="billing_phone_number"/>

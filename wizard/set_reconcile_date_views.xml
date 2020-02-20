@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <!-- Add you code here -->
+        <!-- set.reconcile.date form view -->
+        <record id="model_name_view_form" model="ir.ui.view">
+            <field name="name">Set Reconcile Date</field>
+            <field name="model">set.reconcile.date</field>
+            <field name="arch" type="xml">
+                <form string="Set Date">
+                    <main>
+                        <group>
+                            <div>
+                                <label for="date_start" class="o_form_label oe_inline"/>
+                                <field name="date_start" class="oe_inline"/>
+                            </div>
+                            <div>
+                                <label for="date_end" class="o_form_label oe_inline"/>
+                                <field name="date_end" class="oe_inline"/>
+                            </div>
+                        </group>
+                    </main>
+                    <footer>
+                        <button name="btn_reconcile" type="object" string="Reconcile" class="btn btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

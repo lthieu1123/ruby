@@ -19,6 +19,12 @@
                 <button t-if="widget.modelName == 'sale.order.management'"
                         class="btn btn-primary o_button_process_csv"
                         type="button">Process Update</button>
+                <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_process_sale_done"
+                        type="button">Process Done Item</button>
+                <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_reconcile"
+                        type="button">Reconcile</button>
             </t>
         </t>
     </t>

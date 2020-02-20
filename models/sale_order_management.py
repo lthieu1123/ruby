@@ -8,6 +8,21 @@ from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
 from ..commons.ruby_constant import *
 
+#FEE NAME
+SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
+ITEM_PRICE = 'Item Price Credit'
+SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
+ADJ_PAYMENT_FEE = 'Adjustments Payment Fee'
+SPON_PRODUCT_FEE = 'Sponsored Product Fee'
+ADJ_SHIP_FEE = 'Adjustments Shipping Fee'
+
+#KEY HEADER
+ODER_ITEM_NO = 'Order Item No.'
+TRANSACTION_DATE = 'Transaction Date'
+FEE_NAME = 'Fee Name'
+
+
+
 _li_key = ['Order Item Id','Order Type','Order Flag','Lazada Id','Seller SKU',\
             'Lazada SKU','Created at','Updated at','Order Number','Invoice Required',\
                 'Customer Name','Customer Email','National Registration Number','Shipping Name',\
@@ -40,15 +55,15 @@ class SaleOrderManagment(models.Model):
     _rec_name = 'tracking_code'
     _order = 'updated_at asc'
 
-    order_item_id = fields.Char('Order Item Id',required=True)
+    order_item_id = fields.Char('Order Item Id',required=True, index=True)
     order_type = fields.Char('Order Type')
     order_flag = fields.Char('Order Flag')
     lazada_id = fields.Char('Lazada Id')
     seller_sku = fields.Char('Seller SKU')
     lazada_sku = fields.Char('Lazada SKU')
-    created_at = fields.Datetime('Created at')
+    created_at = fields.Datetime('Created at',index=True)
     updated_at = fields.Datetime('Updated at')
-    order_number = fields.Char('Order Number')
+    order_number = fields.Char('Order Number', index=True)
     invoice_required = fields.Char('Invoice Required')
     customer_name = fields.Char('Customer Name')
     customer_email = fields.Char('Customer Email')
@@ -91,7 +106,7 @@ class SaleOrderManagment(models.Model):
     shipment_type_name = fields.Char('Shipment Type Name')
     shipping_provider_type = fields.Char('Shipping Provider Type')
     cd_tracking_code = fields.Char('CD Tracking Code')
-    tracking_code = fields.Char('Tracking Code')
+    tracking_code = fields.Char('Tracking Code',index=True)
     tracking_url = fields.Char('Tracking URL')
     shipping_provider_first_mile = fields.Char('Shipping Provider (first mile)')
     tracking_code_first_mile = fields.Char('Tracking Code (first mile)')
@@ -111,16 +126,16 @@ class SaleOrderManagment(models.Model):
                                 ('delivered','Delivered'),
                                 ('returned','Returned'),
                                 ('done','Done')
-                            ],string='State',default='pending')
+                            ],string='State',default='pending',index=True)
     shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
+    transaction_date = fields.Date('Transaction Date',index=True)
 
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = '/mnt/d/readcsv/import'
-        _accounting_director = '/mnt/d/readcsv/accouting'
+        _import_directory = '/mnt/d/readcsv/import'        
         import_directory_file = os.listdir(_import_directory)
-        msg = ""
+        msg = []
         #Checking shop code before run
         for entry in import_directory_file:
             shop_code = entry.split('.')[0]
@@ -131,7 +146,7 @@ class SaleOrderManagment(models.Model):
                 return {
                     'messages': [{
                         'type': 'Error',
-                        'message': (_('Cannot find shop with shop code is: "[{}]"').format(shop_code)),
+                        'message': [(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))],
                     }]
                 }
         
@@ -172,10 +187,10 @@ class SaleOrderManagment(models.Model):
                     return {
                         'messages': [{
                             'type': 'Error',
-                            'message': (_('Cannot create data as error: {}').format(str(err))),
+                            'message': [(_('Cannot create data as error: {}').format(str(err)))],
                         }]
                     }
-            msg += (_('Shop: {} - Create: {} - Delete: {}\n')).format(shop_id.name,index+1,del_count)
+            msg.append(_('Shop: {} - Create: {} - Delete: {}').format(shop_id.name,index+1,del_count))
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
@@ -184,10 +199,61 @@ class SaleOrderManagment(models.Model):
                 'message': msg,
             }]
         }
-            
-                
-                
-
-                
-                
-
+    
+    @api.multi
+    def btn_process_sale_done(self):
+        self._cr.execute('SAVEPOINT import')
+        _sale_done_director = '/mnt/d/readcsv/sale'
+        sale_director_file = os.listdir(_sale_done_director)
+        #Checking shop code before run
+        for entry in sale_director_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            if not len(shop_id):
+                return {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': [_('Cannot find shop with shop code is: "[{}]"').format(shop_code)],
+                    }]
+                }
+        msg = []
+        for entry in sale_director_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            directory = "{}/{}".format(_sale_done_director,entry)
+            result = pd.read_csv(directory,sep=',',encoding='utf8')
+            count_price = 0
+            for index, row in result.iterrows():
+                fee_name = row[FEE_NAME]
+                if fee_name != ITEM_PRICE:
+                    continue
+                order_id = row[ODER_ITEM_NO]
+                data = self.search([
+                    ('order_item_id','=',order_id)
+                ])
+                if not data.id:
+                    return {
+                        'messages': [{
+                            'type': 'Error',
+                            'message': [_('Cannot find Order item with ID [{}] in database').format(order_id)],
+                        }]
+                    }
+                data.update({
+                    'transaction_date': row[TRANSACTION_DATE],
+                    'state': 'done'
+                })
+                count_price+=1
+                msg.append("Shop: {} - Item sale: {} ".format(shop_id.name, count_price))
+        self._cr.execute('RELEASE SAVEPOINT import')
+        #Return mess when done
+        return {
+            'messages': [{
+                'type': 'Completed',
+                'message': msg,
+            }]
+        }
+                    

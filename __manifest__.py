@@ -14,6 +14,7 @@
     'data': [
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
+        'wizard/set_reconcile_date_views.xml',
         'views/sale_order_management_view.xml',
         'static/src/xml/custom_render_formview_template.xml',
         'views/sale_order_management_shop_views.xml',
