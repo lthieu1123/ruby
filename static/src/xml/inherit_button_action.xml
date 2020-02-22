@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
     <t t-extend="ListView.buttons">
-        <t t-jquery="button" t-operation="replace">
+        <t t-jquery="button.o_list_button_add" t-operation="replace">
             <t t-if="widget != undefined">
                 <button t-if="widget.modelName == 'sale.order.management'"
                     class="btn btn-secondary invisible-button"

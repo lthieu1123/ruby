@@ -23,13 +23,23 @@ class ShopAnnounce(models.TransientModel):
     @api.multi
     def btn_reconcile(self):
         so_mgt = self.env['sale.order.management']
+        start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
+        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.min)
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError(_('End date must be equal or greate than Start date'))
         #Verify date end data will be import first
         count = so_mgt.search_count([
-            ('created_at','>=',datetime.datetime.combine(self.date_end,datetime.time.min))
+            ('created_at','>=',end_datetime)
         ])
         if not (count):
             raise exceptions.ValidationError(_('Imported data is not reached to end date {}').format(str(self.date_end)))
-        
+        #Find all import data from start date to end date
+        rec_ids = so_mgt.search([
+            ('created_at','>=',start_datetime),
+            ('created_at','<=',end_datetime),
+            ('state','=','delivered')
+        ])
+        return {
+            #action sale.order.management with domain is rec_ids.ids
+        }
