@@ -41,5 +41,13 @@ class ShopAnnounce(models.TransientModel):
             ('state','=','delivered')
         ])
         return {
-            #action sale.order.management with domain is rec_ids.ids
+            'name': _('Reconcile'),
+            'view_type': 'form',
+            'view_mode': 'tree',
+            'view_id': False,
+            'res_model': 'sale.order.management',
+            'context': {},
+            'domain': [('id','in',rec_ids.ids)],
+            'target': 'main',
+            'type': 'ir.actions.act_window',
         }

@@ -18,6 +18,16 @@ odoo.define('ruby.custom_list_view', function (require) {
         redirect_to_process_csv: function(event) {
             event.stopPropagation();
             event.preventDefault();
+            var d = $.Deferred();
+            var button = [{
+                text: _t("OK"),
+                close: true,
+                click: function() {
+                    if (d) d.reject();
+                    d = null;
+                    location.reload();
+                }
+            }];
             return this._rpc({
                 model: 'sale.order.management',
                 method: 'btn_process_csv',
@@ -34,6 +44,8 @@ odoo.define('ruby.custom_list_view', function (require) {
                     }
                 })
                 Dialog.alert(this, msg,{
+                size: "medium",
+                buttons: button,
                 $content: $("<main/>", {
                     role: "alert",
                     text: message

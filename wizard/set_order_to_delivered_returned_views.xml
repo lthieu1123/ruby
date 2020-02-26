@@ -43,10 +43,17 @@
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
                     </header>
                     <main>
-                        <div style="color:blue;" >
-                            <label for="tracking_code_count"></label>
-                            <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
-                        </div>
+                        <group>
+                            <div style="color:blue;">
+                                <label for="tracking_code_count"></label>
+                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                            </div>
+                            <div>
+                                <field name="note" widget="html" readonly="1"/>
+                            </div>
+                        </group>
+                        
+                        <field name="json_field" invisible="1"/>
                         <field name="delta" invisible="1"/>
                         <field name="tracking_code_not_found" invisible="1"/>
                         <div>
@@ -88,10 +95,10 @@
                     </header>
                    <main>
                         <div style="color:blue;">
-                                <label for="tracking_code_count"></label>
-                                <p1><field name="tracking_code_count"/></p1>
-                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
-                            </div>
+                            <label for="tracking_code_count"></label>
+                            <p1><field name="tracking_code_count"/></p1>
+                            <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                        </div>
                             <field name="delta" invisible="1"/>
                             <field name="tracking_code_not_found" invisible="1"/>
                             <div>

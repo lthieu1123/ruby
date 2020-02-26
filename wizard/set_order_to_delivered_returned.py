@@ -9,6 +9,7 @@ import datetime
 import logging
 import re
 import ctypes
+import json
 
 _logger = logging.getLogger(__name__)
 
@@ -45,6 +46,17 @@ class SetOrderAsb(models.AbstractModel):
     # tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code',)
     delta = fields.Integer(string='Delta')
     tracking_code_not_found = fields.Integer('Number of Tracking Code Not Found', readonly=True, default=0)
+    note = fields.Text('Notes',)
+    json_field = fields.Text('Json data')
+
+    def _create_table(self,table_data):
+        header_table = ""
+        data = ""
+        for table in table_data:
+            header_table += '<th>{}</th>'.format(table)
+            data += '<td style="font-size: 300%;">{}</td>'.format(table_data[table])
+        table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
+        return table
 
     @api.model
     def find_order(self,args):
@@ -73,6 +85,8 @@ class SetOrderToDelivered(models.TransientModel):
     @api.multi
     def _show_tracking_code(self):
         for rec in self:
+            str_json = rec.json_field
+            _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
                 tracking_id = self.env['sale.order.management'].search([
                     ('tracking_code','=',rec.tracking_code_ids),
@@ -88,6 +102,15 @@ class SetOrderToDelivered(models.TransientModel):
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
                     rec.tracking_code_count = rec.tracking_code_count + len(delta)
+                    shop_name = tracking_id[0].shop_id.name
+                    new_delta = len(delta)
+                    if _data.get(shop_name,False):
+                        new_delta = _data.get(shop_name) + new_delta
+                    _data.update({
+                        shop_name: new_delta
+                    })
+                    rec.json_field = json.dumps(_data)
+                    rec.note = self._create_table(_data)
                 else:
                     rec.tracking_code_not_found += 1
             #Remove tracking_code_ids
@@ -128,6 +151,8 @@ class SetOrderToReturned(models.TransientModel):
     @api.multi
     def _show_tracking_code(self):
         for rec in self:
+            str_json = rec.json_field
+            _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
                 tracking_id = self.env['sale.order.management'].search([
                     ('tracking_code','=',rec.tracking_code_ids),
@@ -143,6 +168,15 @@ class SetOrderToReturned(models.TransientModel):
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
                     rec.tracking_code_count = rec.tracking_code_count + len(delta)
+                    shop_name = tracking_id[0].shop_id.name
+                    new_delta = len(delta)
+                    if _data.get(shop_name,False):
+                        new_delta = _data.get(shop_name) + new_delta
+                    _data.update({
+                        shop_name: new_delta
+                    })
+                    rec.json_field = json.dumps(_data)
+                    rec.note = self._create_table(_data)
                 else:
                     rec.tracking_code_not_found += 1
             #Remove tracking_code_ids

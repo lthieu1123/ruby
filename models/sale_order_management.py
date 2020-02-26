@@ -3,10 +3,12 @@
 # Import libs
 import os
 import pandas as pd
+import datetime
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
 from ..commons.ruby_constant import *
+
 
 #FEE NAME
 SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
@@ -130,6 +132,22 @@ class SaleOrderManagment(models.Model):
     shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
     transaction_date = fields.Date('Transaction Date',index=True)
 
+    @api.model
+    def create(self,vals):
+        res = super().create(vals)
+        #update external id
+        _datetime = datetime.datetime.now()
+        model_name = self._name
+        self.env['ir.model.data'].sudo().create({
+            'noupdate': True,
+            'name': '{}_{}'.format(model_name,res.id),
+            'date_init': _datetime,
+            'date_update': _datetime,
+            'module': 'ruby',
+            'model': model_name,
+            'res_id': res.id
+        })
+
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
@@ -231,7 +249,9 @@ class SaleOrderManagment(models.Model):
                 fee_name = row[FEE_NAME]
                 if fee_name != ITEM_PRICE:
                     continue
-                order_id = row[ODER_ITEM_NO]
+                order_id = int(row[ODER_ITEM_NO])
+                print('index: ',index)
+                print('ROW: ',order_id)
                 data = self.search([
                     ('order_item_id','=',order_id)
                 ])
@@ -243,11 +263,11 @@ class SaleOrderManagment(models.Model):
                         }]
                     }
                 data.update({
-                    'transaction_date': row[TRANSACTION_DATE],
+                    'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                     'state': 'done'
                 })
                 count_price+=1
-                msg.append("Shop: {} - Item sale: {} ".format(shop_id.name, count_price))
+            msg.append("Shop: {} - Item sale: {} ".format(shop_id.name, count_price))
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
