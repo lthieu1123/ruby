@@ -61,17 +61,41 @@ class SetOrderAsb(models.AbstractModel):
     @api.model
     def find_order(self,args):
         tracking_id = None
+        result = {}
         if self._name == 'set.order.to.delivered':
             tracking_id = self.env['sale.order.management'].search([
                 ('tracking_code','=',args.get('order_number')),
                 ('state','=','pending')
             ])
+            if not len(tracking_id):
+                existed = self.env['sale.order.management'].search([
+                    ('tracking_code','=',args.get('order_number')),
+                    ('state','=','delivered')
+                ])
+                if len(existed):
+                    result.update({'result': 'existed'})
+                else:
+                    result.update({'result': False})
+            else:
+                result.update({'result': True})
+
         if self._name == 'set.order.to.returned':
             tracking_id = self.env['sale.order.management'].search([
                 ('tracking_code','=',args.get('order_number')),
                 ('state','=','delivered')
             ])
-        return True if len(tracking_id) else False
+            if not len(tracking_id):
+                existed = self.env['sale.order.management'].search([
+                    ('tracking_code','=',args.get('order_number')),
+                    ('state','=','returned')
+                ])
+                if len(existed):
+                    result.update({'result': 'existed'})
+                else:
+                    result.update({'result': False})
+            else:
+                result.update({'result': True})
+        return result
 
 
 class SetOrderToDelivered(models.TransientModel):

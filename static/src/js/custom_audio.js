@@ -88,6 +88,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
 
         _updateEnv: function () {
             this._super.apply(this, arguments);
+            var _super = this._super.bind(this);
             var _self = this;
             var d = _self.model.get(this.handle);
             if (d && (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned') && d.viewType=='form') {
@@ -109,7 +110,9 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                         // });
                         tracking_code_count_id[0].addEventListener("change",function(){
                             var current = $(this).val();
+                            var changes = _self.model.localData[d.id];
                             var _model = d.model;
+                            console.log("d: ",d);
                             _self._rpc({
                                 model: _model,
                                 method: "find_order",
@@ -118,7 +121,8 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                     order_number: current
                                     }
                                 ]
-                            }).then(function(isFound){
+                            }).then(function(result){
+                                var _res = result.result
                                 if (isFound){
                                     var e = document.getElementById("audioFound");
                                     e.play();

@@ -151,7 +151,7 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = '/mnt/d/readcsv/import'        
+        _import_directory = '/mnt/c/tool/dauvao'        
         import_directory_file = os.listdir(_import_directory)
         msg = []
         #Checking shop code before run
@@ -221,7 +221,7 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
-        _sale_done_director = '/mnt/d/readcsv/sale'
+        _sale_done_director = '/mnt/c/tool/taichinh'
         sale_director_file = os.listdir(_sale_done_director)
         #Checking shop code before run
         for entry in sale_director_file:
@@ -250,8 +250,6 @@ class SaleOrderManagment(models.Model):
                 if fee_name != ITEM_PRICE:
                     continue
                 order_id = int(row[ODER_ITEM_NO])
-                print('index: ',index)
-                print('ROW: ',order_id)
                 data = self.search([
                     ('order_item_id','=',order_id)
                 ])
