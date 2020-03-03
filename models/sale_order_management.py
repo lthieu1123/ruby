@@ -14,14 +14,22 @@ from ..commons.ruby_constant import *
 SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
 ITEM_PRICE = 'Item Price Credit'
 SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
+SHIP_FEE_VOUCHER_LAZADA = 'Shipping Fee Voucher (by Lazada)'
+PROMOTION_CHARGES_VOUCHER = 'Promotional Charges Vouchers'
 ADJ_PAYMENT_FEE = 'Adjustments Payment Fee'
+PAYMENT_FEE = 'Payment Fee'
 SPON_PRODUCT_FEE = 'Sponsored Product Fee'
+REVERSAL_SHIP_FEE = 'Reversal shipping Fee (Paid by Customer)'
+REVERSAL_ITEM_PRICE = 'Reversal Item Price'
 ADJ_SHIP_FEE = 'Adjustments Shipping Fee'
+SHIP_FEE_CLAIM = 'Shipping Fee Claims'
+
 
 #KEY HEADER
 ODER_ITEM_NO = 'Order Item No.'
 TRANSACTION_DATE = 'Transaction Date'
 FEE_NAME = 'Fee Name'
+AMOUNT = 'Amount'
 
 
 
@@ -230,12 +238,7 @@ class SaleOrderManagment(models.Model):
                 ('code','=',shop_code)
             ])
             if not len(shop_id):
-                return {
-                    'messages': [{
-                        'type': 'Error',
-                        'message': [_('Cannot find shop with shop code is: "[{}]"').format(shop_code)],
-                    }]
-                }
+                raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
         msg = []
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
@@ -254,12 +257,7 @@ class SaleOrderManagment(models.Model):
                     ('order_item_id','=',order_id)
                 ])
                 if not data.id:
-                    return {
-                        'messages': [{
-                            'type': 'Error',
-                            'message': [_('Cannot find Order item with ID [{}] in database').format(order_id)],
-                        }]
-                    }
+                    raise exceptions.ValidationError(_('Cannot find Order item with ID [{}] in database').format(order_id))
                 data.update({
                     'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                     'state': 'done'
@@ -269,9 +267,121 @@ class SaleOrderManagment(models.Model):
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
-            'messages': [{
-                'type': 'Completed',
-                'message': msg,
-            }]
-        }
-                    
+                'name': 'Reconcile Date',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': False,
+                'res_model': 'set.reconcile.date',
+                'target': 'new',
+                'type': 'ir.actions.act_window',
+            }
+
+    def _create_table(self,table_data):
+        header_table = ""
+        data = ""
+        for table in table_data:
+            header_table += '<th>{}</th>'.format(table)
+            data += '<td style="font-size: 300%;">{}</td>'.format(table_data[table])
+        table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
+        return table
+             
+    @api.multi
+    def btn_cal_fee(self):
+        self._cr.execute('SAVEPOINT import')
+        _sale_done_director = '/mnt/c/tool/taichinh'
+        sale_director_file = os.listdir(_sale_done_director)
+        #Checking shop code before run
+        for entry in sale_director_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            if not len(shop_id):
+                raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+        msg = []
+        for entry in sale_director_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            directory = "{}/{}".format(_sale_done_director,entry)
+            result = pd.read_csv(directory,sep=',',encoding='utf8', usecols=['Fee Name','Amount'])
+            a = 0
+            b = 0
+            c = 0
+            d = 0
+            e = 0
+            f = 0
+            g = 0
+            h = 0
+            i = 0
+            j = 0
+            k = 0
+            l = 0
+            for index, row in result.iterrows():
+                fee_name = row[FEE_NAME]
+                if fee_name == SHIP_FEE_BY_CUS:
+                    a += int(row[AMOUNT])
+                    continue
+                if fee_name == ITEM_PRICE:
+                    b += int(row[AMOUNT])
+                    continue
+                if fee_name == SHIP_FEE_BY_SELLER:
+                    c += int(row[AMOUNT])
+                if fee_name == SHIP_FEE_VOUCHER_LAZADA:
+                    d += int(row[AMOUNT])
+                    continue
+                if fee_name == PROMOTION_CHARGES_VOUCHER:
+                    e += int(row[AMOUNT])
+                    continue
+                if fee_name == ADJ_PAYMENT_FEE:
+                    f += int(row[AMOUNT])
+                    continue
+                if fee_name == PAYMENT_FEE:
+                    g += int(row[AMOUNT])
+                    continue
+                if fee_name == SPON_PRODUCT_FEE:
+                    h += int(row[AMOUNT])
+                    continue
+                if fee_name == REVERSAL_SHIP_FEE:
+                    i += int(row[AMOUNT])
+                    continue
+                if fee_name == REVERSAL_ITEM_PRICE:
+                    j += int(row[AMOUNT])
+                    continue
+                if fee_name == ADJ_SHIP_FEE:
+                    k += int(row[AMOUNT])
+                    continue
+                if fee_name == SHIP_FEE_CLAIM:
+                    l += int(row[AMOUNT])
+                    continue
+            
+            total = a+b+c-d+e-f-g-h-i-j-k+l
+            table_data = {
+                SHIP_FEE_BY_CUS: a,
+                ITEM_PRICE: b,
+                SHIP_FEE_BY_SELLER: c,
+                SHIP_FEE_VOUCHER_LAZADA: d,
+                PROMOTION_CHARGES_VOUCHER: e,
+                ADJ_PAYMENT_FEE: f,
+                PAYMENT_FEE: g,
+                SPON_PRODUCT_FEE: h,
+                REVERSAL_SHIP_FEE: i,
+                REVERSAL_ITEM_PRICE: j,
+                ADJ_SHIP_FEE: k,
+                SHIP_FEE_CLAIM: l,
+                'Total': total
+            }
+            table = self._create_table(table_data)
+            context = self.env.context.copy()
+            context['default_message'] = table
+            return {
+                'name': 'Reconcile Date',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id,
+                'res_model': 'shop.announce',
+                'target': 'new',
+                'context': context,
+                'type': 'ir.actions.act_window',
+            }

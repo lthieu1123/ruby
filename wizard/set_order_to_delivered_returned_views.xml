@@ -16,6 +16,21 @@
             </field>
         </record>
 
+        <record id="ecc_contract_announce_view_form_cal_amount" model="ir.ui.view">
+            <field name="name">Annouce</field>
+            <field name="model">shop.announce</field>
+            <field name="arch" type="xml">
+                <form string="Success!">
+                    <main>
+                        <field name="name" readonly="1" widget="html"/>
+                    </main>
+                    <footer>
+                        <button string="OK" class="btn btn-primary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
         <!-- For delivered -->
         <record id="set_order_to_delivered_action" model="ir.actions.act_window">
             <field name="name">Delivered Order</field>

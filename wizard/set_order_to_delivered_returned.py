@@ -20,7 +20,7 @@ class ShopAnnounce(models.TransientModel):
     def _get_default_message(self):
         return self.env.context.get('default_message', False)
 
-    name = fields.Char('name', default=_get_default_message)
+    name = fields.Text('name', default=_get_default_message)
     
     @api.multi
     def btn_ok(self):
