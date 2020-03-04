@@ -10,7 +10,7 @@
     'website': "",
     'category': 'ruby_shop',
     'version': '0.1',
-    'depends': ['base','queue_job'],
+    'depends': ['base',],
     'data': [
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
