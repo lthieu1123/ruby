@@ -159,7 +159,7 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = '/mnt/c/tool/dauvao'        
+        _import_directory = 'c:/tool/dauvao'        
         import_directory_file = os.listdir(_import_directory)
         msg = []
         #Checking shop code before run
@@ -229,7 +229,7 @@ class SaleOrderManagment(models.Model):
     @api.model
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
-        _sale_done_director = '/mnt/c/tool/taichinh'
+        _sale_done_director = 'c:/tool/taichinh'
         sale_director_file = os.listdir(_sale_done_director)
         #Checking shop code before run
         for entry in sale_director_file:
@@ -288,7 +288,7 @@ class SaleOrderManagment(models.Model):
     @api.model
     def btn_cal_fee(self):
         self._cr.execute('SAVEPOINT import')
-        _sale_done_director = '/mnt/c/tool/taichinh'
+        _sale_done_director = 'c:/tool/taichinh'
         sale_director_file = os.listdir(_sale_done_director)
         #Checking shop code before run
         for entry in sale_director_file:
