@@ -281,7 +281,7 @@ class SaleOrderManagment(models.Model):
         data = ""
         for table in table_data:
             header_table += '<th>{}</th>'.format(table)
-            data += '<td style="font-size: 300%;">{}</td>'.format(table_data[table])
+            data += '<td>{}</td>'.format(table_data[table])
         table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
         return table
              

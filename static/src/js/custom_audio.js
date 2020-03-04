@@ -18,7 +18,9 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                 var myAudio = $('#audioFound')
                 if (!myAudio || myAudio.length==0) {
                     $('body').append('<audio id="audioFound" src="/ruby/static/src/sounds/co.mp3" type="audio/mpeg"></audio>');                    
-                    $('body').append('<audio id="audioNotFound" src="/ruby/static/src/sounds/khong.mp3" type="audio/mpeg"></audio>');                    
+                    $('body').append('<audio id="audioNotFound" src="/ruby/static/src/sounds/khong.mp3" type="audio/mpeg"></audio>');  
+                    $('body').append('<audio id="audioDuplicated" src="/ruby/static/src/sounds/trung.mp3" type="audio/mpeg"></audio>');
+                    $('body').append('<audio id="audioUsed" src="/ruby/static/src/sounds/da_nhap.mp3" type="audio/mpeg"></audio>');                                      
                 }
                 var tracking_code_count_id = document.getElementsByName('tracking_code_ids');
                 var loopCount = 0;
@@ -27,10 +29,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
 
                 var iid = setInterval(function() {
                     if (tracking_code_count_id && tracking_code_count_id.length){
-                        // tracking_code_count_id[0].addEventListener('focusin', function(){
-                        //     console.log("Saving value " + $(this).val());
-                        //     $(this).data('val', $(this).val());
-                        // });
+                        
                         tracking_code_count_id[0].addEventListener("change",function(){
                             var current = $(this).val();
                             var _model = d.model;
@@ -42,21 +41,34 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                     order_number: current
                                     }
                                 ]
-                            }).then(function(isFound){
-                                console.log('isFound: ',isFound);
-                                if (isFound){
-                                    var e = document.getElementById("audioFound");
+                            }).then(function(result){
+                                var _res = result.result
+                                if (_res === true){
+                                    var el = $("[name='tracking_code_show'] > div > table > tbody >tr.o_data_row")
+                                    var i;
+                                    var isFoundInTable = false;
+                                    for (i = 0;i<el.length;i++){
+                                        var text = el[i].innerText;
+                                        if (text.includes(current)){
+                                            isFoundInTable = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isFoundInTable){
+                                        var e = document.getElementById("audioDuplicated");
+                                        e.play();
+                                    }else{
+                                        var e = document.getElementById("audioFound");
+                                        e.play();
+                                    }
+                                }else if (_res === false){
+                                    var e = document.getElementById("audioNotFound");
                                     e.play();
                                 }else{
-                                    var e = document.getElementById("audioNotFound");
+                                    var e = document.getElementById("audioUsed");
                                     e.play();
                                 }
                             })
-                            // console.log('this: ',handler.old_value);
-                            // var data = document.getElementsByName('tracking_code_count')[0];
-                            // console.log('data: ',data.innerText);
-                            // var myAudio = document.getElementById('myAudio');
-                            // myAudio.play();
                         });
                         if (iid) clearInterval(iid);
                     }else{
@@ -67,24 +79,6 @@ odoo.define('ecc_approval_process.FormController', function (require) {
             }
         },
         
-        
-        
-
-        // /**
-        //  * @override
-        //  */
-        // start: function () {
-        //     var _self = this;
-        //     var _super = _self._super.bind(this);
-        //     var _args = arguments;
-        //     return $.when(
-        //         _self._rpc({ model: "ecc.approval.status", method: "get_action_id", args: [{}] }).then(function (_id) {
-        //             WebFormRenderer.approvalButtonId = _id;
-        //         }).fail(function (err) { console.log("ERROR: ", err); })
-        //     ).then(function () {
-        //         return _super.apply(_self, _args)
-        //     })
-        // },
 
         _updateEnv: function () {
             this._super.apply(this, arguments);
@@ -96,7 +90,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                 if (!myAudio || myAudio.length==0) {
                     $('body').append('<audio id="audioFound" src="/ruby/static/src/sounds/co.mp3" type="audio/mpeg"></audio>');                    
                     $('body').append('<audio id="audioNotFound" src="/ruby/static/src/sounds/khong.mp3" type="audio/mpeg"></audio>');
-                    $('body').append('<audio id="audioDuplicate" src="/ruby/static/src/sounds/trung.mp3" type="audio/mpeg"></audio>');
+                    $('body').append('<audio id="audioDuplicated" src="/ruby/static/src/sounds/trung.mp3" type="audio/mpeg"></audio>');
                     $('body').append('<audio id="audioUsed" src="/ruby/static/src/sounds/da_nhap.mp3" type="audio/mpeg"></audio>');                    
                 }
                 var tracking_code_count_id = document.getElementsByName('tracking_code_ids');
@@ -106,15 +100,10 @@ odoo.define('ecc_approval_process.FormController', function (require) {
 
                 var iid = setInterval(function() {
                     if (tracking_code_count_id && tracking_code_count_id.length){
-                        // tracking_code_count_id[0].addEventListener('focusin', function(){
-                        //     console.log("Saving value " + $(this).val());
-                        //     $(this).data('val', $(this).val());
-                        // });
                         tracking_code_count_id[0].addEventListener("change",function(){
                             var current = $(this).val();
                             var changes = _self.model.localData[d.id];
                             var _model = d.model;
-                            console.log("d: ",d);
                             _self._rpc({
                                 model: _model,
                                 method: "find_order",
@@ -125,19 +114,32 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                 ]
                             }).then(function(result){
                                 var _res = result.result
-                                if (isFound){
-                                    var e = document.getElementById("audioFound");
+                                if (_res === true){
+                                    var el = $("[name='tracking_code_show'] > div > table > tbody >tr.o_data_row")
+                                    var i;
+                                    var isFoundInTable = false;
+                                    for (i = 0;i<el.length;i++){
+                                        var text = el[i].innerText;
+                                        if (text.includes(current)){
+                                            isFoundInTable = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isFoundInTable){
+                                        var e = document.getElementById("audioDuplicated");
+                                        e.play();
+                                    }else{
+                                        var e = document.getElementById("audioFound");
+                                        e.play();
+                                    }
+                                }else if (_res === false){
+                                    var e = document.getElementById("audioNotFound");
                                     e.play();
                                 }else{
-                                    var e = document.getElementById("audioNotFound");
+                                    var e = document.getElementById("audioUsed");
                                     e.play();
                                 }
                             })
-                            // console.log('this: ',handler.old_value);
-                            // var data = document.getElementsByName('tracking_code_count')[0];
-                            // console.log('data: ',data.innerText);
-                            // var myAudio = document.getElementById('myAudio');
-                            // myAudio.play();
                         });
                         if (iid) clearInterval(iid);
                     }else{
