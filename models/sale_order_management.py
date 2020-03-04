@@ -226,7 +226,7 @@ class SaleOrderManagment(models.Model):
             }]
         }
     
-    @api.multi
+    @api.model
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
         _sale_done_director = '/mnt/c/tool/taichinh'
@@ -285,7 +285,7 @@ class SaleOrderManagment(models.Model):
         table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
         return table
              
-    @api.multi
+    @api.model
     def btn_cal_fee(self):
         self._cr.execute('SAVEPOINT import')
         _sale_done_director = '/mnt/c/tool/taichinh'

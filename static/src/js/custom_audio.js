@@ -95,7 +95,9 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                 var myAudio = $('#audioFound')
                 if (!myAudio || myAudio.length==0) {
                     $('body').append('<audio id="audioFound" src="/ruby/static/src/sounds/co.mp3" type="audio/mpeg"></audio>');                    
-                    $('body').append('<audio id="audioNotFound" src="/ruby/static/src/sounds/khong.mp3" type="audio/mpeg"></audio>');                    
+                    $('body').append('<audio id="audioNotFound" src="/ruby/static/src/sounds/khong.mp3" type="audio/mpeg"></audio>');
+                    $('body').append('<audio id="audioDuplicate" src="/ruby/static/src/sounds/trung.mp3" type="audio/mpeg"></audio>');
+                    $('body').append('<audio id="audioUsed" src="/ruby/static/src/sounds/da_nhap.mp3" type="audio/mpeg"></audio>');                    
                 }
                 var tracking_code_count_id = document.getElementsByName('tracking_code_ids');
                 var loopCount = 0;
