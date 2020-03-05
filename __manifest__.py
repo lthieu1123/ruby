@@ -20,7 +20,8 @@
         'views/sale_order_management_shop_views.xml',
         'report/report_ruby_views.xml',
         'views/menu_action.xml',
-        'views/menu_views.xml'
+        'views/menu_views.xml',
+        # 'data/company_user_data.xml'
     ],
     'demo': [],
     'qweb': [

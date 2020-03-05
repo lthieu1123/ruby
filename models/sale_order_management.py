@@ -163,6 +163,7 @@ class SaleOrderManagment(models.Model):
         import_directory_file = os.listdir(_import_directory)
         msg = []
         #Checking shop code before run
+        view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
             shop_code = entry.split('.')[0]
             shop_id = self.env['sale.order.management.shop'].search([
@@ -173,6 +174,7 @@ class SaleOrderManagment(models.Model):
                     'messages': [{
                         'type': 'Error',
                         'message': [(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))],
+                        'view_id': view_id
                     }]
                 }
         
@@ -214,15 +216,22 @@ class SaleOrderManagment(models.Model):
                         'messages': [{
                             'type': 'Error',
                             'message': [(_('Cannot create data as error: {}').format(str(err)))],
+                            'view_id': view_id
                         }]
                     }
-            msg.append(_('Shop: {} - Create: {} - Delete: {}').format(shop_id.name,index+1,del_count))
+            values = {
+                'shop': shop_id.name,
+                'create':index+1,
+                'del':del_count
+            }
+            msg.append(values)
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
             'messages': [{
                 'type': 'Completed',
                 'message': msg,
+                'view_id': view_id
             }]
         }
     
