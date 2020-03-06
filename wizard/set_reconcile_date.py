@@ -41,7 +41,7 @@ class ShopAnnounce(models.TransientModel):
             ('state','=','delivered')
         ])
         return {
-            'name': _('Reconcile'),
+            'name': _('Đối Soát Đơn Hàng'),
             'view_type': 'form',
             'view_mode': 'tree',
             'view_id': False,

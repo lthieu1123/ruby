@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Ruby Shop Sale Order Management",
+    'name': "Tool Quản Lý Toàn Diện RUBI",
     'summary': """
-        Phần mềm quản lý đơn hàng Ruby Shop""",
+        Tool Quản Lý Toàn Diện RUBI""",
     'description': """
         Quản lý các đơn hàng đang xử lý, đã gửi, chuyển hoàn
     """,
     'author': "Hiếu Lâm",
     'website': "",
-    'category': 'ruby_shop',
+    'category': 'rubi',
     'version': '0.1',
     'depends': ['base',],
     'data': [
@@ -20,7 +20,8 @@
         'views/sale_order_management_shop_views.xml',
         'report/report_ruby_views.xml',
         'views/menu_action.xml',
-        'views/menu_views.xml'
+        'views/menu_views.xml',
+        # 'data/company_user_data.xml'
     ],
     'demo': [],
     'qweb': [

@@ -4,6 +4,8 @@
 import os
 import pandas as pd
 import datetime
+import base64
+import io
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
@@ -159,10 +161,11 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = 'c:/tool/dauvao'        
+        _import_directory = 'c:/tool/newssg'        
         import_directory_file = os.listdir(_import_directory)
         msg = []
         #Checking shop code before run
+        view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
             shop_code = entry.split('.')[0]
             shop_id = self.env['sale.order.management.shop'].search([
@@ -173,6 +176,7 @@ class SaleOrderManagment(models.Model):
                     'messages': [{
                         'type': 'Error',
                         'message': [(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))],
+                        'view_id': view_id
                     }]
                 }
         
@@ -214,15 +218,22 @@ class SaleOrderManagment(models.Model):
                         'messages': [{
                             'type': 'Error',
                             'message': [(_('Cannot create data as error: {}').format(str(err)))],
+                            'view_id': view_id
                         }]
                     }
-            msg.append(_('Shop: {} - Create: {} - Delete: {}').format(shop_id.name,index+1,del_count))
+            values = {
+                'shop': shop_id.name,
+                'create':index+1,
+                'del':del_count
+            }
+            msg.append(values)
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
             'messages': [{
                 'type': 'Completed',
                 'message': msg,
+                'view_id': view_id
             }]
         }
     
@@ -267,7 +278,7 @@ class SaleOrderManagment(models.Model):
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
         return {
-                'name': 'Reconcile Date',
+                'name': 'Đối Soát Đơn Hàng',
                 'view_type': 'form',
                 'view_mode': 'form',
                 'view_id': False,
@@ -284,104 +295,100 @@ class SaleOrderManagment(models.Model):
             data += '<td>{}</td>'.format(table_data[table])
         table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
         return table
-             
+
     @api.model
-    def btn_cal_fee(self):
+    def btn_cal_fee(self, file_name, fiel_data):
         self._cr.execute('SAVEPOINT import')
-        _sale_done_director = 'c:/tool/taichinh'
-        sale_director_file = os.listdir(_sale_done_director)
+        # _sale_done_director = 'c:/tool/taichinh'
+        # sale_director_file = os.listdir(_sale_done_director)
         #Checking shop code before run
-        for entry in sale_director_file:
-            shop_code = entry.split('.')[0]
-            shop_id = self.env['sale.order.management.shop'].search([
-                ('code','=',shop_code)
-            ])
-            if not len(shop_id):
-                raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
-        msg = []
-        for entry in sale_director_file:
-            shop_code = entry.split('.')[0]
-            shop_id = self.env['sale.order.management.shop'].search([
-                ('code','=',shop_code)
-            ])
-            directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8', usecols=['Fee Name','Amount'])
-            a = 0
-            b = 0
-            c = 0
-            d = 0
-            e = 0
-            f = 0
-            g = 0
-            h = 0
-            i = 0
-            j = 0
-            k = 0
-            l = 0
-            for index, row in result.iterrows():
-                fee_name = row[FEE_NAME]
-                if fee_name == SHIP_FEE_BY_CUS:
-                    a += int(row[AMOUNT])
-                    continue
-                if fee_name == ITEM_PRICE:
-                    b += int(row[AMOUNT])
-                    continue
-                if fee_name == SHIP_FEE_BY_SELLER:
-                    c += int(row[AMOUNT])
-                if fee_name == SHIP_FEE_VOUCHER_LAZADA:
-                    d += int(row[AMOUNT])
-                    continue
-                if fee_name == PROMOTION_CHARGES_VOUCHER:
-                    e += int(row[AMOUNT])
-                    continue
-                if fee_name == ADJ_PAYMENT_FEE:
-                    f += int(row[AMOUNT])
-                    continue
-                if fee_name == PAYMENT_FEE:
-                    g += int(row[AMOUNT])
-                    continue
-                if fee_name == SPON_PRODUCT_FEE:
-                    h += int(row[AMOUNT])
-                    continue
-                if fee_name == REVERSAL_SHIP_FEE:
-                    i += int(row[AMOUNT])
-                    continue
-                if fee_name == REVERSAL_ITEM_PRICE:
-                    j += int(row[AMOUNT])
-                    continue
-                if fee_name == ADJ_SHIP_FEE:
-                    k += int(row[AMOUNT])
-                    continue
-                if fee_name == SHIP_FEE_CLAIM:
-                    l += int(row[AMOUNT])
-                    continue
-            
-            total = a+b+c-d+e-f-g-h-i-j-k+l
-            table_data = {
-                SHIP_FEE_BY_CUS: a,
-                ITEM_PRICE: b,
-                SHIP_FEE_BY_SELLER: c,
-                SHIP_FEE_VOUCHER_LAZADA: d,
-                PROMOTION_CHARGES_VOUCHER: e,
-                ADJ_PAYMENT_FEE: f,
-                PAYMENT_FEE: g,
-                SPON_PRODUCT_FEE: h,
-                REVERSAL_SHIP_FEE: i,
-                REVERSAL_ITEM_PRICE: j,
-                ADJ_SHIP_FEE: k,
-                SHIP_FEE_CLAIM: l,
-                'Total': total
-            }
-            table = self._create_table(table_data)
-            context = self.env.context.copy()
-            context['default_message'] = table
-            return {
-                'name': 'Reconcile Date',
-                'view_type': 'form',
-                'view_mode': 'form',
-                'view_id': self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id,
-                'res_model': 'shop.announce',
-                'target': 'new',
-                'context': context,
-                'type': 'ir.actions.act_window',
-            }
+        
+        shop_code = file_name.split('.')[0]
+        shop_id = self.env['sale.order.management.shop'].search([
+            ('code','=',shop_code)
+        ])
+        if not len(shop_id):
+            raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+        
+        data_file = base64.b64decode(fiel_data)
+        csv_filelike = io.BytesIO(data_file)
+        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount'])
+        a = 0
+        b = 0
+        c = 0
+        d = 0
+        e = 0
+        f = 0
+        g = 0
+        h = 0
+        i = 0
+        j = 0
+        k = 0
+        l = 0
+        for index, row in result.iterrows():
+            fee_name = row[FEE_NAME]
+            if fee_name == SHIP_FEE_BY_CUS:
+                a += int(row[AMOUNT])
+                continue
+            if fee_name == ITEM_PRICE:
+                b += int(row[AMOUNT])
+                continue
+            if fee_name == SHIP_FEE_BY_SELLER:
+                c += int(row[AMOUNT])
+            if fee_name == SHIP_FEE_VOUCHER_LAZADA:
+                d += int(row[AMOUNT])
+                continue
+            if fee_name == PROMOTION_CHARGES_VOUCHER:
+                e += int(row[AMOUNT])
+                continue
+            if fee_name == ADJ_PAYMENT_FEE:
+                f += int(row[AMOUNT])
+                continue
+            if fee_name == PAYMENT_FEE:
+                g += int(row[AMOUNT])
+                continue
+            if fee_name == SPON_PRODUCT_FEE:
+                h += int(row[AMOUNT])
+                continue
+            if fee_name == REVERSAL_SHIP_FEE:
+                i += int(row[AMOUNT])
+                continue
+            if fee_name == REVERSAL_ITEM_PRICE:
+                j += int(row[AMOUNT])
+                continue
+            if fee_name == ADJ_SHIP_FEE:
+                k += int(row[AMOUNT])
+                continue
+            if fee_name == SHIP_FEE_CLAIM:
+                l += int(row[AMOUNT])
+                continue
+        
+        total = a+b+c-d+e-f-g-h-i-j-k+l
+        table_data = {
+            SHIP_FEE_BY_CUS: a,
+            ITEM_PRICE: b,
+            SHIP_FEE_BY_SELLER: c,
+            SHIP_FEE_VOUCHER_LAZADA: d,
+            PROMOTION_CHARGES_VOUCHER: e,
+            ADJ_PAYMENT_FEE: f,
+            PAYMENT_FEE: g,
+            SPON_PRODUCT_FEE: h,
+            REVERSAL_SHIP_FEE: i,
+            REVERSAL_ITEM_PRICE: j,
+            ADJ_SHIP_FEE: k,
+            SHIP_FEE_CLAIM: l,
+            'Total': total
+        }
+        table = self._create_table(table_data)
+        context = self.env.context.copy()
+        context['default_message'] = table
+        return {
+            'name': 'Đối Soát Tài Chính',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id,
+            'res_model': 'shop.announce',
+            'target': 'new',
+            'context': context,
+            'type': 'ir.actions.act_window',
+        }

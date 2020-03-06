@@ -19,6 +19,7 @@ odoo.define('ruby.custom_list_view', function (require) {
             event.stopPropagation();
             event.preventDefault();
             var d = $.Deferred();
+            var self = this;
             var button = [{
                 text: _t("OK"),
                 close: true,
@@ -35,23 +36,42 @@ odoo.define('ruby.custom_list_view', function (require) {
             }).then(function(data){
                 var msg_type = data.messages[0].type
                 var msg = data.messages[0].message
+                var view_id = data.messages[0].view_id
                 var message = "";
-                msg.forEach(function(item,idx,array){
-                    if(idx === array.length-1){
-                        message+= item;
-                    }else{
-                        message+= item+" | ";
+                if (msg_type == "Error"){
+                    message = msg
+                }else{
+                    var body = "";
+                    for (var i = 0; i < msg.length; i++){
+                        var data = msg[i];
+                        var shop = data.shop;
+                        var create = data.create;
+                        var del = data.del;
+                        body += "<tr class=\"o_data_row\"><td class=\"o_data_cell o_readonly_modifier\">"+shop+"</td><td>"+create+"</td><td>"+del+"</td></tr>"
+                    }
+                    message = "<table class=\"o_list_view table table-sm table-hover table-striped o_list_view_ungrouped\"><thread><tr><th>Shop</th><th>Create</th><th>Delete</th></tr></thread><tbody>"+body+"</tbody></table>"
+                }
+                return self.do_action({
+                    name: 'Result',
+                    type: 'ir.actions.act_window',
+                    view_type: 'form',
+                    view_mode: 'form',
+                    res_model: 'shop.announce',
+                    views: [[view_id, 'form']],
+                    target: 'new',
+                    context: {
+                        default_message: message
                     }
                 })
-                Dialog.alert(this, msg,{
-                size: "medium",
-                buttons: button,
-                $content: $("<main/>", {
-                    role: "alert",
-                    text: message
-                }),
-                title: msg_type
-                });
+                // Dialog.alert(this, msg,{
+                // size: "medium",
+                // buttons: button,
+                // $content: $("<main/>", {
+                //     role: "alert",
+                //     text: message
+                // }),
+                // title: msg_type
+                // });
             })
         },
 

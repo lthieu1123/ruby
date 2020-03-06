@@ -2,24 +2,24 @@
 <odoo>
     <data>
         <!-- This Menu Item will appear in the Upper bar, that's why It needs NO parent or action -->
-        <menuitem id="sale_order_management_menu_root" name="Sale Order Management" sequence="1"/>
+        <menuitem id="sale_order_management_menu_root" name="Tool Quản Lý Toàn Diện RUBI" sequence="1"/>
             <!-- This Menu Item must have a parent and an action -->
             <menuitem id="sale_order_management_menu_act"
-                        name="Sale Order"
+                        name="Cập Nhật Mới"
                         parent="sale_order_management_menu_root"
                         action="sale_order_management_action"
                         sequence="1"/>
 
             <!-- Delivered -->
             <menuitem id="set_order_to_delivered_act"
-                        name="Delivered Order"
+                        name="Giao Hàng"
                         parent="sale_order_management_menu_root"
                         action="set_order_to_delivered_action"
                         sequence="2"/>
             
             <!-- Returned -->
             <menuitem id="set_order_to_returned_act"
-                        name="Returned Order"
+                        name="Hàng Trả"
                         parent="sale_order_management_menu_root"
                         action="set_order_to_returned_action"
                         sequence="3"/>
@@ -31,26 +31,26 @@
                         sequence="4"/>
                         
             <menuitem id="sale_order_report_menu_act"
-                        name="Report"
+                        name="Báo Cáo"
                         parent="sale_order_management_menu_root"
                         sequence="5"/>
                 <menuitem id="sale_order_delivered_report_sub_menu"
-                            name="Delivered Report"
+                            name="Báo Cáo Giao Hàng"
                             parent="sale_order_report_menu_act"
                             action="delivered_report_act"
                             sequence="1"/>
                 <menuitem id="sale_order_returned_report_sub_menu"
-                            name="Returned Report"
+                            name="Báo Cáo Hàng Trả"
                             parent="sale_order_report_menu_act"
                             action="returned_report_act"
                             sequence="2"/>
             <menuitem id="action_calculate_fee_menu"
-                        name="Calculate Fee"
+                        name="Đối Soát Tài Chính"
                         parent="sale_order_management_menu_root"
-                        action="action_calculate_fee"
+                        action="financial_control_action"
                         sequence="6"/>
             <menuitem id="action_process_done_item_menu"
-                        name="Process Done Item"
+                        name="Đối Soát Đơn Hàng"
                         parent="sale_order_management_menu_root"
                         action="action_process_done"
                         sequence="6"/>
