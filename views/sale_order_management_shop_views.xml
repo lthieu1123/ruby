@@ -9,8 +9,9 @@
             <field name="view_mode">tree,form</field>
             <field name="view_type">form</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
+                <p class="o_view_nocontent_smiling_face">
                     <!-- Add Text Here -->
+                    Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…
                 </p><p>
                     <!-- More details about what a user can do with this object will be OK --> 
                 </p>
@@ -24,7 +25,9 @@
             <field name="arch" type="xml">
                 <form string="">
                     <sheet>
+                        <span>Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…</span>
                         <group>
+                            
                             <field name="name"/>
                             <field name="code"/>                            
                         </group>

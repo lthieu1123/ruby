@@ -10,6 +10,7 @@ import logging
 import re
 import ctypes
 import json
+import base64
 
 _logger = logging.getLogger(__name__)
 
@@ -21,7 +22,13 @@ class ShopAnnounce(models.TransientModel):
         return self.env.context.get('default_message', False)
 
     name = fields.Text('name', default=_get_default_message)
+    file_data = fields.Binary(string='File')
+    file_name = fields.Char('File Name')
     
+    @api.multi
+    def btn_accept(self):
+        return self.env['sale.order.management'].btn_cal_fee(self.file_name,self.file_data)
+
     @api.multi
     def btn_ok(self):
         context = self.env.context
@@ -134,7 +141,7 @@ class SetOrderToDelivered(models.TransientModel):
                         shop_name: new_delta
                     })
                     rec.json_field = json.dumps(_data)
-                    rec.note = self._create_table(_data)
+                    rec.note = rec._create_table(_data)
                 else:
                     rec.tracking_code_not_found += 1
             #Remove tracking_code_ids
@@ -200,7 +207,7 @@ class SetOrderToReturned(models.TransientModel):
                         shop_name: new_delta
                     })
                     rec.json_field = json.dumps(_data)
-                    rec.note = self._create_table(_data)
+                    rec.note = rec._create_table(_data)
                 else:
                     rec.tracking_code_not_found += 1
             #Remove tracking_code_ids

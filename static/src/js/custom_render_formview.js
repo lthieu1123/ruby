@@ -20,9 +20,9 @@ odoo.define('rubyshop.custom_form_view', function (require) {
                             btn.addClass('o_invisible_modifier');
                             breadcrumb = $('li.breadcrumb-item.active')[0]
                             if (d.model=='set.order.to.delivered'){
-                                breadcrumb.innerText = "Delivered Order";
+                                breadcrumb.innerText = "Giao Hàng";
                             }else if (d.model=='set.order.to.returned'){
-                                breadcrumb.innerText = "Returned Order";
+                                breadcrumb.innerText = "Hàng Trả";
                             }
                             clearInterval(iid);
                         }

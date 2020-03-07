@@ -9,6 +9,14 @@
             <field name="arch" type="xml">
                 <form string="Set Date">
                     <main>
+                        <div>
+                            <ul>
+                                <li>Chọn khung thời gian bạn muốn đối soát, chúng tôi sẽ giúp bạn đối soát toàn bộ đơn hàng gửi đi trong thời gian ấy.</li>
+                                <li>Để đảm bảo tính chính xác hãy đối soát theo từng tháng.</li>
+                                <li>Hãy đảm bảo đã upload đủ file thanh toán từ ngày đối soát đến 60 ngày tiếp theo.</li>
+                                <li>Thời gian khiếu nại lên lazada là 3 THÁNG kể từ ngày phát sinh đơn hàng</li>
+                            </ul>
+                        </div>
                         <group>
                             <div>
                                 <label for="date_start" class="o_form_label oe_inline"/>

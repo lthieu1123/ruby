@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Ruby Shop Sale Order Management",
+    'name': "Tool Quản Lý Toàn Diện RUBI",
     'summary': """
-        Phần mềm quản lý đơn hàng Ruby Shop""",
+        Tool Quản Lý Toàn Diện RUBI""",
     'description': """
         Quản lý các đơn hàng đang xử lý, đã gửi, chuyển hoàn
     """,
     'author': "Hiếu Lâm",
     'website': "",
-    'category': 'ruby_shop',
+    'category': 'rubi',
     'version': '0.1',
-    'depends': ['base',],
+    'depends': ['base','web'],
     'data': [
+        'security/user_group.xml',
+        # 'data/company_user_data.xml',
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
         'wizard/set_reconcile_date_views.xml',
@@ -20,10 +22,13 @@
         'views/sale_order_management_shop_views.xml',
         'report/report_ruby_views.xml',
         'views/menu_action.xml',
-        'views/menu_views.xml'
+        'views/menu_views.xml',
+        
     ],
     'demo': [],
     'qweb': [
         'static/src/xml/inherit_button_action.xml'
-    ]
+    ],
+    'installable': True,
+    'auto_install': True,
 }

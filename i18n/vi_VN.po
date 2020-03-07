@@ -1,0 +1,887 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* ruby
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20200304\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-06 17:31+0000\n"
+"PO-Revision-Date: 2020-03-06 17:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__measure
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__measure
+msgid "# of Value"
+msgstr "# Giá Trị"
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.sale_order_management_shop_view_form
+msgid "<span>Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…</span>"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.actions.act_window,help:ruby.sale_order_management_action
+msgid "<span>Tải file sẳn sàng giao mới nhất về máy. Đặt tên lần lượt là 1,2,3,4,5,6…</span>\n"
+"                    <span>Lưu vào thư mục: C://tool/newssg</span>"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.financial_control_view_form
+msgid "<span>Tải lên file sao kê bạn cần kiểm tra, chúng tôi sẽ giúp bạn kiểm tra lại toàn bộ tài chính.</span>"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_delivered_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_returned_view_form
+msgid "Apply"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_base_report
+msgid "Base Report"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_sale_order_management_delivered_report
+#: model:ir.model,name:ruby.model_sale_order_management_returned_report
+msgid "Bill and Value supplier report"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_address
+msgid "Billing Address"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_address2
+msgid "Billing Address2"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_address3
+msgid "Billing Address3"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_address4
+msgid "Billing Address4"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_address5
+msgid "Billing Address5"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_city
+msgid "Billing City"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_country
+msgid "Billing Country"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_name
+msgid "Billing Name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_phone_number
+msgid "Billing Phone Number"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_phone_number2
+msgid "Billing Phone Number2"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__billing_postcode
+msgid "Billing Postcode"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__branch_number
+msgid "Branch Number"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__bundle_discount
+msgid "Bundle Discount"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__bundle_id
+msgid "Bundle ID"
+msgstr ""
+
+#. module: ruby
+#: model:ir.ui.menu,name:ruby.sale_order_report_menu_act
+msgid "Báo Cáo"
+msgstr ""
+
+#. module: ruby
+#: model:ir.ui.menu,name:ruby.sale_order_delivered_report_sub_menu
+msgid "Báo Cáo Giao Hàng"
+msgstr ""
+
+#. module: ruby
+#: model:ir.ui.menu,name:ruby.sale_order_returned_report_sub_menu
+msgid "Báo Cáo Hàng Trả"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_delivered_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_returned_view_form
+msgid "Bắn mã code thứ 2 vào ô Tracking Code"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__cd_shipping_provider
+msgid "CD Shipping Provider"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__cd_tracking_code
+msgid "CD Tracking Code"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.financial_control_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_delivered_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_returned_view_form
+msgid "Cancel"
+msgstr "Hủy"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__cancel_return_initiator
+msgid "Cancel / Return Initiator"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/models/sale_order_management.py:220
+#, python-format
+msgid "Cannot create data as error: {}"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/models/sale_order_management.py:271
+#, python-format
+msgid "Cannot find Order item with ID [{}] in database"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/models/sale_order_management.py:178
+#: code:addons/ruby/models/sale_order_management.py:252
+#: code:addons/ruby/models/sale_order_management.py:311
+#: code:addons/ruby/wizard/base_import_inherit.py:45
+#, python-format
+msgid "Cannot find shop with shop code is: \"[{}]\""
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Chọn khung thời gian bạn muốn đối soát, chúng tôi sẽ giúp bạn đối soát toàn bộ đơn hàng gửi đi trong thời gian ấy."
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/models/sale_order_management.py:62
+#: sql_constraint:sale.order.management.shop:0
+#, python-format
+msgid "Code must be unique"
+msgstr "Mã Shop phải là duy nhất"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report__col
+msgid "Col"
+msgstr ""
+
+#. module: ruby
+#. openerp-web
+#: code:addons/ruby/static/src/xml/inherit_button_action.xml:11
+#, python-format
+msgid "Create"
+msgstr "Tạo"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__row
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__row
+msgid "Created Date"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__created_at
+msgid "Created at"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__create_uid
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__create_uid
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__create_uid
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__create_uid
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__create_uid
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__create_date
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__create_date
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__create_date
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__create_date
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__create_date
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__customer_email
+msgid "Customer Email"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__customer_name
+msgid "Customer Name"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.actions.act_window,help:ruby.sale_order_management_shop_action
+msgid "Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.sale_order_management_action
+#: model:ir.ui.menu,name:ruby.sale_order_management_menu_act
+msgid "Cập Nhật Mới"
+msgstr ""
+
+#. module: ruby
+#: selection:sale.order.management,state:0
+msgid "Delivered"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_delivered_view_form
+msgid "Delivered Order"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.view_delivered_report_graph
+#: model_terms:ir.ui.view,arch_db:ruby.view_delivered_report_pivot
+#: model_terms:ir.ui.view,arch_db:ruby.view_delivered_report_search
+#: model_terms:ir.ui.view,arch_db:ruby.view_returned_report_graph
+#: model_terms:ir.ui.view,arch_db:ruby.view_returned_report_pivot
+#: model_terms:ir.ui.view,arch_db:ruby.view_returned_report_search
+msgid "Delivered Report"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__delta
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__delta
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__delta
+msgid "Delta"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report__display_name
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__display_name
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__display_name
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__display_name
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__display_name
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__display_name
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__display_name
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__display_name
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__display_name
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ruby
+#: selection:sale.order.management,state:0
+msgid "Done"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__editor
+msgid "Editor"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/wizard/set_reconcile_date.py:30
+#, python-format
+msgid "End date must be equal or greate than Start date"
+msgstr "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__file_data
+msgid "File"
+msgstr "Tập Tin"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__file_name
+msgid "File Name"
+msgstr "Tên Tập Tin"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__date_start
+msgid "From"
+msgstr "Từ"
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.set_order_to_delivered_action
+#: model:ir.ui.menu,name:ruby.set_order_to_delivered_act
+msgid "Giao Hàng"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.set_order_to_returned_action
+#: model:ir.ui.menu,name:ruby.set_order_to_returned_act
+msgid "Hàng Trả"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Hãy đảm bảo đã upload đủ file thanh toán từ ngày đối soát đến 60 ngày tiếp theo."
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report__id
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__id
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__id
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__id
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__id
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__id
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__id
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__id
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__id
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__id
+msgid "ID"
+msgstr ""
+
+#. module: ruby
+#. openerp-web
+#: code:addons/ruby/static/src/xml/inherit_button_action.xml:24
+#, python-format
+msgid "Import"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/wizard/set_reconcile_date.py:36
+#, python-format
+msgid "Imported data is not reached to end date {}"
+msgstr ""
+
+#. module: ruby
+#. openerp-web
+#: code:addons/ruby/static/src/xml/inherit_button_action.xml:8
+#, python-format
+msgid "Invisible"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__invoice_required
+msgid "Invoice Required"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__item_name
+msgid "Item Name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__json_field
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__json_field
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__json_field
+msgid "Json data"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report____last_update
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management____last_update
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report____last_update
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report____last_update
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop____last_update
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs____last_update
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered____last_update
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned____last_update
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date____last_update
+#: model:ir.model.fields,field_description:ruby.field_shop_announce____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__write_uid
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__write_uid
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__write_uid
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__write_uid
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__write_uid
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__write_date
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__write_date
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__write_date
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__write_date
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__write_date
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__lazada_id
+msgid "Lazada Id"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__lazada_sku
+msgid "Lazada SKU"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report__measure
+msgid "Measure"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__national_registration_number
+msgid "National Registration Number"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__note
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__note
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__note
+msgid "Notes"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__tracking_code_count
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__tracking_code_count
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__tracking_code_count
+msgid "Number of Tracking Code"
+msgstr "Số lượng Tracking Code"
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__tracking_code_not_found
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__tracking_code_not_found
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__tracking_code_not_found
+msgid "Number of Tracking Code Not Found"
+msgstr ""
+
+#. module: ruby
+#. openerp-web
+#: code:addons/ruby/static/src/js/render_button_process_csv.js:24
+#: model_terms:ir.ui.view,arch_db:ruby.ecc_contract_announce_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.ecc_contract_announce_view_form_cal_amount
+#: model_terms:ir.ui.view,arch_db:ruby.financial_control_view_form
+#, python-format
+msgid "OK"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__order_flag
+msgid "Order Flag"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__order_item_id
+msgid "Order Item Id"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__order_number
+msgid "Order Number"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__order_type
+msgid "Order Type"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__paid_price
+msgid "Paid Price"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__payment_method
+msgid "Payment Method"
+msgstr ""
+
+#. module: ruby
+#: selection:sale.order.management,state:0
+msgid "Pending"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__premium
+msgid "Premium"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.server,name:ruby.action_calculate_fee
+#: model:ir.actions.server,name:ruby.action_process_done
+msgid "Process Done Item"
+msgstr ""
+
+#. module: ruby
+#. openerp-web
+#: code:addons/ruby/static/src/xml/inherit_button_action.xml:21
+#, python-format
+msgid "Process Update"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__promised_shipping_time
+msgid "Promised shipping time"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__reason
+msgid "Reason"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__reason_detail
+msgid "Reason Detail"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Reconcile"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__refund_amount
+msgid "Refund Amount"
+msgstr ""
+
+#. module: ruby
+#: selection:sale.order.management,state:0
+msgid "Returned"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.set_order_to_returned_view_form
+msgid "Returned Order"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_base_report__row
+msgid "Row"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_sale_order_management
+#: model:ir.ui.menu,name:ruby.sale_order_management_menu_root
+msgid "Sale Order Management"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.delivered_report_act
+#: model:ir.actions.act_window,name:ruby.returned_report_act
+msgid "Sale Order Management Report"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.sale_order_management_shop_action
+#: model:ir.model,name:ruby.model_sale_order_management_shop
+msgid "Sale Order Management Shop"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__seller_sku
+msgid "Seller SKU"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Set Date"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_set_order_abs
+msgid "Set Order Abstract"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_set_order_to_delivered
+msgid "Set Order To Delivered"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_set_order_to_returned
+msgid "Set Order To Returned"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_set_reconcile_date
+msgid "Set Reconcile Date"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipment_type_name
+msgid "Shipment Type Name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_address
+msgid "Shipping Address"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_address2
+msgid "Shipping Address2"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_address3
+msgid "Shipping Address3"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_address4
+msgid "Shipping Address4"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_address5
+msgid "Shipping Address5"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_city
+msgid "Shipping City"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_country
+msgid "Shipping Country"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_fee
+msgid "Shipping Fee"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_name
+msgid "Shipping Name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_phone_number
+msgid "Shipping Phone Number"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_phone_number2
+msgid "Shipping Phone Number2"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_postcode
+msgid "Shipping Postcode"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_provider
+msgid "Shipping Provider"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_provider_first_mile
+msgid "Shipping Provider (first mile)"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_provider_type
+msgid "Shipping Provider Type"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shipping_region
+msgid "Shipping Region"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__col
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__col
+#: model:ir.ui.menu,name:ruby.sale_order_menagement_shop_menu_act
+msgid "Shop"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__code
+msgid "Shop Code"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__shop_id
+msgid "Shop Name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model,name:ruby.model_shop_announce
+msgid "Shop announce"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_shop__name
+msgid "Shop name"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__state
+msgid "State"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__status
+msgid "Status"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.ecc_contract_announce_view_form
+#: model_terms:ir.ui.view,arch_db:ruby.ecc_contract_announce_view_form_cal_amount
+#: model_terms:ir.ui.view,arch_db:ruby.financial_control_view_form
+msgid "Success!"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tax_code
+msgid "Tax Code"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tax_invoice_requested
+msgid "Tax Invoice requested"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/report/report_abstrac.py:68
+#, python-format
+msgid "The options to build query incorrect"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.actions.act_window,help:ruby.delivered_report_act
+#: model_terms:ir.actions.act_window,help:ruby.returned_report_act
+msgid "This report allows you to analyse the Sale Order Management Report"
+msgstr ""
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Thời gian khiếu nại lên lazada là 3 THÁNG kể từ ngày phát sinh đơn hàng"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_reconcile_date__date_end
+msgid "To"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tracking_code
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__tracking_code_ids
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__tracking_code_ids
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__tracking_code_show
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__tracking_code_ids
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__tracking_code_show
+msgid "Tracking Code"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tracking_code_first_mile
+msgid "Tracking Code (first mile)"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tracking_url
+msgid "Tracking URL"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__tracking_url_first_mile
+msgid "Tracking URL (first mile)"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__transaction_date
+msgid "Transaction Date"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__unit_price
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_delivered_report__unit_price
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management_returned_report__unit_price
+msgid "Unit Price"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__updated_at
+msgid "Updated at"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__variation
+msgid "Variation"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_sale_order_management__wallet_credits
+msgid "Wallet Credits"
+msgstr ""
+
+#. module: ruby
+#: model:ir.model.fields,field_description:ruby.field_set_order_abs__name
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_delivered__name
+#: model:ir.model.fields,field_description:ruby.field_set_order_to_returned__name
+#: model:ir.model.fields,field_description:ruby.field_shop_announce__name
+msgid "name"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/wizard/set_order_to_delivered_returned.py:159
+#, python-format
+msgid "{} orders have been delivered"
+msgstr "{} đơn hàng đã giao"
+
+#. module: ruby
+#: code:addons/ruby/wizard/set_order_to_delivered_returned.py:224
+#, python-format
+msgid "{} orders have been returned"
+msgstr "{} đơn hàng trả"
+
+#. module: ruby
+#: model_terms:ir.ui.view,arch_db:ruby.model_name_view_form
+msgid "Để đảm bảo tính chính xác hãy đối soát theo từng tháng."
+msgstr ""
+
+#. module: ruby
+#: model:ir.ui.menu,name:ruby.action_calculate_fee_menu
+msgid "Đối Soát Tài Chính"
+msgstr ""
+
+#. module: ruby
+#: code:addons/ruby/wizard/set_reconcile_date.py:44
+#: model:ir.ui.menu,name:ruby.action_process_done_item_menu
+#, python-format
+msgid "Đối Soát Đơn Hàng"
+msgstr ""
+
+#. module: ruby
+#: model:ir.actions.act_window,name:ruby.financial_control_action
+msgid "Đối soát tài chính"
+msgstr ""
+
