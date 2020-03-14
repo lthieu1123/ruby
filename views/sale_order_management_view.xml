@@ -43,6 +43,7 @@
                         <field name="deliver_date"/>
                         <field name="notes"/>
                         <field name="state"/>
+                        <field name="write_date" string="Cập Nhật Lúc"/>
                 </tree>
             </field>
         </record>

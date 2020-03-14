@@ -185,17 +185,25 @@
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
                     </header>
                    <main>
-                        <div style="color:blue;">
-                            <label for="tracking_code_count"></label>
-                            <p1><field name="tracking_code_count"/></p1>
-                            <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
-                        </div>
-                            <field name="delta" invisible="1"/>
-                            <field name="tracking_code_not_found" invisible="1"/>
+                        <group>
+                            <div style="color:blue;">
+                                <label for="tracking_code_count"></label>
+                                <p1><field name="tracking_code_count"/></p1>
+                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                            </div>
                             <div>
-                                <ul>
-                                    <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
-                                </ul>
+                                <field name="note" widget="html" readonly="1"/>
+                            </div>
+                        </group>
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>
+                        <field name="json_field" invisible="1"/>
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>
+                        <div>
+                            <ul>
+                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                            </ul>
                         </div>
                         <group>
                             <field name="existed_tracking_code" invisible="1"/>
