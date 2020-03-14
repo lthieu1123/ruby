@@ -175,7 +175,10 @@ class SaleOrderManagment(models.Model):
         self._cr.execute('SAVEPOINT import')
         # _import_directory = 'c:/tool/newssg'
         _import_directory = '/mnt/c/tool/newssg'
-        import_directory_file = os.listdir(_import_directory)
+        try:
+            import_directory_file = os.listdir(_import_directory)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy file trong folder "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
@@ -256,7 +259,11 @@ class SaleOrderManagment(models.Model):
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
         _sale_done_director = 'c:/tool/taichinh'
-        sale_director_file = os.listdir(_sale_done_director)
+        try:
+            sale_director_file = os.listdir(_sale_done_director)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy file trong folder "{}"').format(_sale_done_director))
+
         #Checking shop code before run
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]

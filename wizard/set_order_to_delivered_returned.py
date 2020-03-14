@@ -55,39 +55,8 @@ class SetOrderAsb(models.AbstractModel):
     tracking_code_not_found = fields.Integer('Number of Tracking Code Not Found', readonly=True, default=0)
     note = fields.Text('Notes',)
     json_field = fields.Text('Json data')
-    tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code',)
     existed_tracking_code = fields.Text('Existed Tracking Code')
-    existed_tracking_data = fields.Many2many(comodel_name='sale.order.management',string='Existed Tracking Data')
-
-    @api.onchange('tracking_code_show')
-    def _onchange_tracking_code_show(self):
-        print('_onchange_tracking_code_show')
-        str_json = self.json_field
-
-        _data = json.loads(str_json) if str_json else {}
-        existed_data = self.existed_tracking_data
-        current_data = self.tracking_code_show
-        if len(existed_data) <= len(current_data):
-            self.existed_tracking_data = current_data
-        else:
-            count = self.tracking_code_count
-            _li_diff = list(set(existed_data.ids) - set(current_data.ids))
-            order_number = current_data.mapped(lambda r: r.order_number)
-            _li_order_number = list(dict.fromkeys(order_number))
-            if len(_li_diff):
-                recs = self.env['sale.order.management'].browse(_li_diff)
-                for rec in recs:
-                    shop_name = rec.shop_id.name
-                    if rec.order_number not in _li_order_number:
-                        _data.update({
-                            shop_name: _data.get(shop_name) - 1
-                        })
-                        count -=1
-                self.json_field = json.dumps(_data)
-                self.note = self._create_table(_data)
-                self.tracking_code_count = count
-                self.existed_tracking_data = current_data
-        self.existed_tracking_code = self.tracking_code_show.mapped(lambda r: r.tracking_code)
+    
 
     def _create_table(self,table_data):
         header_table = ""
@@ -142,6 +111,39 @@ class SetOrderToDelivered(models.TransientModel):
     _name = 'set.order.to.delivered'
     _inherit = ['set.order.abs']
     _description = 'Set Order To Delivered'
+
+    tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code',)
+    existed_tracking_data = fields.Many2many('sale.order.management','sale_order_to_delivered_relation','sale_order_management_id','set_order_delivered_id','Existed Tracking Data')
+
+    @api.onchange('tracking_code_show')
+    def _onchange_tracking_code_show(self):
+        print('_onchange_tracking_code_show')
+        str_json = self.json_field
+
+        _data = json.loads(str_json) if str_json else {}
+        existed_data = self.existed_tracking_data
+        current_data = self.tracking_code_show
+        if len(existed_data) <= len(current_data):
+            self.existed_tracking_data = current_data
+        else:
+            count = self.tracking_code_count
+            _li_diff = list(set(existed_data.ids) - set(current_data.ids))
+            order_number = current_data.mapped(lambda r: r.order_number)
+            _li_order_number = list(dict.fromkeys(order_number))
+            if len(_li_diff):
+                recs = self.env['sale.order.management'].browse(_li_diff)
+                for rec in recs:
+                    shop_name = rec.shop_id.name
+                    if rec.order_number not in _li_order_number:
+                        _data.update({
+                            shop_name: _data.get(shop_name) - 1
+                        })
+                        count -=1
+                self.json_field = json.dumps(_data)
+                self.note = self._create_table(_data)
+                self.tracking_code_count = count
+                self.existed_tracking_data = current_data
+        self.existed_tracking_code = self.tracking_code_show.mapped(lambda r: r.tracking_code)
 
     @api.onchange('tracking_code_ids')
     @api.multi
@@ -210,6 +212,39 @@ class SetOrderToReturned(models.TransientModel):
     _name = 'set.order.to.returned'
     _inherit = ['set.order.abs']
     _description = 'Set Order To Returned'
+
+    tracking_code_show = fields.Many2many(comodel_name='sale.order.management', string='Tracking Code',)
+    existed_tracking_data = fields.Many2many('sale.order.management','sale_order_to_returned_relation','sale_order_management_id','set_order_returned_id','Existed Tracking Data')
+
+    @api.onchange('tracking_code_show')
+    def _onchange_tracking_code_show(self):
+        print('_onchange_tracking_code_show')
+        str_json = self.json_field
+
+        _data = json.loads(str_json) if str_json else {}
+        existed_data = self.existed_tracking_data
+        current_data = self.tracking_code_show
+        if len(existed_data) <= len(current_data):
+            self.existed_tracking_data = current_data
+        else:
+            count = self.tracking_code_count
+            _li_diff = list(set(existed_data.ids) - set(current_data.ids))
+            order_number = current_data.mapped(lambda r: r.order_number)
+            _li_order_number = list(dict.fromkeys(order_number))
+            if len(_li_diff):
+                recs = self.env['sale.order.management'].browse(_li_diff)
+                for rec in recs:
+                    shop_name = rec.shop_id.name
+                    if rec.order_number not in _li_order_number:
+                        _data.update({
+                            shop_name: _data.get(shop_name) - 1
+                        })
+                        count -=1
+                self.json_field = json.dumps(_data)
+                self.note = self._create_table(_data)
+                self.tracking_code_count = count
+                self.existed_tracking_data = current_data
+        self.existed_tracking_code = self.tracking_code_show.mapped(lambda r: r.tracking_code)
 
     @api.onchange('tracking_code_ids')
     @api.multi
