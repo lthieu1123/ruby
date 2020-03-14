@@ -18,7 +18,13 @@
             <t t-if="widget !== undefined">
                 <button t-if="widget.modelName == 'sale.order.management'"
                         class="btn btn-primary o_button_process_csv"
-                        type="button">Process Update</button>
+                        type="button">Cập Nhật Hàng Mới</button>
+                <!-- <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_deliver_order"
+                        type="button">Hàng Đã Giao</button>
+                <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_returned_order"
+                        type="button">Hàng Trả</button> -->
                 <button t-if="widget.modelName != 'sale.order.management'"
                         class="btn btn-secondary o_button_import"
                         type="button">Import</button>

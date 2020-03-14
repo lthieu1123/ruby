@@ -86,7 +86,7 @@
             <field name="name">Giao Hàng</field>
             <field name="model">set.order.to.delivered</field>
             <field name="arch" type="xml">
-                <form string="Delivered Order" create="false" delete="false" edit="false">
+                <form string="Delivered Order" create="false" edit="false">
                     <header>
                         <button name="btn_apply" type="object" string="Apply" class="btn btn-primary" context="{'count': tracking_code_count}"/>
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
@@ -111,9 +111,53 @@
                             </ul>
                         </div>
                         <group>
+                            <field name="existed_tracking_code" invisible="1"/>
+                            <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
+                        </group>
+                        <group>
                             <field name="tracking_code_ids" options="{'no_create': 1, 'search_more':false}"/>
                         </group>
-                        <field name="tracking_code_show" widget="many2many" readonly="1" force_save="1"/>
+                        <field name="tracking_code_show">
+                            <tree create="false" edit="false">
+                                <field name="tracking_code"/>
+                                <field name="order_number"/>
+                                <field name="lazada_id"/>
+                                <field name="order_item_id"/>
+                                <field name="unit_price"/>
+                                <field name="shipment_type_name"/>
+                                <field name="payment_method"/>
+                                <field name="shipping_provider"/>
+
+                                <field name="status"/>
+                                <field name="updated_at"/>
+                                <field name="shipping_provider_type"/>
+                                <field name="seller_sku"/>
+                                <field name="billing_phone_number"/>
+                                <field name="item_name"/>
+                                <field name="created_at"/>
+                                
+                            </tree>
+                            <form create="false" edit="false"> 
+                                <group>
+                                    <field name="tracking_code" readonly="1"/>
+                                    <field name="order_number" readonly="1"/>
+                                    <field name="lazada_id" readonly="1"/>
+                                    <field name="order_item_id" readonly="1"/>
+                                    <field name="unit_price" readonly="1"/>
+                                    <field name="shipment_type_name" readonly="1"/>
+                                    <field name="payment_method" readonly="1"/>
+                                    <field name="shipping_provider" readonly="1"/>
+
+                                    <field name="status" readonly="1"/>
+                                    <field name="updated_at" readonly="1"/>
+                                    <field name="shipping_provider_type" readonly="1"/>
+                                    <field name="seller_sku" readonly="1"/>
+                                    <field name="billing_phone_number" readonly="1"/>
+                                    <field name="item_name" readonly="1"/>
+                                    <field name="created_at" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
                     </main>
                 </form>
             </field>
@@ -135,7 +179,7 @@
             <field name="name">Hàng Trả</field>
             <field name="model">set.order.to.returned</field>
             <field name="arch" type="xml">
-                <form string="Returned Order" create="false" delete="false" edit="false">
+                <form string="Returned Order" create="false" edit="false">
                     <header>
                         <button name="btn_apply" type="object" string="Apply" class="btn btn-primary" context="{'count': tracking_code_count}"/>
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
@@ -154,9 +198,52 @@
                                 </ul>
                         </div>
                         <group>
-                            <field name="tracking_code_ids" options="{'no_create': 1, 'search_more':false}" />
+                            <field name="existed_tracking_code" invisible="1"/>
+                            <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
-                        <field name="tracking_code_show" widget="many2many" readonly="1" force_save="1"/>
+                        <group>
+                            <field name="tracking_code_ids"/>
+                        </group>
+                        <field name="tracking_code_show">
+                            <tree create="false" edit="false">
+                                <field name="tracking_code"/>
+                                <field name="order_number"/>
+                                <field name="lazada_id"/>
+                                <field name="order_item_id"/>
+                                <field name="unit_price"/>
+                                <field name="shipment_type_name"/>
+                                <field name="payment_method"/>
+                                <field name="shipping_provider"/>
+
+                                <field name="status"/>
+                                <field name="updated_at"/>
+                                <field name="shipping_provider_type"/>
+                                <field name="seller_sku"/>
+                                <field name="billing_phone_number"/>
+                                <field name="item_name"/>
+                                <field name="created_at"/>
+                            </tree>
+                            <form create="false" edit="false"> 
+                                <group>
+                                    <field name="tracking_code" readonly="1"/>
+                                    <field name="order_number" readonly="1"/>
+                                    <field name="lazada_id" readonly="1"/>
+                                    <field name="order_item_id" readonly="1"/>
+                                    <field name="unit_price" readonly="1"/>
+                                    <field name="shipment_type_name" readonly="1"/>
+                                    <field name="payment_method" readonly="1"/>
+                                    <field name="shipping_provider" readonly="1"/>
+
+                                    <field name="status" readonly="1"/>
+                                    <field name="updated_at" readonly="1"/>
+                                    <field name="shipping_provider_type" readonly="1"/>
+                                    <field name="seller_sku" readonly="1"/>
+                                    <field name="billing_phone_number" readonly="1"/>
+                                    <field name="item_name" readonly="1"/>
+                                    <field name="created_at" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
                    </main>
                 </form>
             </field>

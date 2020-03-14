@@ -14,7 +14,9 @@ class RubyReportDelivered(models.Model):
     row = fields.Date(string='Created Date')
     measure = fields.Float('# of Value', required=True)
     col = fields.Many2one('sale.order.management.shop', string="Shop")
-    unit_price = fields.Float('Unit Price', required=True)
+    unit_price = fields.Float('Sale Price', required=True)
+    seller_sku = fields.Char('Seller SKU',)
+
 
     # --------------------------------------- functions -------------------------------------------------
 
@@ -26,9 +28,10 @@ class RubyReportDelivered(models.Model):
             """
                 select row_number() OVER () as id,
                 count(*) as measure,
-                sm.created_at as row,
-                sm.unit_price as unit_price,
-                sm.shop_id as col
+                sm.deliver_date as row,
+                sum(sm.unit_price) as unit_price,
+                sm.shop_id as col,
+                sm.seller_sku as seller_sku
             """
         ]
         return super()._select(sql)
@@ -51,9 +54,10 @@ class RubyReportDelivered(models.Model):
         sql = [
             """
                 group by
-                    sm.created_at,
+                    sm.deliver_date,
                     sm.unit_price,
-                    sm.shop_id
+                    sm.shop_id,
+                    sm.seller_sku
             """
         ]
         return super()._select(sql)
@@ -89,7 +93,8 @@ class RubyReportReturned(models.Model):
     row = fields.Date(string='Created Date')
     measure = fields.Float('# of Value', required=True)
     col = fields.Many2one('sale.order.management.shop', string="Shop")
-    unit_price = fields.Float('Unit Price', required=True)
+    unit_price = fields.Float('Sale Price', required=True)
+    seller_sku = fields.Char('Seller SKU',)
 
     # --------------------------------------- functions -------------------------------------------------
 
@@ -101,9 +106,10 @@ class RubyReportReturned(models.Model):
             """
                 select row_number() OVER () as id,
                 count(*) as measure,
-                sm.created_at as row,
-                sm.unit_price as unit_price,
-                sm.shop_id as col
+                sm.return_date as row,
+                sum(sm.unit_price) as unit_price,
+                sm.shop_id as col,
+                sm.seller_sku as seller_sku
             """
         ]
         return super()._select(sql)
@@ -126,9 +132,10 @@ class RubyReportReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.created_at,
+                    sm.return_date,
                     sm.unit_price,
-                    sm.shop_id
+                    sm.shop_id,
+                    sm.seller_sku
             """
         ]
         return super()._select(sql)

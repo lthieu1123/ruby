@@ -10,8 +10,8 @@ odoo.define('ruby.custom_list_view', function (require) {
             this._super.apply(this, arguments);
             if (this.$buttons && this.modelName == 'sale.order.management') {
                 this.$buttons.find('.o_button_process_csv').on('click', this.proxy('redirect_to_process_csv'));
-                this.$buttons.find('.o_button_process_sale_done').on('click', this.proxy('redirect_to_process_sale_done'));
-                this.$buttons.find('.o_button_reconcile').on('click', this.proxy('redirect_to_reconcile'));
+                this.$buttons.find('.o_button_deliver_order').on('click', this.proxy('redirect_to_delivered_order'));
+                this.$buttons.find('.o_button_returned_order').on('click', this.proxy('redirect_to_returned_order'));
             }
         },
 
@@ -117,6 +117,8 @@ odoo.define('ruby.custom_list_view', function (require) {
                 context: {}
             })
         },
+
+        
 
     });
 

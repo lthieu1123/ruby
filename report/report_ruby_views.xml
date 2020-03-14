@@ -7,18 +7,19 @@
             <field name="arch" type="xml">
                 <pivot string="Delivered Report">
                     <field name="row" interval="day" type="row"/>
-                    <field name="col" type="col"/>
+                    <field name="seller_sku" type="col"/>
                     <field name="measure" type="measure"/>
                 </pivot>
             </field>
         </record>
+        
         <record id="view_delivered_report_graph" model="ir.ui.view">
             <field name="name">sale.order.management.report.graphs</field>
             <field name="model">sale.order.management.delivered.report</field>
             <field name="arch" type="xml">
                 <graph string="Delivered Report" type="bar">
                     <field name="row" interval="day" type="row"/>
-                    <field name="col" type="col"/>
+                    <field name="seller_sku" type="col"/>
                     <field name="measure" type="measure"/>
                  </graph>
              </field>
@@ -31,6 +32,9 @@
                 <search string="Delivered Report">
                     <field name="col"/>
                     <field name="row"/>
+                    <field name="seller_sku"/>
+                    <filter name="today" string="To day"
+                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
                 </search>
             </field>
         </record>
@@ -40,7 +44,9 @@
             <field name="res_model">sale.order.management.delivered.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph,pivot</field>
-            <field name="help">This report allows you to analyse the Sale Order Management Report</field>
+            <field name="context">{'search_default_today': 1}</field>
+            <field name="search_view_id" ref="view_delivered_report_search"/>
+            <field name="help">Báo cáo các sản phẩm đã giao trong ngày</field>
         </record>
         
 
@@ -50,7 +56,7 @@
             <field name="arch" type="xml">
                 <pivot string="Delivered Report">
                     <field name="row" interval="day" type="row"/>
-                    <field name="col" type="col"/>
+                    <field name="seller_sku" type="col"/>
                     <field name="measure" type="measure"/>
                 </pivot>
             </field>
@@ -62,7 +68,7 @@
             <field name="arch" type="xml">
                 <graph string="Delivered Report" type="bar">
                     <field name="row" interval="day" type="row"/>
-                    <field name="col" type="col"/>
+                    <field name="seller_sku" type="col"/>
                     <field name="measure" type="measure"/>
                  </graph>
              </field>
@@ -75,6 +81,9 @@
                 <search string="Delivered Report">
                     <field name="col"/>
                     <field name="row"/>
+                    <field name="seller_sku"/>
+                    <filter name="today" string="To day"
+                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
                 </search>
             </field>
         </record>
@@ -84,7 +93,9 @@
             <field name="res_model">sale.order.management.returned.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph,pivot</field>
-            <field name="help">This report allows you to analyse the Sale Order Management Report</field>
+            <field name="context">{'search_default_today': 1}</field>
+            <field name="search_view_id" ref="view_returned_report_search"/>
+            <field name="help">Báo cáo các sản phẩm đã hoàn trả trong ngày</field>
         </record>
     </data>
 </odoo>

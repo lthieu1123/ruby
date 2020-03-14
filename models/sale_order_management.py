@@ -6,11 +6,14 @@ import pandas as pd
 import datetime
 import base64
 import io
+import logging
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
+from odoo.addons import decimal_precision as dp
 from ..commons.ruby_constant import *
 
+QUERY_STRING = 'select id from sale_order_management order by id desc limit 1'
 
 #FEE NAME
 SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
@@ -50,16 +53,7 @@ _li_key = ['Order Item Id','Order Type','Order Flag','Lazada Id','Seller SKU',\
                 'Tracking URL (first mile)','Promised shipping time','Premium','Status','Cancel / Return Initiator',\
                 'Reason','Reason Detail','Editor','Bundle ID','Bundle Discount','Refund Amount']
 
-class SaleOrderManagmentShop(models.Model):
-    _name = 'sale.order.management.shop'
-    _description = 'Sale Order Management Shop'
-
-    name = fields.Char('Shop name', required=True)
-    code = fields.Char('Shop Code', required=True)
-
-    # SQL Contraints
-    _sql_constraints = [('unique_tracking', 'unique(code)',
-                         _('Code must be unique'))]
+_logger = logging.getLogger(__name__)
 
 class SaleOrderManagment(models.Model):
     _name = 'sale.order.management'
@@ -138,9 +132,15 @@ class SaleOrderManagment(models.Model):
                                 ('delivered','Delivered'),
                                 ('returned','Returned'),
                                 ('done','Done')
-                            ],string='State',default='pending',index=True)
+                            ],string='Trạng Thái Đơn Hàng',default='pending',index=True)
     shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
     transaction_date = fields.Date('Transaction Date',index=True)
+    package_number = fields.Char('Package Number')
+    new_update_time = fields.Float('New Update',index=True,)
+    deliver_date = fields.Date('Ngày Giao Hàng',index=True)
+    return_date = fields.Date('Ngày Trả Hàng',index=True)
+    notes = fields.Char('Ghi Chú')
+    
 
     @api.model
     def create(self,vals):
@@ -157,13 +157,27 @@ class SaleOrderManagment(models.Model):
             'model': model_name,
             'res_id': res.id
         })
+    
+    @api.multi
+    def unlink(self):
+        model_name = self._name
+        for rec in self:
+            externalID = '{}_{}'.format(model_name, rec.id)
+            ir_model_data = self.env['ir.model.data'].sudo().search([
+                ('name','=',externalID)
+            ])
+            if len(ir_model_data):
+                ir_model_data.unlink()
+        return super().unlink()
 
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = 'c:/tool/newssg'        
+        # _import_directory = 'c:/tool/newssg'
+        _import_directory = '/mnt/c/tool/newssg'
         import_directory_file = os.listdir(_import_directory)
         msg = []
+        update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
         view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
@@ -201,7 +215,8 @@ class SaleOrderManagment(models.Model):
                     del_count +=1
                 #Adding shop_id in vals before add vals from csv
                 vals = {
-                    'shop_id': shop_id.id
+                    'shop_id': shop_id.id,
+                    'new_update_time': update_time
                 }
                 #Get data from csv row and add it to dict
                 for key in _li_key:
@@ -390,5 +405,26 @@ class SaleOrderManagment(models.Model):
             'res_model': 'shop.announce',
             'target': 'new',
             'context': context,
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.multi
+    def btn_new_update(self):
+        self._cr.execute(QUERY_STRING)
+        result = self.env.cr.fetchall()
+        update_time = False
+        if len(result):
+            _id = result[0][0]
+            obj = self.browse(int(_id))
+            update_time = obj.new_update_time
+
+        return {
+            'name': 'Cập Nhật Mới',
+            'view_type': 'form',
+            'view_mode': 'tree,graph,pivot',
+            'view_id': False,
+            'res_model': self._name,
+            'target': 'current',
+            'domain': [('new_update_time','=',update_time)],
             'type': 'ir.actions.act_window',
         }

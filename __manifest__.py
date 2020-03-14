@@ -10,8 +10,10 @@
     'website': "",
     'category': 'rubi',
     'version': '0.1',
-    'depends': ['base',],
+    'depends': ['base','web'],
     'data': [
+        'security/user_group.xml',
+        # 'data/company_user_data.xml',
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
         'wizard/set_reconcile_date_views.xml',
@@ -21,10 +23,12 @@
         'report/report_ruby_views.xml',
         'views/menu_action.xml',
         'views/menu_views.xml',
-        # 'data/company_user_data.xml'
+        
     ],
     'demo': [],
     'qweb': [
         'static/src/xml/inherit_button_action.xml'
-    ]
+    ],
+    'installable': True,
+    'auto_install': True,
 }
