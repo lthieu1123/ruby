@@ -173,8 +173,8 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        # _import_directory = 'c:/tool/newssg'
-        _import_directory = '/mnt/c/tool/newssg'
+        _import_directory = 'c:/tool/newssg'
+        #_import_directory = '/mnt/c/tool/newssg'
         import_directory_file = os.listdir(_import_directory)
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
