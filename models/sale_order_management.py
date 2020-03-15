@@ -175,7 +175,10 @@ class SaleOrderManagment(models.Model):
         self._cr.execute('SAVEPOINT import')
         _import_directory = 'c:/tool/newssg'
         #_import_directory = '/mnt/c/tool/newssg'
-        import_directory_file = os.listdir(_import_directory)
+        try:
+            import_directory_file = os.listdir(_import_directory)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(import_directory_file))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
@@ -189,7 +192,7 @@ class SaleOrderManagment(models.Model):
                 return {
                     'messages': [{
                         'type': 'Error',
-                        'message': [(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))],
+                        'message': [(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))],
                         'view_id': view_id
                     }]
                 }
@@ -259,7 +262,7 @@ class SaleOrderManagment(models.Model):
         try:
             sale_director_file = os.listdir(_sale_done_director)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy file trong folder "{}"').format(_sale_done_director))
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_sale_done_director))
 
         #Checking shop code before run
         for entry in sale_director_file:
@@ -268,7 +271,7 @@ class SaleOrderManagment(models.Model):
                 ('code','=',shop_code)
             ])
             if not len(shop_id):
-                raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+                raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
         msg = []
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
@@ -327,7 +330,7 @@ class SaleOrderManagment(models.Model):
             ('code','=',shop_code)
         ])
         if not len(shop_id):
-            raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+            raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
         
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)

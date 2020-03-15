@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="view_delivered_report_pivot" model="ir.ui.view">
-            <field name="name">sale.order.management.report.pivot</field>
+            <field name="name">Báo Cáo Giao Hàng</field>
             <field name="model">sale.order.management.delivered.report</field>
             <field name="arch" type="xml">
                 <pivot string="Delivered Report">
@@ -14,7 +14,7 @@
         </record>
         
         <record id="view_delivered_report_graph" model="ir.ui.view">
-            <field name="name">sale.order.management.report.graphs</field>
+            <field name="name">Báo Cáo Giao Hàng</field>
             <field name="model">sale.order.management.delivered.report</field>
             <field name="arch" type="xml">
                 <graph string="Delivered Report" type="bar">
@@ -40,7 +40,7 @@
         </record>
 
         <record id="delivered_report_act" model="ir.actions.act_window">
-            <field name="name">Sale Order Management Report</field>
+            <field name="name">Báo Cáo Giao Hàng</field>
             <field name="res_model">sale.order.management.delivered.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph,pivot</field>
@@ -51,7 +51,7 @@
         
 
         <record id="view_returned_report_pivot" model="ir.ui.view">
-            <field name="name">sale.order.management.report.pivot</field>
+            <field name="name">Báo Cáo Hàng Trả</field>
             <field name="model">sale.order.management.returned.report</field>
             <field name="arch" type="xml">
                 <pivot string="Delivered Report">
@@ -63,7 +63,7 @@
         </record>
 
         <record id="view_returned_report_graph" model="ir.ui.view">
-            <field name="name">sale.order.management.report.graphs</field>
+            <field name="name">Báo Cáo Hàng Trả</field>
             <field name="model">sale.order.management.returned.report</field>
             <field name="arch" type="xml">
                 <graph string="Delivered Report" type="bar">
@@ -89,7 +89,7 @@
         </record>
 
         <record id="returned_report_act" model="ir.actions.act_window">
-            <field name="name">Sale Order Management Report</field>
+            <field name="name">Báo Cáo Hàng Trả</field>
             <field name="res_model">sale.order.management.returned.report</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph,pivot</field>

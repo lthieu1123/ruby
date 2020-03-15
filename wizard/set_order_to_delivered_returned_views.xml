@@ -188,7 +188,6 @@
                         <group>
                             <div style="color:blue;">
                                 <label for="tracking_code_count"></label>
-                                <p1><field name="tracking_code_count"/></p1>
                                 <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
                             </div>
                             <div>
