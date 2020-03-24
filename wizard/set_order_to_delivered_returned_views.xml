@@ -59,7 +59,7 @@
                         <field name="name" readonly="1" widget="html"/>
                     </main>
                     <footer>
-                        <button string="OK" class="btn btn-primary" special="cancel"/>
+                        <button string="OK" class="btn btn-primary" name="btn_new_update" type="object"/>
                     </footer>
                 </form>
             </field>
@@ -92,17 +92,24 @@
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
                     </header>
                     <main>
-                        <group>
+                        <group col="2">
                             <div style="color:blue;">
                                 <label for="tracking_code_count"></label>
                                 <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
                             </div>
                             <div>
+                                <field name="json_field" invisible="1"/>
                                 <field name="note" widget="html" readonly="1"/>
                             </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Không tìm thấy:</span>
+                                <field name="code_not_found" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Đã chuyển trạng thái:</span>
+                                <field name="code_used" widget="html" readonly="1"/>
+                            </div>
                         </group>
-                        
-                        <field name="json_field" invisible="1"/>
                         <field name="delta" invisible="1"/>
                         <field name="tracking_code_not_found" invisible="1"/>
                         <div>
@@ -115,7 +122,15 @@
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
-                            <field name="tracking_code_ids" options="{'no_create': 1, 'search_more':false}"/>
+                            <group>
+                                <group>
+                                    <field name="input_type"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
                         </group>
                         <field name="tracking_code_show">
                             <tree create="false" edit="false">
@@ -185,24 +200,47 @@
                         <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
                     </header>
                    <main>
-                        <div style="color:blue;">
-                            <label for="tracking_code_count"></label>
-                            <p1><field name="tracking_code_count"/></p1>
-                            <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
-                        </div>
-                            <field name="delta" invisible="1"/>
-                            <field name="tracking_code_not_found" invisible="1"/>
+                        <group col="2">
+                            <div style="color:blue;">
+                                <label for="tracking_code_count"></label>
+                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                            </div>
                             <div>
-                                <ul>
-                                    <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
-                                </ul>
+                                <field name="json_field" invisible="1"/>
+                                <field name="note" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Không tìm thấy:</span>
+                                <field name="code_not_found" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Đã chuyển trạng thái:</span>
+                                <field name="code_used" widget="html" readonly="1"/>
+                            </div>
+                        </group>
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>                        
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>
+                        <div>
+                            <ul>
+                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                            </ul>
                         </div>
                         <group>
                             <field name="existed_tracking_code" invisible="1"/>
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
-                            <field name="tracking_code_ids"/>
+                            <group>
+                                <group>
+                                    <field name="input_type"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
                         </group>
                         <field name="tracking_code_show">
                             <tree create="false" edit="false">

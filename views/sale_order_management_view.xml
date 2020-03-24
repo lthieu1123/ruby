@@ -1,6 +1,38 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
+
+        <!-- model.name search view -->
+        <record id="sale_order_managment_view_search" model="ir.ui.view">
+            <field name="name">Lazada Search</field>
+            <field name="model">sale.order.management</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <!-- Add your fields here -->
+                    <field name="tracking_code"/>
+                    <field name="order_number"/>
+                    <field name="lazada_id"/>
+                    <field name="order_item_id"/>
+                    <field name="unit_price"/>
+                    <field name="shipment_type_name"/>
+                    <field name="payment_method"/>
+                    <field name="shipping_provider"/>
+                    <field name="package_number"/>
+                    <field name="status"/>
+                    <field name="updated_at"/>
+                    <field name="shipping_provider_type"/>
+                    <field name="seller_sku"/>
+                    <field name="billing_phone_number"/>
+                    <field name="item_name"/>
+                    <field name="created_at"/>
+                    <field name="deliver_date"/>
+                    <field name="notes"/>
+                    <field name="state"/>
+                    <field name="write_date" string="Cập Nhật Lúc"/>
+                </search>
+            </field>
+        </record>
+
         <!-- model.name action window -->
         <record id="sale_order_management_action" model="ir.actions.act_window">
             <field name="name">Danh Sách Đơn Hàng</field>
@@ -8,6 +40,7 @@
             <field name="res_model">sale.order.management</field>
             <field name="view_mode">tree</field>
             <field name="view_type">form</field>
+            <field name="search_view_id" ref="sale_order_managment_view_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     <span>Tải file sẳn sàng giao mới nhất về máy. Đặt tên lần lượt là 1,2,3,4,5,6…</span>
@@ -43,6 +76,7 @@
                         <field name="deliver_date"/>
                         <field name="notes"/>
                         <field name="state"/>
+                        <field name="write_date" string="Cập Nhật Lúc"/>
                 </tree>
             </field>
         </record>

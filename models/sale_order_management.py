@@ -173,9 +173,12 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = 'c:/tool/newssg'
-        #_import_directory = '/mnt/c/tool/newssg'
-        import_directory_file = os.listdir(_import_directory)
+        # _import_directory = 'c:/tool/newssg'
+        _import_directory = '/mnt/c/tool/newssg'
+        try:
+            import_directory_file = os.listdir(_import_directory)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(import_directory_file))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
@@ -189,7 +192,7 @@ class SaleOrderManagment(models.Model):
                 return {
                     'messages': [{
                         'type': 'Error',
-                        'message': [(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))],
+                        'message': [(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))],
                         'view_id': view_id
                     }]
                 }
@@ -204,15 +207,21 @@ class SaleOrderManagment(models.Model):
             #Reading csv file
             result = pd.read_csv(directory,sep=';',encoding='utf8')
             del_count = 0
+            skip_count = 0
             #browse data from dataframe pandas
             for index, row in result.iterrows():
                 #Checking existed item in database, if existed -> unlink
                 existed_item = self.search([
-                    ('order_item_id','=',row['Order Item Id'])
+                    ('order_item_id','=',row['Order Item Id']),
                 ])
                 if existed_item.id:
-                    existed_item.unlink()
-                    del_count +=1
+                    if existed_item.state == 'pending':
+                        existed_item.unlink()
+                        del_count +=1
+                    else:
+                        skip_count+=1
+                        continue
+
                 #Adding shop_id in vals before add vals from csv
                 vals = {
                     'shop_id': shop_id.id,
@@ -238,7 +247,7 @@ class SaleOrderManagment(models.Model):
                     }
             values = {
                 'shop': shop_id.name,
-                'create':index+1,
+                'create':index+1-skip_count,
                 'del':del_count
             }
             msg.append(values)
@@ -256,7 +265,11 @@ class SaleOrderManagment(models.Model):
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
         _sale_done_director = 'c:/tool/taichinh'
-        sale_director_file = os.listdir(_sale_done_director)
+        try:
+            sale_director_file = os.listdir(_sale_done_director)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_sale_done_director))
+
         #Checking shop code before run
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
@@ -264,7 +277,7 @@ class SaleOrderManagment(models.Model):
                 ('code','=',shop_code)
             ])
             if not len(shop_id):
-                raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+                raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
         msg = []
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
@@ -323,7 +336,7 @@ class SaleOrderManagment(models.Model):
             ('code','=',shop_code)
         ])
         if not len(shop_id):
-            raise exceptions.ValidationError(_('Cannot find shop with shop code is: "[{}]"').format(shop_code))
+            raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
         
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)
@@ -426,5 +439,6 @@ class SaleOrderManagment(models.Model):
             'res_model': self._name,
             'target': 'current',
             'domain': [('new_update_time','=',update_time)],
+            'search_view_id': self.env.ref('ruby.sale_order_managment_view_search').id,
             'type': 'ir.actions.act_window',
         }

@@ -1,56 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-		<record id="partner_giaohang1" model="res.partner">
-            <field name="name">Marc Demo</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="customer" eval="False"/>
-            <!-- <field name="company_name">YourCompany</field>
-            <field name="street">3575  Buena Vista Avenue</field>
-            <field name="city">Eugene</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','OR')]"/>
-            <field name="zip">97401</field>
-            <field name="country_id" ref="us"/>
-            <field name="tz">Europe/Brussels</field>
-            <field name="email">mark.brown23@example.com</field>
-            <field name="phone">(441)-695-2334</field> -->
-        </record>
-
-		<record id="partner_giaohang2" model="res.partner">
-            <field name="name">User 2</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="customer" eval="False"/>
-        </record>
-
-		<record id="partner_manager" model="res.partner">
-            <field name="name">Manager</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="customer" eval="False"/>
-        </record>
-
-        <record id="user_giaohang1" model="res.users">
-			<field name="partner_id" ref="partner_giaohang1"/>
-            <field name="login">giaohang1</field>
-            <field name="password">1123</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('ruby.user_normal_groups')])]"/>
-        </record>
-
-		<record id="user_giaohang2" model="res.users">
-			<field name="partner_id" ref="partner_giaohang2"/>
-            <field name="login">giaohang2</field>
-            <field name="password">1123</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('ruby.user_normal_groups')])]"/>
-        </record>
-
-		<record id="user_manager" model="res.users">
-			<field name="partner_id" ref="partner_manager"/>
-            <field name="login">manager</field>
-            <field name="password">1123</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('ruby.user_manager_groups')])]"/>
-        </record>
+        
     </data>
 </odoo>

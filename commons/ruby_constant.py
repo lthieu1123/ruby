@@ -70,3 +70,5 @@ header = {
     'Bundle Discount': 'bundle_discount',
     'Refund Amount': 'refund_amount'
 }
+
+SHOPEE_HEADER = []
