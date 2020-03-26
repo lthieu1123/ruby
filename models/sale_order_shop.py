@@ -23,3 +23,14 @@ class SaleOrderManagmentShop(models.Model):
     # SQL Contraints
     _sql_constraints = [('unique_tracking', 'unique(code)',
                          _('Code must be unique'))]
+
+# class SaleOrderManagmentShopeeShop(models.Model):
+#     _name = 'sale.order.management.shopee.shop'
+#     _description = 'Sale Order Management Shopee Shop'
+
+#     name = fields.Char('Shop name', required=True)
+#     code = fields.Char('Shop Code', required=True)
+
+#     # SQL Contraints
+#     _sql_constraints = [('unique_tracking', 'unique(code)',
+#                          _('Code must be unique'))]

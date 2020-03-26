@@ -28,6 +28,7 @@ REVERSAL_SHIP_FEE = 'Reversal shipping Fee (Paid by Customer)'
 REVERSAL_ITEM_PRICE = 'Reversal Item Price'
 ADJ_SHIP_FEE = 'Adjustments Shipping Fee'
 SHIP_FEE_CLAIM = 'Shipping Fee Claims'
+SHIP_FEE_SUBSIDY = 'Auto. Shipping fee subsidy (by Lazada)'
 
 
 #KEY HEADER
@@ -353,6 +354,7 @@ class SaleOrderManagment(models.Model):
         j = 0
         k = 0
         l = 0
+        m = 0
         for index, row in result.iterrows():
             fee_name = row[FEE_NAME]
             if fee_name == SHIP_FEE_BY_CUS:
@@ -390,8 +392,11 @@ class SaleOrderManagment(models.Model):
             if fee_name == SHIP_FEE_CLAIM:
                 l += int(row[AMOUNT])
                 continue
+            if fee_name == SHIP_FEE_SUBSIDY:
+                m += int(row[AMOUNT])
+                continue
         
-        total = a+b+c-d+e-f-g-h-i-j-k+l
+        total = a+b-c+d-e-f-g-h-i-j+k+l+m
         table_data = {
             SHIP_FEE_BY_CUS: a,
             ITEM_PRICE: b,
@@ -405,6 +410,7 @@ class SaleOrderManagment(models.Model):
             REVERSAL_ITEM_PRICE: j,
             ADJ_SHIP_FEE: k,
             SHIP_FEE_CLAIM: l,
+            SHIP_FEE_SUBSIDY: m,
             'Total': total
         }
         table = self._create_table(table_data)

@@ -22,6 +22,8 @@
         'views/sale_order_management_shop_views.xml',
         'report/report_ruby_views.xml',
         'views/menu_action.xml',
+        # 'views/shopee_views.xml',
+        # 'views/shopee_menu_views.xml',
         'views/menu_views.xml',
         
     ],
