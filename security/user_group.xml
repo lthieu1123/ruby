@@ -19,7 +19,7 @@
 			<field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>       
 
-        <!-- <record id="sale_managment_shopee" model="ir.module.category">
+        <record id="sale_managment_shopee" model="ir.module.category">
             <field name="name">Sale Shopee</field>
             <field name="sequence">40</field>
         </record>
@@ -35,7 +35,7 @@
             <field name="category_id" ref="sale_managment_shopee"/>
             <field name="implied_ids" eval="[(4, ref('user_normal_shopee_groups'))]"/>
 			<field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
-        </record>        -->
+        </record>       
 
     </data>
 </odoo>

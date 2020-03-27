@@ -17,7 +17,7 @@ from ..commons.ruby_constant import *
 _li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đơn hàng','Nhận xét từ Người mua',\
             'Mã vận đơn','Lựa chọn vận chuyển','Phương thức giao hàng','Loại đơn hàng','Ngày giao hàng dự kiến',\
             'Ngày gửi hàng','Thời gian giao hàng','Tình trạng Trả hàng / Hoàn tiền','SKU sản phẩm','Tên sản phẩm',\
-            'Cân nặng sản phẩm','Tổng cân nặng','Cân nặng sản phẩm','SKU phân loại hàng','Tên phân loại hàng','Giá gốc',\
+            'Cân nặng sản phẩm','Tổng cân nặng','Cân nặng sản phẩm.1','SKU phân loại hàng','Tên phân loại hàng','Giá gốc',\
             'Người bán tự giảm','Được Shopee trợ giá','Được người bán trợ giá','Giá ưu đãi','Số lượng','Product Subtotal',\
             'Tiền đơn hàng (VND)','Mã giảm giá của Shop','Hoàn Xu','Shopee Voucher','Chỉ tiêu combo khuyến mãi','Giảm giá từ combo Shopee',\
             'Giảm giá từ Combo của Shop','Shopee Xu được hoàn','Số tiền được giảm khi thanh toán bằng thẻ Ghi nợ','Phí vận chuyển (dự kiến)',\
@@ -28,7 +28,7 @@ _li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đ�
 class ShopeeManagment(models.Model):
     _name = "shopee.management"
     _description = "Shopee Management"
-    _rec_name = "ma_don_hang"
+    _rec_name = "ma_van_don"
 
     ma_don_hang = fields.Char('Mã đơn hàng', index=True)
     forder_id = fields.Char('Forder ID')
@@ -78,7 +78,7 @@ class ShopeeManagment(models.Model):
     tien_ky_quy = fields.Float('Tiền ký quỹ')
     username = fields.Char('Username (Buyer)')
     ten_nguoi_nhan = fields.Char('Tên Người nhận')
-    so_dien_thoai = fields.Integer('Số điện thoại')
+    so_dien_thoai = fields.Char('Số điện thoại')
     tinh_thanh_pho = fields.Char('Tỉnh/Thành phố')
     tp_quan_huyen = fields.Char('TP / Quận / Huyện')
     district = fields.Char('District')
@@ -128,14 +128,14 @@ class ShopeeManagment(models.Model):
         return super().unlink()
 
     @api.multi
-    def btn_process_csv(self):
+    def btn_process_excel(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = 'c:/tool/shopee/newssg'
-        # _import_directory = '/mnt/c/tool/newssg'
+        # _import_directory = 'c:/shopee/newssg'
+        _import_directory = '/mnt/c/shopee/newssg'
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(import_directory_file))
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
@@ -161,21 +161,23 @@ class ShopeeManagment(models.Model):
             ])
             directory = "{}/{}".format(_import_directory,entry)
             #Reading csv file
-            result = pd.read_csv(directory,sep=';',encoding='utf8')
+            result = pd.read_excel(directory)
             del_count = 0
-            skip_count = 0
+            create_count = 0
             #browse data from dataframe pandas
             for index, row in result.iterrows():
                 #Checking existed item in database, if existed -> unlink
+                if str(row['Mã vận đơn']) == 'nan':
+                    continue
                 existed_item = self.search([
-                    ('order_item_id','=',row['Order Item Id']),
+                    ('ma_van_don','=',row['Mã vận đơn']),
+                    ('new_update_time','!=',update_time)
                 ])
-                if existed_item.id:
-                    if existed_item.state == 'pending':
+                if len(existed_item):
+                    if existed_item[0].state == 'pending':
                         existed_item.unlink()
-                        del_count +=1
+                        del_count += len(existed_item)
                     else:
-                        skip_count+=1
                         continue
 
                 #Adding shop_id in vals before add vals from csv
@@ -185,7 +187,7 @@ class ShopeeManagment(models.Model):
                 }
                 #Get data from csv row and add it to dict
                 for key in _li_key:
-                    _header = header.get(key)
+                    _header = shopee_header.get(key)
                     _data = row[key]
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None
@@ -193,6 +195,7 @@ class ShopeeManagment(models.Model):
                 #Create new data
                 try:
                     self.create(vals)
+                    create_count += 1
                 except Exception as err:
                     return {
                         'messages': [{
@@ -203,7 +206,7 @@ class ShopeeManagment(models.Model):
                     }
             values = {
                 'shop': shop_id.name,
-                'create':index+1-skip_count,
+                'create':create_count,
                 'del':del_count
             }
             msg.append(values)

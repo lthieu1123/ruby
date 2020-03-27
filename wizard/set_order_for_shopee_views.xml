@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- model.name action window -->
+        
+
+        <!-- <record id="financial_control_view_form" model="ir.ui.view">
+            <field name="name">Đối soát tài chính</field>
+            <field name="model">shop.announce</field>
+            <field name="arch" type="xml">
+                <form string="Success!">
+                    <main>
+                        <div>
+                            <span>Tải lên file sao kê bạn cần kiểm tra, chúng tôi sẽ giúp bạn kiểm tra lại toàn bộ tài chính.</span>
+                        </div>
+                        <field name="name" invisible="1"/>
+                        <field name="file_data" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                    </main>
+                    <footer>
+                        <button string="OK" class="btn btn-primary" name="btn_accept" type="object"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="financial_control_action" model="ir.actions.act_window">
+            <field name="name">Đối soát tài chính</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shop.announce</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="financial_control_view_form"/>
+            <field name="target">new</field>
+        </record> -->
+
+        
+        <!-- For delivered -->
+        <record id="set_order_to_delivered_shopee_action" model="ir.actions.act_window">
+            <field name="name">Giao Hàng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">set.order.to.delivered.shopee</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p><p>
+                    <!-- More details about what a user can do with this object will be OK --> 
+                </p>
+            </field>
+        </record>
+
+        <!-- FormView Delivered -->
+        <record id="set_order_to_delivered_shopee_view_form" model="ir.ui.view">
+            <field name="name">Giao Hàng</field>
+            <field name="model">set.order.to.delivered.shopee</field>
+            <field name="arch" type="xml">
+                <form string="Delivered Order" create="false" edit="false">
+                    <header>
+                        <button name="btn_apply" type="object" string="Apply" class="btn btn-primary" context="{'count': tracking_code_count}"/>
+                        <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
+                    </header>
+                    <main>
+                        <group col="2">
+                            <div style="color:blue;">
+                                <label for="tracking_code_count"></label>
+                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                            </div>
+                            <div>
+                                <field name="json_field" invisible="1"/>
+                                <field name="note" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Không tìm thấy:</span>
+                                <field name="code_not_found" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Đã chuyển trạng thái:</span>
+                                <field name="code_used" widget="html" readonly="1"/>
+                            </div>
+                        </group>
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>
+                        <div>
+                            <ul>
+                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                            </ul>
+                        </div>
+                        <group>
+                            <field name="existed_tracking_code" invisible="1"/>
+                            <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <group>
+                                <group>
+                                    <field name="input_type"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
+                        </group>
+                        <field name="tracking_code_show">
+                            <tree create="false" edit="false">
+                                <field name="ma_van_don"/>
+                                <field name="ma_don_hang"/>
+                                <field name="sku_san_pham"/>
+                                <field name="ten_san_pham"/>
+                                <field name="gia_goc"/>
+                                <field name="so_luong"/>
+                                <field name="tien_don_hang"/>
+                                <field name="package_number"/>
+                                <field name="state"/>
+                                
+                            </tree>
+                            <form create="false" edit="false"> 
+                                <group>
+                                    <field name="ma_van_don" readonly="1"/>
+                                    <field name="ma_don_hang" readonly="1"/>
+                                    <field name="sku_san_pham" readonly="1"/>
+                                    <field name="ten_san_pham" readonly="1"/>
+                                    <field name="gia_goc" readonly="1"/>
+                                    <field name="so_luong" readonly="1"/>
+                                    <field name="tien_don_hang" readonly="1"/>
+                                    <field name="package_number" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
+                    </main>
+                </form>
+            </field>
+        </record>
+        
+        <!-- For delivered -->
+        <record id="set_order_to_returned_shopee_action" model="ir.actions.act_window">
+            <field name="name">Hàng Trả</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">set.order.to.returned.shopee</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <!-- <field name="target">new</field> -->
+            <field name="target">current</field>
+        </record>
+
+        <!-- FormView Returned -->
+        <record id="set_order_to_returned_shopee_view_form" model="ir.ui.view">
+            <field name="name">Hàng Trả</field>
+            <field name="model">set.order.to.returned.shopee</field>
+            <field name="arch" type="xml">
+                <form string="Returned Order" create="false" edit="false">
+                    <header>
+                        <button name="btn_apply" type="object" string="Apply" class="btn btn-primary" context="{'count': tracking_code_count}"/>
+                        <button special="cancel" string="Cancel" type="object" class="btn-secondary"/>
+                    </header>
+                   <main>
+                        <group col="2">
+                            <div style="color:blue;">
+                                <label for="tracking_code_count"></label>
+                                <field style="font-size: 500%; color:blue;" name="tracking_code_count"  readonly="1"/>
+                            </div>
+                            <div>
+                                <field name="json_field" invisible="1"/>
+                                <field name="note" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Không tìm thấy:</span>
+                                <field name="code_not_found" widget="html" readonly="1"/>
+                            </div>
+                            <div attrs="{'invisible': [('input_type','=','one')]}">
+                                <span>Đã chuyển trạng thái:</span>
+                                <field name="code_used" widget="html" readonly="1"/>
+                            </div>
+                        </group>
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>                        
+                        <field name="delta" invisible="1"/>
+                        <field name="tracking_code_not_found" invisible="1"/>
+                        <div>
+                            <ul>
+                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                            </ul>
+                        </div>
+                        <group>
+                            <field name="existed_tracking_code" invisible="1"/>
+                            <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <group>
+                                <group>
+                                    <field name="input_type"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
+                        </group>
+                        <field name="tracking_code_show">
+                            <tree create="false" edit="false">
+                                <field name="ma_van_don"/>
+                                <field name="ma_don_hang"/>
+                                <field name="sku_san_pham"/>
+                                <field name="ten_san_pham"/>
+                                <field name="gia_goc"/>
+                                <field name="so_luong"/>
+                                <field name="tien_don_hang"/>
+                                <field name="package_number"/>
+                                <field name="state"/>
+                                
+                            </tree>
+                            <form create="false" edit="false"> 
+                                <group>
+                                    <field name="ma_van_don" readonly="1"/>
+                                    <field name="ma_don_hang" readonly="1"/>
+                                    <field name="sku_san_pham" readonly="1"/>
+                                    <field name="ten_san_pham" readonly="1"/>
+                                    <field name="gia_goc" readonly="1"/>
+                                    <field name="so_luong" readonly="1"/>
+                                    <field name="tien_don_hang" readonly="1"/>
+                                    <field name="package_number" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
+                   </main>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

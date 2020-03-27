@@ -14,7 +14,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
             this._super.apply(this, arguments);
             var _self = this;
             var d = _self.model.get(this.handle);
-            if (d && (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned') && d.viewType=='form') {
+            if (d && (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned' || d.model=='set.order.to.delivered.shopee' || d.model=='set.order.to.returned.shopee') && d.viewType=='form') {
                 var myAudio = $('#audioFound')
                 if (!myAudio || myAudio.length==0) {
                     $('body').append('<audio id="audioFound" src="/ruby/static/src/sounds/co.mp3" type="audio/mpeg"></audio>');                    
@@ -82,7 +82,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
             var _super = this._super.bind(this);
             var _self = this;
             var d = _self.model.get(this.handle);
-            if (d && (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned') && d.viewType=='form') {
+            if (d && (d.model=='set.order.to.delivered' || d.model=='set.order.to.returned' || d.model=='set.order.to.delivered.shopee' || d.model=='set.order.to.returned.shopee') && d.viewType=='form') {
                 var myAudio = $('#audioFound')
                 if (!myAudio || myAudio.length==0) {
                     $('body').append('<audio id="audioFound" src="/ruby/static/src/sounds/co.mp3" type="audio/mpeg"></audio>');                    

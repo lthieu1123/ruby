@@ -179,7 +179,7 @@ class SaleOrderManagment(models.Model):
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(import_directory_file))
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run

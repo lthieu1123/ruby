@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <!-- model.name action window -->
+        <record id="sale_order_management_shopee_shop_action" model="ir.actions.act_window">
+            <field name="name">Sale Order Management Shopee SHop</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.management.shopee.shop</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    <!-- Add Text Here -->
+                    Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…
+                </p><p>
+                    <!-- More details about what a user can do with this object will be OK --> 
+                </p>
+            </field>
+        </record>
+        
+        <!-- model.name form view -->
+        <record id="sale_order_management_shopee_shop_view_form" model="ir.ui.view">
+            <field name="name">Sale Order Management Shopee Shop</field>
+            <field name="model">sale.order.management.shopee.shop</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <span>Cài đặt tất cả các shop hiện có với mã code lần lượt là 1,2,3,4,5…</span>
+                        <group>
+                            
+                            <field name="name"/>
+                            <field name="code"/>                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- model.name tree view -->
+        <record id="sale_order_management_shopee_shop_view_tree" model="ir.ui.view">
+            <field name="name">Sale Order Management Shop Shopee</field>
+            <field name="model">sale.order.management.shopee.shop</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <!-- Add your fields here -->
+                     <field name="name"/>
+                    <field name="code"/> 
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

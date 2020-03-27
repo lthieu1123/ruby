@@ -11,6 +11,8 @@
                     <!-- Add your fields here -->
                     <field name="ma_van_don"/>
                     <field name="ma_don_hang"/>
+                    <field name="sku_san_pham"/>
+                    <field name="ten_san_pham"/>
                     <field name="gia_goc"/>
                     <field name="so_luong"/>
                     <field name="tien_don_hang"/>
@@ -48,6 +50,8 @@
                 <tree delete="false">
                     <field name="ma_van_don"/>
                     <field name="ma_don_hang"/>
+                    <field name="sku_san_pham"/>
+                    <field name="ten_san_pham"/>
                     <field name="gia_goc"/>
                     <field name="so_luong"/>
                     <field name="tien_don_hang"/>
