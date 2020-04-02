@@ -130,7 +130,7 @@ class SetOrderToDeliveredShopee(models.TransientModel):
                             _list_show_ids)
                         ma_van_don = _object.mapped(lambda r: r.ma_van_don)
                         delta = list(dict.fromkeys(ma_van_don))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
@@ -164,7 +164,7 @@ class SetOrderToDeliveredShopee(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['shopee.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object + rec.tracking_code_show
                     ma_van_don = sale_object.mapped(lambda r: r.ma_van_don)
                     delta = list(dict.fromkeys(ma_van_don))
                     rec.delta = len(delta)
@@ -284,7 +284,7 @@ class SetOrderToReturnedShopp(models.TransientModel):
                             _list_show_ids)
                         ma_van_don = _object.mapped(lambda r: r.ma_van_don)
                         delta = list(dict.fromkeys(ma_van_don))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
@@ -318,7 +318,7 @@ class SetOrderToReturnedShopp(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['shopee.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object + rec.tracking_code_show
                     ma_van_don = sale_object.mapped(lambda r: r.ma_van_don)
                     delta = list(dict.fromkeys(ma_van_don))
                     rec.delta = len(delta)

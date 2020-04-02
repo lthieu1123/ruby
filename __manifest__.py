@@ -10,10 +10,10 @@
     'website': "",
     'category': 'rubi',
     'version': '0.1',
-    'depends': ['base','web'],
+    'depends': ['base','web','mail'],
     'data': [
         'security/user_group.xml',
-        # 'data/company_user_data.xml',
+        'data/directory_data.xml',
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
         'wizard/set_reconcile_date_views.xml',
@@ -25,6 +25,7 @@
         'views/menu_action.xml',
         'views/shopee_views.xml',
         'views/sale_order_management_shopee_shop_views.xml',
+        'views/directory_shop_views.xml',
         'views/shopee_menu_views.xml',
         'views/menu_views.xml',
         

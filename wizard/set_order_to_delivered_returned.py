@@ -46,7 +46,9 @@ class ShopAnnounce(models.TransientModel):
 
     @api.multi
     def btn_new_update(self):
-        vals =  self.env['sale.order.management'].btn_new_update()
+        context = self.env.context
+        default_model = context.get('default_model')
+        vals =  self.env[default_model].btn_new_update()
         vals.update({
             'target': 'main',
         })
@@ -197,7 +199,7 @@ class SetOrderToDelivered(models.TransientModel):
                             _list_show_ids)
                         order_number = _object.mapped(lambda r: r.order_number)
                         delta = list(dict.fromkeys(order_number))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
@@ -232,7 +234,7 @@ class SetOrderToDelivered(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['sale.order.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object + rec.tracking_code_show
                     order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
@@ -322,7 +324,7 @@ class SetOrderToReturned(models.TransientModel):
                             _list_show_ids)
                         order_number = _object.mapped(lambda r: r.order_number)
                         delta = list(dict.fromkeys(order_number))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
@@ -388,7 +390,7 @@ class SetOrderToReturned(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['sale.order.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object +  rec.tracking_code_show
                     order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)

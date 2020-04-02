@@ -25,5 +25,20 @@
             <field name="state">code</field>
             <field name="code">action = model.btn_new_update()</field>
         </record>
+        <record id="action_new_update_shopee" model="ir.actions.server">
+            <field name="name">Cập Nhật Mới</field>
+                        <!-- here the name of the module containing mail_message model-->
+            <field name="model_id" ref="model_shopee_management"/>
+            <field name="state">code</field>
+            <field name="code">action = model.btn_new_update()</field>
+        </record>
+
+        <record id="action_process_done_shopee" model="ir.actions.server">
+            <field name="name">Process Done Item</field>
+                        <!-- here the name of the module containing mail_message model-->
+            <field name="model_id" ref="model_shopee_management"/>
+            <field name="state">code</field>
+            <field name="code">action = model.btn_process_reconcile()</field>
+        </record>
     </data>
 </odoo>

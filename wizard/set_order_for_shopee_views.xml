@@ -85,7 +85,7 @@
                         <field name="tracking_code_not_found" invisible="1"/>
                         <div>
                             <ul>
-                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                                <li>Bắn mã code thứ 2 vào ô Mã vận đơn</li>
                             </ul>
                         </div>
                         <group>
@@ -100,8 +100,8 @@
                             </group>
                         </group>
                         <group>
-                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
-                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}" string="Mã vận đơn"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}" string="Mã vận đơn"/>
                         </group>
                         <field name="tracking_code_show">
                             <tree create="false" edit="false">
@@ -181,7 +181,7 @@
                         <field name="tracking_code_not_found" invisible="1"/>
                         <div>
                             <ul>
-                                <li>Bắn mã code thứ 2 vào ô Tracking Code</li>
+                                <li>Bắn mã code thứ 2 vào ô Mã vận đơn</li>
                             </ul>
                         </div>
                         <group>
@@ -196,8 +196,8 @@
                             </group>
                         </group>
                         <group>
-                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}"/>
-                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}"/>
+                            <field name="input_data" attrs="{'invisible': [('input_type','=','one')]}" string="Mã vận đơn"/>
+                            <field name="tracking_code_ids" attrs="{'invisible': [('input_type','=','many')]}" string="Mã vận đơn"/>
                         </group>
                         <field name="tracking_code_show">
                             <tree create="false" edit="false">

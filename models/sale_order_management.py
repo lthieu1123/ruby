@@ -129,10 +129,10 @@ class SaleOrderManagment(models.Model):
     bundle_discount = fields.Char('Bundle Discount')
     refund_amount = fields.Float('Refund Amount')
     state = fields.Selection(selection=[
-                                ('pending','Pending'),
-                                ('delivered','Delivered'),
-                                ('returned','Returned'),
-                                ('done','Done')
+                                ('pending','Đang chờ'),
+                                ('delivered','Đã giao'),
+                                ('returned','Hàng trả'),
+                                ('done','Đã nhận tiền')
                             ],string='Trạng Thái Đơn Hàng',default='pending',index=True)
     shop_id = fields.Many2one('sale.order.management.shop','Shop Name',)
     transaction_date = fields.Date('Transaction Date',index=True)
@@ -174,12 +174,19 @@ class SaleOrderManagment(models.Model):
     @api.multi
     def btn_process_csv(self):
         self._cr.execute('SAVEPOINT import')
-        _import_directory = 'c:/tool/newssg'
+        # _import_directory = 'c:/tool/newlazada/newssg'
         # _import_directory = '/mnt/c/tool/newssg'
+        _directory = self.env['lazada.directory'].search([
+            ('name','=','update')
+        ])
+        if not _directory.id:
+            raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
+        _import_directory = _directory.directory
+
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
+            raise exceptions.ValidationError(_('Không tìm thấy tập tin trong thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
@@ -265,11 +272,18 @@ class SaleOrderManagment(models.Model):
     @api.model
     def btn_process_sale_done(self):
         self._cr.execute('SAVEPOINT import')
-        _sale_done_director = 'c:/tool/taichinh'
+        # _sale_done_director = 'c:/tool/newlazada/taichinh'
+        _directory = self.env['lazada.directory'].search([
+            ('name','=','reconcile')
+        ])
+        if not _directory.id:
+            raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
+        _sale_done_director = _directory.directory
+        
         try:
             sale_director_file = os.listdir(_sale_done_director)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_sale_done_director))
+            raise exceptions.ValidationError(_('Không tìm thấy tập tin trong thư mục "{}"').format(_sale_done_director))
 
         #Checking shop code before run
         for entry in sale_director_file:
@@ -297,7 +311,7 @@ class SaleOrderManagment(models.Model):
                     ('order_item_id','=',order_id)
                 ])
                 if not data.id:
-                    raise exceptions.ValidationError(_('Cannot find Order item with ID [{}] in database').format(order_id))
+                    raise exceptions.ValidationError(_('Không tim thấy đơn hàng có "order id" [{}]').format(order_id))
                 data.update({
                     'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                     'state': 'done'
@@ -306,6 +320,8 @@ class SaleOrderManagment(models.Model):
             msg.append("Shop: {} - Item sale: {} ".format(shop_id.name, count_price))
         self._cr.execute('RELEASE SAVEPOINT import')
         #Return mess when done
+        context = self.env.context.copy()
+        context['default_res_model'] = 'sale.order.management'
         return {
                 'name': 'Đối Soát Đơn Hàng',
                 'view_type': 'form',
@@ -314,6 +330,7 @@ class SaleOrderManagment(models.Model):
                 'res_model': 'set.reconcile.date',
                 'target': 'new',
                 'type': 'ir.actions.act_window',
+                'context': context
             }
 
     def _create_table(self,table_data):
@@ -342,78 +359,33 @@ class SaleOrderManagment(models.Model):
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)
         result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount'])
-        a = 0
-        b = 0
-        c = 0
-        d = 0
-        e = 0
-        f = 0
-        g = 0
-        h = 0
-        i = 0
-        j = 0
-        k = 0
-        l = 0
-        m = 0
+        lazada_formula_ids = self.env['lazada.formula'].search([])
+        data = {}
+        for item in lazada_formula_ids:
+            data.update({
+                item.name: 0.0
+            })
+                    
         for index, row in result.iterrows():
             fee_name = row[FEE_NAME]
-            if fee_name == SHIP_FEE_BY_CUS:
-                a += int(row[AMOUNT])
-                continue
-            if fee_name == ITEM_PRICE:
-                b += int(row[AMOUNT])
-                continue
-            if fee_name == SHIP_FEE_BY_SELLER:
-                c += int(row[AMOUNT])
-            if fee_name == SHIP_FEE_VOUCHER_LAZADA:
-                d += int(row[AMOUNT])
-                continue
-            if fee_name == PROMOTION_CHARGES_VOUCHER:
-                e += int(row[AMOUNT])
-                continue
-            if fee_name == ADJ_PAYMENT_FEE:
-                f += int(row[AMOUNT])
-                continue
-            if fee_name == PAYMENT_FEE:
-                g += int(row[AMOUNT])
-                continue
-            if fee_name == SPON_PRODUCT_FEE:
-                h += int(row[AMOUNT])
-                continue
-            if fee_name == REVERSAL_SHIP_FEE:
-                i += int(row[AMOUNT])
-                continue
-            if fee_name == REVERSAL_ITEM_PRICE:
-                j += int(row[AMOUNT])
-                continue
-            if fee_name == ADJ_SHIP_FEE:
-                k += int(row[AMOUNT])
-                continue
-            if fee_name == SHIP_FEE_CLAIM:
-                l += int(row[AMOUNT])
-                continue
-            if fee_name == SHIP_FEE_SUBSIDY:
-                m += int(row[AMOUNT])
+            amount = float(row[AMOUNT])
+            if data.get(fee_name,False):
+                data[fee_name] = data[fee_name] + amount
+            else:
                 continue
         
-        total = a+b-c+d-e-f-g-h-i-j+k+l+m
-        table_data = {
-            SHIP_FEE_BY_CUS: a,
-            ITEM_PRICE: b,
-            SHIP_FEE_BY_SELLER: c,
-            SHIP_FEE_VOUCHER_LAZADA: d,
-            PROMOTION_CHARGES_VOUCHER: e,
-            ADJ_PAYMENT_FEE: f,
-            PAYMENT_FEE: g,
-            SPON_PRODUCT_FEE: h,
-            REVERSAL_SHIP_FEE: i,
-            REVERSAL_ITEM_PRICE: j,
-            ADJ_SHIP_FEE: k,
-            SHIP_FEE_CLAIM: l,
-            SHIP_FEE_SUBSIDY: m,
+        total = 0
+        for item in lazada_formula_ids:
+            if item.operator == 'add':
+                total += data[item.name]
+            elif item.operator == 'subtract':
+                total -= data[item.name]
+
+        data.update({
             'Total': total
-        }
-        table = self._create_table(table_data)
+        })
+
+        table = self._create_table(data)
         context = self.env.context.copy()
         context['default_message'] = table
         return {
