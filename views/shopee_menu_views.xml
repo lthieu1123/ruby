@@ -17,19 +17,7 @@
                             sequence="10"
                             groups="ruby.user_manager_shopee_groups"/>
 
-            <menuitem id="sale_order_menagement_shopee_shop_menu_act"
-                            name="Shop"
-                            parent="shoppe_managment_menu_root"
-                            action="sale_order_management_shopee_shop_action"
-                            sequence="40"
-                            groups="ruby.user_manager_shopee_groups"/>
             
-            <menuitem id="shopee_directory_menu_act"
-                            name="Đường Dẫn Thư Mục"
-                            parent="shoppe_managment_menu_root"
-                            action="shopee_directory_action"
-                            sequence="41"
-                            groups="ruby.user_manager_shopee_groups"/>
 
             <menuitem id="set_order_to_delivered_shopee_act"
                             name="Giao Hàng"
@@ -49,5 +37,21 @@
                         action="action_process_done_shopee"
                         sequence="70"
                         groups="ruby.user_manager_shopee_groups"/>
+
+            <!-- This Menu Item Must have a parent -->
+            <menuitem id="shoppe_setting_menu_categ" name="Cài Đặt" parent="shoppe_managment_menu_root" sequence="80" groups="ruby.user_manager_shopee_groups"/>
+            <menuitem id="sale_order_menagement_shopee_shop_menu_act"
+                            name="Shop"
+                            parent="shoppe_setting_menu_categ"
+                            action="sale_order_management_shopee_shop_action"
+                            sequence="10"
+                            groups="ruby.user_manager_shopee_groups"/>
+            
+            <menuitem id="shopee_directory_menu_act"
+                            name="Đường Dẫn Thư Mục"
+                            parent="shoppe_setting_menu_categ"
+                            action="shopee_directory_action"
+                            sequence="20"
+                            groups="ruby.user_manager_shopee_groups"/>
     </data>
 </odoo>

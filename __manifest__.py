@@ -25,6 +25,7 @@
         'views/menu_action.xml',
         'views/shopee_views.xml',
         'views/sale_order_management_shopee_shop_views.xml',
+        'views/lazada_formula_views.xml',
         'views/directory_shop_views.xml',
         'views/shopee_menu_views.xml',
         'views/menu_views.xml',

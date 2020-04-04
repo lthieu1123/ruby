@@ -31,18 +31,7 @@
                         action="set_order_to_returned_action"
                         sequence="30"/>
             <!-- This Menu Item Must have a parent -->
-            <menuitem id="sale_order_menagement_shop_menu_act"
-                        name="Shop"
-                        parent="sale_order_management_menu_root"
-                        action="sale_order_management_shop_action"
-                        sequence="40"
-                        groups="ruby.user_manager_groups"/>
-            <menuitem id="lazada_directory_menu_act"
-                        name="Đường Dẫn Thư Mục"
-                        parent="sale_order_management_menu_root"
-                        action="lazada_directory_action"
-                        sequence="41"
-                        groups="ruby.user_manager_groups"/>
+            
                         
             <menuitem id="sale_order_report_menu_act"
                         name="Báo Cáo"
@@ -73,5 +62,25 @@
                         sequence="70"
                         groups="ruby.user_manager_groups"/>
 
+            <!-- This Menu Item Must have a parent -->
+            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80" groups="ruby.user_manager_groups"/>
+                <menuitem id="sale_order_menagement_shop_menu_act"
+                            name="Shop"
+                            parent="lazada_setting_menu_categ"
+                            action="sale_order_management_shop_action"
+                            sequence="10"
+                            groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_formula_menu_act"
+                            name="Công Thức Tính Chi Phí"
+                            parent="lazada_setting_menu_categ"
+                            action="lazada_formula_action"
+                            sequence="20"
+                            groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_directory_menu_act"
+                            name="Đường Dẫn Thư Mục"
+                            parent="lazada_setting_menu_categ"
+                            action="lazada_directory_action"
+                            sequence="30"
+                            groups="ruby.user_manager_groups"/>
     </data>
 </odoo>
