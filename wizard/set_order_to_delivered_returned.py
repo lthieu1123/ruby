@@ -10,10 +10,14 @@ import logging
 import re
 import ctypes
 import json
+import io
 import base64
+import pandas as pd
 
 _logger = logging.getLogger(__name__)
 
+SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
+SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
 
 class ShopAnnounce(models.TransientModel):
     _name = 'shop.announce'
@@ -22,9 +26,19 @@ class ShopAnnounce(models.TransientModel):
     def _get_default_message(self):
         return self.env.context.get('default_message', False)
 
+    def _get_default_cal_fee(self):
+        return self.env.context.get('default_cal_fee', False)
+
+    def _get_default_has_csv(self):
+        return self.env.context.get('has_data_csv', False)
+
     name = fields.Text('name', default=_get_default_message)
     file_data = fields.Binary(string='File')
     file_name = fields.Char('File Name')
+    # csv_file = fields.Binary(string='Chênh lệch phí vận chuyển')
+    # csv_name = fields.Char('CSV File Name', default='phi_van_chuyen.csv')
+    # has_csv = fields.Boolean('Has CSV', default=_get_default_has_csv)
+    is_cal_fee = fields.Boolean('Is Cal Fee', default=_get_default_cal_fee)
 
     @api.multi
     def btn_accept(self):

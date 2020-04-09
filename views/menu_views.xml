@@ -32,22 +32,12 @@
                         sequence="30"/>
             <!-- This Menu Item Must have a parent -->
             
-                        
-            <menuitem id="sale_order_report_menu_act"
-                        name="Báo Cáo"
+            <menuitem id="action_reconcile_fee_act"
+                        name="Đối Soát Chi Phí"
                         parent="sale_order_management_menu_root"
                         sequence="50"
+                        action="lazada_reconcile_fee_action"
                         groups="ruby.user_manager_groups"/>
-                <menuitem id="sale_order_delivered_report_sub_menu"
-                            name="Báo Cáo Giao Hàng"
-                            parent="sale_order_report_menu_act"
-                            action="delivered_report_act"
-                            sequence="1"/>
-                <menuitem id="sale_order_returned_report_sub_menu"
-                            name="Báo Cáo Hàng Trả"
-                            parent="sale_order_report_menu_act"
-                            action="returned_report_act"
-                            sequence="2"/>
                             
             <menuitem id="action_calculate_fee_menu"
                         name="Đối Soát Tài Chính"
@@ -82,5 +72,15 @@
                             action="lazada_directory_action"
                             sequence="30"
                             groups="ruby.user_manager_groups"/>
+                <menuitem id="sale_order_delivered_report_sub_menu"
+                            name="Báo Cáo Giao Hàng"
+                            parent="lazada_setting_menu_categ"
+                            action="delivered_report_act"
+                            sequence="40"/>
+                <menuitem id="sale_order_returned_report_sub_menu"
+                            name="Báo Cáo Hàng Trả"
+                            parent="lazada_setting_menu_categ"
+                            action="returned_report_act"
+                            sequence="50"/>
     </data>
 </odoo>

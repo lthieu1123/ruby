@@ -348,7 +348,6 @@ class SaleOrderManagment(models.Model):
         # _sale_done_director = 'c:/tool/taichinh'
         # sale_director_file = os.listdir(_sale_done_director)
         #Checking shop code before run
-        
         shop_code = file_name.split('.')[0]
         shop_id = self.env['sale.order.management.shop'].search([
             ('code','=',shop_code)
@@ -358,47 +357,79 @@ class SaleOrderManagment(models.Model):
         
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount'])
+        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
         lazada_formula_ids = self.env['lazada.formula'].search([])
         data = {}
+        # data_csv = {}
         for item in lazada_formula_ids:
-            data.update({
-                item.name: 0.0
-            })
-                    
+            data[item.name] = 0.0
+                            
         for index, row in result.iterrows():
+            if row['Order Item Status'] == 'Pending':
+                continue
             fee_name = row[FEE_NAME]
-            amount = float(row[AMOUNT])
-            if data.get(fee_name,False):
-                data[fee_name] = data[fee_name] + amount
+            amount = abs(float(row[AMOUNT]))
+            # if fee_name == SHIP_FEE_BY_CUS or fee_name == SHIP_FEE_BY_SELLER:
+            #     order_number = row['Order No.']
+            #     if data_csv.get(order_number, False):
+            #         data_csv[order_number][fee_name] = round(data_csv[order_number][fee_name] + amount,2)
+            #     else:
+            #         data_csv.update({
+            #             order_number: {
+            #                 SHIP_FEE_BY_CUS: 0.0,
+            #                 SHIP_FEE_BY_SELLER: 0.0,
+            #             }
+            #         })
+            #         data_csv[order_number][fee_name] = amount
+            if fee_name in data:
+                data[fee_name] = round(data[fee_name] + amount,2)
             else:
                 continue
         
-        total = 0
+        total = 0.0
         for item in lazada_formula_ids:
             if item.operator == 'add':
-                total += data[item.name]
+                total = round(total + data[item.name],2)
             elif item.operator == 'subtract':
-                total -= data[item.name]
+                total = round(total - data[item.name],2)
 
         data.update({
-            'Total': total
+            'Total': total  
         })
+
+        # _li_key = []
+        # for order_number in data_csv:
+        #     sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] + data_csv[order_number][SHIP_FEE_BY_SELLER]
+        #     if sum_total==0:
+        #         _li_key.append(order_number)
+        # for key in _li_key:
+        #     del data_csv[key]
 
         table = self._create_table(data)
         context = self.env.context.copy()
         context['default_message'] = table
+        context['default_cal_fee'] = True
+        # res = self.env['shop.announce'].create({
+        #     'name': table,
+        #     'csv_file': self._create_csv_file(data_csv),
+        #     'csv_name': 'phi_van_chuyen.csv',
+        #     'has_csv': True if len(data_csv) else False,
+        #     'is_cal_fee': True
+        # })
+        
         return {
             'name': 'Đối Soát Tài Chính',
             'view_type': 'form',
             'view_mode': 'form',
             'view_id': self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id,
             'res_model': 'shop.announce',
+            # 'res_id': res.id,
             'target': 'new',
             'context': context,
             'type': 'ir.actions.act_window',
         }
-
+        
+        
     @api.multi
     def btn_new_update(self):
         self._cr.execute(QUERY_STRING)
