@@ -37,6 +37,6 @@
     'qweb': [
         'static/src/xml/inherit_button_action.xml'
     ],
-    'installable': True,
-    'auto_install': True,
+    # 'installable': True,
+    # 'auto_install': True,
 }

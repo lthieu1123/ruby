@@ -189,7 +189,6 @@ class SetOrderToDelivered(models.TransientModel):
         code_not_found = self.code_not_found or ""
         code_used = self.code_used or ""
         _data = json.loads(str_json) if str_json else {}
-        print('input_data: ', self.input_data)
         if self.input_data:
             _li_code_origin = re.split('[;,\s]', self.input_data)
             _li_code = [code.strip() for code in _li_code_origin]
@@ -217,7 +216,6 @@ class SetOrderToDelivered(models.TransientModel):
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
-                        print('shop_name: ', shop_name)
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -327,7 +325,9 @@ class SetOrderToReturned(models.TransientModel):
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
                 else:
-                    if tracking_ids[0].state != 'pending':
+                    if tracking_ids[0].state == 'pending' or tracking_ids[0].state == 'done':
+                        code_not_found += code+"\r\n"
+                    elif tracking_ids[0].state == 'returned':
                         code_used += code+"\r\n"
                     else:
                         tracking_ids_id = tracking_ids.ids
@@ -342,7 +342,6 @@ class SetOrderToReturned(models.TransientModel):
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
-                        print('shop_name: ', shop_name)
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -357,7 +356,6 @@ class SetOrderToReturned(models.TransientModel):
 
     @api.onchange('tracking_code_show')
     def _onchange_tracking_code_show(self):
-        print('_onchange_tracking_code_show')
         str_json = self.json_field
 
         _data = json.loads(str_json) if str_json else {}

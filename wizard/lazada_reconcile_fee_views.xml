@@ -17,8 +17,18 @@
                             <div>
                                 <span class="oe_inline" >Chi phí trợ giá: </span>
                                 <field class="oe_inline" name="price_support"/>
+                                <span class="oe_inline" > Nếu giá đơn hàng trên: </span>
+                                <field class="oe_inline" name="price_over"/>
                             </div>
-                            
+                        </group>
+                        <group>
+                            <div>
+                                <span>Vui lòng chọn ngày cần đối soát chi phí. </span>
+                                <span class="oe_inline" >Từ ngày: </span>
+                                <field class="oe_inline" name="date_start" required="1"/>
+                                <span class="oe_inline" > Đến ngày: </span>
+                                <field class="oe_inline" name="date_end" required="1"/>
+                            </div>
                         </group>
                         
                         <field name="file_name" invisible="1"/>

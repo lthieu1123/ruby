@@ -46,7 +46,10 @@ class LazadaReconcileFee(models.TransientModel):
     _description = 'Lazada Reconcile Fee'
 
     name = fields.Text('name',default='Đói soát chi phí')
+    date_start = fields.Date('Từ ngày')
+    date_end = fields.Date('Đến ngày')
     price_support = fields.Float('Trợ Giá')
+    price_over = fields.Float('Price Over')
     file_data = fields.Binary(string='File')
     file_name = fields.Char('File Name')
     csv_file = fields.Binary(string='Chênh lệch phí vận chuyển')
@@ -66,7 +69,8 @@ class LazadaReconcileFee(models.TransientModel):
             df = pd.DataFrame({
                 'Order No.': order_number,
                 SHIP_FEE_BY_CUS: fee_by_cus,
-                SHIP_FEE_BY_SELLER: fee_by_seller
+                SHIP_FEE_BY_SELLER: fee_by_seller,
+
             })
             df.to_csv('file_csv.csv',encoding='utf-8')
             _file = open('file_csv.csv','rb')
@@ -74,6 +78,18 @@ class LazadaReconcileFee(models.TransientModel):
             return _encode
         else:
             return False
+
+    def _get_list_order_number_with_date(self):
+        date_start = datetime.datetime.combine(self.date_start,datetime.time.min)
+        date_end = datetime.datetime.combine(self.date_end,datetime.time.min)
+        if self.date_start > self.date_end:
+            raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
+        _li_order_number = self.env['sale.order.management'].search([
+            ('created_at','>=',date_start),
+            ('created_at','<=',date_end),
+            ('state','!=','pending')
+        ]).mapped(lambda r: r.order_number)
+        return _li_order_number
 
     def btn_reconcile(self):
         self.ensure_one()
@@ -88,14 +104,20 @@ class LazadaReconcileFee(models.TransientModel):
         csv_filelike = io.BytesIO(data_file)
         result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
         data_csv = {}
-
+        
         for index, row in result.iterrows():
             if row[ORDER_STATUS] == 'Pending':
                 continue
+
+            order_number = row[ORDER_NO]
+            _li_order_number = self._get_list_order_number_with_date()
+            if order_number not in _li_order_number:
+                continue
+
             fee_name = row[FEE_NAME]
             amount = abs(float(row[AMOUNT]))
-            if fee_name == SHIP_FEE_BY_CUS or fee_name == SHIP_FEE_BY_SELLER:
-                order_number = row[ORDER_NO]
+            if fee_name == SHIP_FEE_BY_CUS or fee_name == SHIP_FEE_BY_SELLER or fee_name == ITEM_PRICE:
+                
                 if data_csv.get(order_number, False):
                     data_csv[order_number][fee_name] = round(data_csv[order_number][fee_name] + amount)
                 else:
@@ -103,17 +125,23 @@ class LazadaReconcileFee(models.TransientModel):
                         order_number: {
                             SHIP_FEE_BY_CUS: 0.0,
                             SHIP_FEE_BY_SELLER: 0.0,
+                            ITEM_PRICE: 0.0,
                         }
                     })
                     data_csv[order_number][fee_name] = amount
         
+        # Remove order_number in data_csv that has the same fee
         _li_key = []
         for order_number in data_csv:
-            sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - self.price_support
+            if data_csv[order_number][ITEM_PRICE] >= self.price_over:
+                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - self.price_support
+            else:
+                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER]
             if sum_total==0:
                 _li_key.append(order_number)
         for key in _li_key:
             del data_csv[key]
+        
         csv_file = self._create_csv_file(data_csv)
         vals = {
             'has_csv': False,

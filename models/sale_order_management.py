@@ -283,7 +283,10 @@ class SaleOrderManagment(models.Model):
         try:
             sale_director_file = os.listdir(_sale_done_director)
         except Exception as err:
-            raise exceptions.ValidationError(_('Không tìm thấy tập tin trong thư mục "{}"').format(_sale_done_director))
+            raise exceptions.ValidationError(_('Không tìm thấy đường dẫn thư mục "{}"').format(_sale_done_director))
+        
+        if not len(sale_director_file):
+            raise exceptions.ValidationError(_('Không tìm thấy tập tin trong đường dẫn thư mục "{}"').format(_sale_done_director))
 
         #Checking shop code before run
         for entry in sale_director_file:
