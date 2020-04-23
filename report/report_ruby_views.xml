@@ -6,9 +6,10 @@
             <field name="model">sale.order.management.delivered.report</field>
             <field name="arch" type="xml">
                 <pivot string="Delivered Report">
-                    <field name="row" interval="day" type="row"/>
-                    <field name="seller_sku" type="col"/>
+                    <field name="row" interval="day" type="col"/>
+                    <field name="seller_sku" type="row"/>
                     <field name="measure" type="measure"/>
+                    <field name="unit_price" type="measure"/>
                 </pivot>
             </field>
         </record>
@@ -30,7 +31,6 @@
             <field name="model">sale.order.management.delivered.report</field>
             <field name="arch" type="xml">
                 <search string="Delivered Report">
-                    <field name="col"/>
                     <field name="row"/>
                     <field name="seller_sku"/>
                     <filter name="today" string="To day"
@@ -43,7 +43,7 @@
             <field name="name">Báo Cáo Giao Hàng</field>
             <field name="res_model">sale.order.management.delivered.report</field>
             <field name="view_type">form</field>
-            <field name="view_mode">graph,pivot</field>
+            <field name="view_mode">pivot,graph</field>
             <field name="context">{'search_default_today': 1}</field>
             <field name="search_view_id" ref="view_delivered_report_search"/>
             <field name="help">Báo cáo các sản phẩm đã giao trong ngày</field>
@@ -54,10 +54,11 @@
             <field name="name">Báo Cáo Hàng Trả</field>
             <field name="model">sale.order.management.returned.report</field>
             <field name="arch" type="xml">
-                <pivot string="Delivered Report">
-                    <field name="row" interval="day" type="row"/>
-                    <field name="seller_sku" type="col"/>
+                <pivot string="Returned Report">
+                    <field name="row" interval="day" type="col"/>
+                    <field name="seller_sku" type="row"/>
                     <field name="measure" type="measure"/>
+                    <field name="unit_price" type="measure"/>
                 </pivot>
             </field>
         </record>
@@ -66,10 +67,11 @@
             <field name="name">Báo Cáo Hàng Trả</field>
             <field name="model">sale.order.management.returned.report</field>
             <field name="arch" type="xml">
-                <graph string="Delivered Report" type="bar">
+                <graph string="Returned Report" type="bar">
                     <field name="row" interval="day" type="row"/>
                     <field name="seller_sku" type="col"/>
                     <field name="measure" type="measure"/>
+                    <!-- <field name="measure" type="measure"/> -->
                  </graph>
              </field>
         </record>
@@ -78,8 +80,7 @@
             <field name="name">sale.order.management.report.search</field>
             <field name="model">sale.order.management.returned.report</field>
             <field name="arch" type="xml">
-                <search string="Delivered Report">
-                    <field name="col"/>
+                <search string="Returned Report">
                     <field name="row"/>
                     <field name="seller_sku"/>
                     <filter name="today" string="To day"
@@ -92,7 +93,7 @@
             <field name="name">Báo Cáo Hàng Trả</field>
             <field name="res_model">sale.order.management.returned.report</field>
             <field name="view_type">form</field>
-            <field name="view_mode">graph,pivot</field>
+            <field name="view_mode">pivot,graph</field>
             <field name="context">{'search_default_today': 1}</field>
             <field name="search_view_id" ref="view_returned_report_search"/>
             <field name="help">Báo cáo các sản phẩm đã hoàn trả trong ngày</field>

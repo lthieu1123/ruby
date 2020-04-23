@@ -24,6 +24,7 @@
         'static/src/xml/custom_render_formview_template.xml',
         'views/sale_order_management_shop_views.xml',
         'report/report_ruby_views.xml',
+        'report/lazada_report_order_number_views.xml',
         'views/menu_action.xml',
         'views/shopee_views.xml',
         'views/sale_order_management_shopee_shop_views.xml',

@@ -4,18 +4,17 @@
 from odoo import api, models, fields
 from odoo.tools.translate import _
 
-class RubyReportDelivered(models.Model):
-    _name = 'sale.order.management.delivered.report'
+class LazadaReportOrderNumberDelivered(models.Model):
+    _name = 'lazada.report.order.number.delivered'
     _inherit = ['base.report']
-    _description = 'Bill and Value supplier report'
+    _description = 'Lazada Report Order Number Delivered'
     _auto = False
 
     # Allow override model fields
-    row = fields.Date(string='Created Date')
-    measure = fields.Float('# of Value', required=True)
-    col = fields.Many2one('sale.order.management.shop', string="Shop")
-    unit_price = fields.Float('Sale Price', required=True)
-    seller_sku = fields.Char('Seller SKU',)
+    row = fields.Date(string='Ngày giao')
+    measure = fields.Float('# số lượng', required=True)
+    order_number = fields.Char('Order Number', required=True)
+    shop_id = fields.Many2one('sale.order.management.shop','Shop')
 
 
     # --------------------------------------- functions -------------------------------------------------
@@ -26,12 +25,12 @@ class RubyReportDelivered(models.Model):
         """
         sql = [
             """
-                select row_number() OVER () as id,
-                count(*) as measure,
-                sm.deliver_date as row,
-                sum(sm.unit_price) as unit_price,
-                sm.shop_id as col,
-                sm.seller_sku as seller_sku
+                select
+                    row_number() OVER () as id,
+                    count(*) as measure,
+                    sm.order_number as order_number,
+                    sm.shop_id as shop_id,
+                    sm.deliver_date as row
             """
         ]
         return super()._select(sql)
@@ -55,9 +54,8 @@ class RubyReportDelivered(models.Model):
             """
                 group by
                     sm.deliver_date,
-                    sm.unit_price,
                     sm.shop_id,
-                    sm.seller_sku
+                    sm.order_number
             """
         ]
         return super()._select(sql)
@@ -83,18 +81,18 @@ class RubyReportDelivered(models.Model):
     def init(self):
         self.execute_query_to_create_view()
 
-class RubyReportReturned(models.Model):
-    _name = 'sale.order.management.returned.report'
+class LazadaReportOrderNumberReturned(models.Model):
+    _name = 'lazada.report.order.number.returned'
     _inherit = ['base.report']
-    _description = 'Bill and Value supplier report'
+    _description = 'Lazada Report Order Number Returned'
     _auto = False
 
     # Allow override model fields
-    row = fields.Date(string='Created Date')
-    measure = fields.Float('# of Value', required=True)
-    col = fields.Many2one('sale.order.management.shop', string="Shop")
-    unit_price = fields.Float('Sale Price', required=True)
-    seller_sku = fields.Char('Seller SKU',)
+    row = fields.Date(string='Ngày trả')
+    measure = fields.Float('# số lượng', required=True)
+    order_number = fields.Char('Order Number', required=True)
+    shop_id = fields.Many2one('sale.order.management.shop','Shop')
+
 
     # --------------------------------------- functions -------------------------------------------------
 
@@ -104,12 +102,12 @@ class RubyReportReturned(models.Model):
         """
         sql = [
             """
-                select row_number() OVER () as id,
-                count(*) as measure,
-                sm.return_date as row,
-                sum(sm.unit_price) as unit_price,
-                sm.shop_id as col,
-                sm.seller_sku as seller_sku
+                select
+                    row_number() OVER () as id,
+                    count(*) as measure,
+                    sm.order_number as order_number,
+                    sm.shop_id as shop_id,
+                    sm.deliver_date as row
             """
         ]
         return super()._select(sql)
@@ -132,10 +130,9 @@ class RubyReportReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.return_date,
-                    sm.unit_price,
+                    sm.deliver_date,
                     sm.shop_id,
-                    sm.seller_sku
+                    sm.order_number
             """
         ]
         return super()._select(sql)

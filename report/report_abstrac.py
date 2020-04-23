@@ -127,4 +127,6 @@ class BaseReport(models.AbstractModel):
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
         result = super().read_group(domain, fields, groupby, offset, limit, orderby, lazy)
+        if len(result) == 1:
+            return result
         return list(filter(lambda group: group.get('__count',False),result))   
