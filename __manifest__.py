@@ -10,7 +10,7 @@
     'website': "",
     'category': 'rubi',
     'version': '0.1',
-    'depends': ['base','web','mail','decimal_precision'],
+    'depends': ['base','web','mail','decimal_precision','backend_theme_v12'],
     'data': [
         'security/user_group.xml',
         'data/directory_data.xml',
@@ -32,7 +32,7 @@
         'views/directory_shop_views.xml',
         'views/shopee_menu_views.xml',
         'views/menu_views.xml',
-        
+        'views/sendo_tiki_views.xml'
     ],
     'demo': [],
     'qweb': [
