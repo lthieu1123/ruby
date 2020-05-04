@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <search string="Search Description">
                     <!-- Add your fields here -->
+                    <field name="shop_id"/>
                     <field name="tracking_code"/>
                     <field name="order_number"/>
                     <field name="lazada_id"/>
@@ -57,6 +58,7 @@
             <field name="model">sale.order.management</field>
             <field name="arch" type="xml">
                 <tree>
+                        <field name="shop_id"/>
                         <field name="tracking_code"/>
                         <field name="order_number"/>
                         <field name="lazada_id"/>

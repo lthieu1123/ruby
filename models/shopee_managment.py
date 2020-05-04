@@ -265,11 +265,11 @@ class ShopeeManagment(models.Model):
 
     @api.multi
     def btn_process_reconcile(self):
-        self._cr.execute('SAVEPOINT import')
         # _sale_done_director = 'c:/tool/newlazada/taichinh'
         _directory = self.env['shopee.directory'].search([
             ('name','=','reconcile')
         ])
+        _li_shop = []
         if not _directory.id:
             raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
         _sale_done_director = _directory.directory
@@ -287,37 +287,14 @@ class ShopeeManagment(models.Model):
             ])
             if not len(shop_id):
                 raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
+            _li_shop.append(shop_id.id)
         
-        for entry in sale_director_file:
-            directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8')
-            max_row = 10
-            max_row = len(result) if max_row > len(result) else max_row
-            header_index = 0
-            column_index = 0
-            for i in range(0,max_row):
-                _li_data = list(result.loc[i])
-                if 'Mã đơn hàng' in _li_data:
-                    header_index = i
-                    break
-            _li_header = list(result.loc[header_index])
-            for i in range(0,len(_li_header)):
-                if 'Mã đơn hàng' == _li_header[i]:
-                    column_index = i
-                    break
-            for i in range(_li_header+1,len(result)):
-                ma_don_hang = result.loc[i][column_index]
-                item = self.env['shopee.management'].search([
-                    ('ma_don_hang','=',ma_don_hang)
-                ])
-                if not item.id:
-                    raise exceptions.ValidationError(_('Không tim thấy mã đơn hàng [{}]').format(ma_don_hang))
-                item.write({
-                    'state': 'done'
-                })
-        self._cr.execute('RELEASE SAVEPOINT import')
+        
         context = self.env.context.copy()
         context['default_res_model'] = 'shopee.management'
+        context['default_shop_id'] = _li_shop
+        context['sale_director_file'] = sale_director_file
+        context['sale_done_director'] = _sale_done_director
         return {
                 'name': 'Đối Soát Đơn Hàng',
                 'view_type': 'form',

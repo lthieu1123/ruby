@@ -3,6 +3,7 @@
 # Import libs
 from odoo import api, models, fields
 from odoo.tools.translate import _
+from odoo.addons import decimal_precision as dp
 
 class LazadaReportOrderNumberDelivered(models.Model):
     _name = 'lazada.report.order.number.delivered'
@@ -27,7 +28,7 @@ class LazadaReportOrderNumberDelivered(models.Model):
             """
                 select
                     row_number() OVER () as id,
-                    count(*) as measure,
+                    count (distinct sm.order_number) as measure,
                     sm.order_number as order_number,
                     sm.shop_id as shop_id,
                     sm.deliver_date as row

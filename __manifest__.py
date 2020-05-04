@@ -10,7 +10,7 @@
     'website': "",
     'category': 'rubi',
     'version': '0.1',
-    'depends': ['base','web','mail'],
+    'depends': ['base','web','mail','decimal_precision'],
     'data': [
         'security/user_group.xml',
         'data/directory_data.xml',

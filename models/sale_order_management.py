@@ -268,14 +268,14 @@ class SaleOrderManagment(models.Model):
                 'view_id': view_id
             }]
         }
-    
+
     @api.model
     def btn_process_sale_done(self):
-        self._cr.execute('SAVEPOINT import')
         # _sale_done_director = 'c:/tool/newlazada/taichinh'
         _directory = self.env['lazada.directory'].search([
             ('name','=','reconcile')
         ])
+        _li_shop = []
         if not _directory.id:
             raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
         _sale_done_director = _directory.directory
@@ -296,35 +296,14 @@ class SaleOrderManagment(models.Model):
             ])
             if not len(shop_id):
                 raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
-        msg = []
-        for entry in sale_director_file:
-            shop_code = entry.split('.')[0]
-            shop_id = self.env['sale.order.management.shop'].search([
-                ('code','=',shop_code)
-            ])
-            directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8')
-            count_price = 0
-            for index, row in result.iterrows():
-                fee_name = row[FEE_NAME]
-                if fee_name != ITEM_PRICE:
-                    continue
-                order_id = int(row[ODER_ITEM_NO])
-                data = self.search([
-                    ('order_item_id','=',order_id)
-                ])
-                if not data.id:
-                    raise exceptions.ValidationError(_('Không tim thấy đơn hàng có "order id" [{}]').format(order_id))
-                data.update({
-                    'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
-                    'state': 'done'
-                })
-                count_price+=1
-            msg.append("Shop: {} - Item sale: {} ".format(shop_id.name, count_price))
-        self._cr.execute('RELEASE SAVEPOINT import')
-        #Return mess when done
+            _li_shop.append(shop_id.id)
+
+        #Return wizard to calculate reconcile
         context = self.env.context.copy()
         context['default_res_model'] = 'sale.order.management'
+        context['default_shop_id'] = _li_shop
+        context['sale_director_file'] = sale_director_file
+        context['sale_done_director'] = _sale_done_director
         return {
                 'name': 'Đối Soát Đơn Hàng',
                 'view_type': 'form',

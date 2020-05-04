@@ -3,6 +3,7 @@
 # Import libs
 from odoo import api, models, fields
 from odoo.tools.translate import _
+from odoo.addons import decimal_precision as dp
 
 class RubyReportDelivered(models.Model):
     _name = 'sale.order.management.delivered.report'
@@ -12,8 +13,9 @@ class RubyReportDelivered(models.Model):
 
     # Allow override model fields
     row = fields.Date(string='Ngày giao')
-    measure = fields.Float('# số lượng', required=True)
-    unit_price = fields.Float('Giá trung bình', required=True)
+    measure = fields.Float('# số lượng', required=True,)
+    # unit_price = fields.Float('Giá trung bình', required=True, digits=dp.get_precision('Vietnam Dong Digit'))
+    unit_price = fields.Float('Giá trung bình', required=True,)
     seller_sku = fields.Char('SKU sản phẩm',)
 
 
@@ -53,7 +55,6 @@ class RubyReportDelivered(models.Model):
             """
                 group by
                     sm.deliver_date,
-                    sm.unit_price,
                     sm.seller_sku
             """
         ]
