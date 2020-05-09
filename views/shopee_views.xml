@@ -9,8 +9,8 @@
             <field name="arch" type="xml">
                 <search string="Search Description">
                     <!-- Add your fields here -->
-                    <field name="shop_id"/>
                     <field name="ma_van_don"/>
+                    <field name="shop_id"/>
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
@@ -49,7 +49,6 @@
             <field name="model">shopee.management</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="shop_id"/>
                     <field name="ma_van_don"/>
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
@@ -60,6 +59,7 @@
                     <field name="package_number"/>
                     <field name="state"/>
                     <field name="write_date" string="Cập Nhật Lúc"/>
+                    <field name="shop_id"/>
                 </tree>
             </field>
         </record>

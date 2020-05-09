@@ -144,7 +144,6 @@ class ShopeeManagment(models.Model):
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
-            print('ERROR: ',str(err))
             raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
@@ -199,7 +198,7 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
-                    _data = row[key] if _header != 'Mã vận đơn' else str(row[key])
+                    _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None
                     })

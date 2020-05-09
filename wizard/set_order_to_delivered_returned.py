@@ -195,6 +195,7 @@ class SetOrderToDelivered(models.TransientModel):
             _li_code = list(dict.fromkeys(_li_code))
 
             for code in _li_code:
+                code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
                     ('tracking_code', '=', code)
                 ])
@@ -235,8 +236,9 @@ class SetOrderToDelivered(models.TransientModel):
             str_json = rec.json_field
             _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
+                tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', rec.tracking_code_ids),
+                    ('tracking_code', '=', tracking_code),
                     ('state', '=', 'pending')
                 ])
                 tracking_ids = tracking_id.ids
@@ -319,6 +321,7 @@ class SetOrderToReturned(models.TransientModel):
             _li_code = list(dict.fromkeys(_li_code))
 
             for code in _li_code:
+                code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
                     ('tracking_code', '=', code)
                 ])
@@ -391,8 +394,9 @@ class SetOrderToReturned(models.TransientModel):
             str_json = rec.json_field
             _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
+                tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', rec.tracking_code_ids),
+                    ('tracking_code', '=', tracking_code),
                     ('state', '=', 'delivered')
                 ])
                 tracking_ids = tracking_id.ids

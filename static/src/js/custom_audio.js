@@ -31,7 +31,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                     if (tracking_code_count_id && tracking_code_count_id.length){
                         
                         tracking_code_count_id[0].addEventListener("change",function(){
-                            var current = $(this).val();
+                            var current = $(this).val().toUpperCase();
                             var _model = d.model;
                             _self._rpc({
                                 model: _model,
@@ -98,7 +98,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                     var iid = setInterval(function() {
                         if (tracking_code_count_id && tracking_code_count_id.length){
                             tracking_code_count_id[0].addEventListener("change",function(){
-                                var current = $(this).val();
+                                var current = $(this).val().toUpperCase();
                                 var changes = _self.model.localData[d.id];
                                 var _model = d.model;
                                 _self._rpc({

@@ -9,9 +9,9 @@
             <field name="arch" type="xml">
                 <search string="Search Description">
                     <!-- Add your fields here -->
-                    <field name="shop_id"/>
                     <field name="tracking_code"/>
                     <field name="order_number"/>
+                    <field name="shop_id"/>
                     <field name="lazada_id"/>
                     <field name="order_item_id"/>
                     <field name="unit_price"/>
@@ -58,7 +58,6 @@
             <field name="model">sale.order.management</field>
             <field name="arch" type="xml">
                 <tree>
-                        <field name="shop_id"/>
                         <field name="tracking_code"/>
                         <field name="order_number"/>
                         <field name="lazada_id"/>
@@ -79,6 +78,7 @@
                         <field name="notes"/>
                         <field name="state"/>
                         <field name="write_date" string="Cập Nhật Lúc"/>
+                        <field name="shop_id"/>
                 </tree>
             </field>
         </record>

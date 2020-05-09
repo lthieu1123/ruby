@@ -53,13 +53,11 @@ class ShopAnnounce(models.TransientModel):
         rec_ids = so_mgt.search([
             ('created_at','>=',start_datetime),
             ('created_at','<=',end_datetime),
-            ('state','=','pending'),
+            ('state','=','delivered'),
             ('shop_id','in',_li_shop)
         ])
-        print('Truoc doi soat')
         self._reconcile_lazada_data(rec_ids,sale_director_file,_sale_done_director)
-        print('Sau doi soat')
-        result = rec_ids.filtered(lambda r: r.state == 'pending')
+        result = rec_ids.filtered(lambda r: r.state == 'delivered')
         return {
             'name': _('Đối Soát Đơn Hàng'),
             'view_type': 'form',
@@ -93,11 +91,11 @@ class ShopAnnounce(models.TransientModel):
         rec_ids = so_mgt.search([
             ('ngay_dat_hang','>=',start_datetime),
             ('ngay_dat_hang','<=',end_datetime),
-            ('state','=','pending'),
+            ('state','=','delivered'),
             ('shop_id','in',_li_shop)
         ])
         self._reconcile_shopee_data(rec_ids,sale_director_file,_sale_done_director)
-        result = rec_ids.filtered(lambda r: r.state == 'pending')
+        result = rec_ids.filtered(lambda r: r.state == 'delivered')
         return {
             'name': _('Đối Soát Đơn Hàng'),
             'view_type': 'form',
@@ -112,10 +110,7 @@ class ShopAnnounce(models.TransientModel):
 
     @api.model
     def _reconcile_lazada_data(self, rec_ids, sale_director_file, _sale_done_director):
-        print('Trong doi soat')
-        print('sale_director_file: ',sale_director_file)
         for entry in sale_director_file:
-            print('entry: ',entry)
             directory = "{}/{}".format(_sale_done_director,entry)
             result = pd.read_csv(directory,sep=',',encoding='utf8')
             
@@ -124,11 +119,6 @@ class ShopAnnounce(models.TransientModel):
                 if fee_name != ITEM_PRICE:
                     continue
                 order_id = str(row[ODER_ITEM_NO])
-                print('order_id: ',order_id)
-                if order_id == 242685644192639:
-                    print('242685644192639')
-                    print('rec_ids: ',rec_ids)
-                    print('rec_ids: ',rec_ids.filtered(lambda r: r.order_item_id == order_id))
                 rec = rec_ids.filtered(lambda r: r.order_item_id == order_id)
                 if rec.id:
                     rec.update({

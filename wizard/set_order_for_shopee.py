@@ -56,7 +56,6 @@ class SetOrderAsb(models.AbstractModel):
                     result.update({'result': False})
             else:
                 result.update({'result': True})
-        print('Result: ',result)
         return result
 
 class SetOrderToDeliveredShopee(models.TransientModel):
