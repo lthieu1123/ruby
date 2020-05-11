@@ -9,7 +9,7 @@
     'author': "Hiếu Lâm",
     'website': "",
     'category': 'rubi',
-    'version': '0.1',
+    'version': '8.0.1',
     'depends': ['base','web','mail','decimal_precision','backend_theme_v12'],
     'data': [
         'security/user_group.xml',
