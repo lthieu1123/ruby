@@ -239,8 +239,8 @@ class SaleOrderManagment(models.Model):
                 for key in _li_key:
                     _header = header.get(key)
                     _data = row[key]
-                    if key == 'Tracking Code' and _data != 'nan':
-                        _data = _data.upper()
+#                     if key == 'Tracking Code' and _data != 'nan':
+#                         _data = _data.upper()
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None
                     })
