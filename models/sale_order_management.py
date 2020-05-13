@@ -218,6 +218,10 @@ class SaleOrderManagment(models.Model):
             skip_count = 0
             #browse data from dataframe pandas
             for index, row in result.iterrows():
+                #If tracking code is blank, move to next row
+                if row['Tracking Code'] == 'nan':
+                    continue
+
                 #Checking existed item in database, if existed -> unlink
                 existed_item = self.search([
                     ('order_item_id','=',row['Order Item Id']),
@@ -435,3 +439,9 @@ class SaleOrderManagment(models.Model):
             'search_view_id': self.env.ref('ruby.sale_order_managment_view_search').id,
             'type': 'ir.actions.act_window',
         }
+
+    @api.model
+    def _remove_blank_tracking_code(self):
+        return self.search([
+            ('tracking_code','=',False)
+        ]).unlink()

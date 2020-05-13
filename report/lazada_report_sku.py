@@ -15,7 +15,7 @@ class RubyReportDelivered(models.Model):
     row = fields.Date(string='Ngày giao')
     measure = fields.Float('# số lượng', required=True,)
     # unit_price = fields.Float('Giá trung bình', required=True, digits=dp.get_precision('Vietnam Dong Digit'))
-    unit_price = fields.Float('Giá trung bình', required=True,)
+    unit_price = fields.Float('Giá trung bình', required=True, group_operator='avg')
     seller_sku = fields.Char('SKU sản phẩm',)
 
 
@@ -30,8 +30,9 @@ class RubyReportDelivered(models.Model):
                 select row_number() OVER () as id,
                 count(*) as measure,
                 sm.deliver_date as row,
-                avg(sm.unit_price) as unit_price,
-                sm.seller_sku as seller_sku
+                sm.unit_price as unit_price,
+                sm.seller_sku as seller_sku,
+                sm.id as _id
             """
         ]
         return super()._select(sql)
@@ -55,7 +56,8 @@ class RubyReportDelivered(models.Model):
             """
                 group by
                     sm.deliver_date,
-                    sm.seller_sku
+                    sm.seller_sku,
+                    sm.id
             """
         ]
         return super()._select(sql)
@@ -90,7 +92,7 @@ class RubyReportReturned(models.Model):
     # Allow override model fields
     row = fields.Date(string='Ngày trả')
     measure = fields.Float('# số lượng', required=True)
-    unit_price = fields.Float('Giá trung bình', required=True)
+    unit_price = fields.Float('Giá trung bình', required=True, group_operator='avg')
     seller_sku = fields.Char('SKU sản phẩm',)
 
     # --------------------------------------- functions -------------------------------------------------
@@ -104,8 +106,9 @@ class RubyReportReturned(models.Model):
                 select row_number() OVER () as id,
                 count(*) as measure,
                 sm.return_date as row,
-                avg(sm.unit_price) as unit_price,
-                sm.seller_sku as seller_sku
+                sm.unit_price as unit_price,
+                sm.seller_sku as seller_sku,
+                sm.id as _id
             """
         ]
         return super()._select(sql)
@@ -128,10 +131,9 @@ class RubyReportReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.return_date,
-                    sm.unit_price,
-                    sm.shop_id,
-                    sm.seller_sku
+                    sm.deliver_date,
+                    sm.seller_sku,
+                    sm.id
             """
         ]
         return super()._select(sql)
