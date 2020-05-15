@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+        <record model="lazada.directory" id="lazada_update_directory">
+            <field name="name">update</field>
+            <field name="directory">C:\tool\lazada\newssg</field>
+        </record>
+
+        <record model="lazada.directory" id="lazada_reconcile_directory">
+            <field name="name">reconcile</field>
+            <field name="directory">C:\tool\lazada\reconcile</field>
+        </record>
+
+        <record model="shopee.directory" id="shopee_update_directory">
+            <field name="name">update</field>
+            <field name="directory">C:\tool\shopee\newssg</field>
+        </record>
+
+        <record model="shopee.directory" id="shopee_reconcile_directory">
+            <field name="name">reconcile</field>
+            <field name="directory">C:\tool\shopee\reconcile</field>
+        </record>
+    </data>
+</odoo>

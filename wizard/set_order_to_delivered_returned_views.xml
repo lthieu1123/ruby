@@ -57,9 +57,17 @@
                 <form string="Success!">
                     <main>
                         <field name="name" readonly="1" widget="html"/>
+                        <field name="is_cal_fee" invisible="1"/>
+                        <!-- <field name="has_csv" invisible="1"/>
+                        <field name="csv_name" invisible="1"/>
+                        
+                        <div attrs="{'invisible': [('has_csv','=', False)]}">
+                            <p>Các đơn hàng chi phí khác nhau: <field name="csv_file" readonly="1" filename="csv_name"/></p>
+                        </div> -->
                     </main>
                     <footer>
-                        <button string="OK" class="btn btn-primary" name="btn_new_update" type="object"/>
+                        <button string="OK" class="btn btn-primary" name="btn_new_update" type="object" attrs="{'invisible': [('is_cal_fee','=', True)]}"/>
+                        <button string="OK" class="btn btn-primary" type="object" special="cancel" attrs="{'invisible': [('is_cal_fee','=', False)]}"/>
                     </footer>
                 </form>
             </field>

@@ -18,6 +18,7 @@
                             </ul>
                         </div>
                         <group>
+                            <field name="res_model" invisible="1"/>
                             <div>
                                 <label for="date_start" class="o_form_label oe_inline"/>
                                 <field name="date_start" class="oe_inline"/>
@@ -29,7 +30,8 @@
                         </group>
                     </main>
                     <footer>
-                        <button name="btn_reconcile" type="object" string="Reconcile" class="btn btn-primary"/>
+                        <button name="btn_reconcile" type="object" string="Đối soát" class="btn btn-primary" attrs="{'invisible': [('res_model','!=','sale.order.management')]}"/>
+                        <button name="btn_reconcile_shopee" type="object" string="Đối soát" class="btn btn-primary" attrs="{'invisible': [('res_model','!=','shopee.management')]}"/>
                     </footer>
                 </form>
             </field>

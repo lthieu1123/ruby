@@ -2,20 +2,22 @@
 <odoo>
     <data noupdate="0">
         <!-- Add you code here -->
-        <menuitem id="shoppe_managment_menu_root" name="Shopee" sequence="1" web_icon="ruby,static/description/icon_lazada.png"/>
+        <menuitem id="shoppe_managment_menu_root" name="Shopee" sequence="2" web_icon="ruby,static/description/icon-shopee.png"/>
+            <menuitem id="action_new_update_item_shopee_menu"
+                        name="Cập Nhật Mới"
+                        parent="shoppe_managment_menu_root"
+                        action="action_new_update_shopee"
+                        sequence="1"
+                        groups="ruby.user_manager_shopee_groups"/>
+
             <menuitem id="shopee_action"
                             name="Danh Sách Đơn Hàng"
                             parent="shoppe_managment_menu_root"
                             action="shopee_management_action"
-                            sequence="1"
+                            sequence="10"
                             groups="ruby.user_manager_shopee_groups"/>
 
-            <menuitem id="sale_order_menagement_shopee_shop_menu_act"
-                            name="Shop"
-                            parent="shoppe_managment_menu_root"
-                            action="sale_order_management_shopee_shop_action"
-                            sequence="40"
-                            groups="ruby.user_manager_shopee_groups"/>
+            
 
             <menuitem id="set_order_to_delivered_shopee_act"
                             name="Giao Hàng"
@@ -28,5 +30,28 @@
                             parent="shoppe_managment_menu_root"
                             action="set_order_to_returned_shopee_action"
                             sequence="30"/>
+
+            <menuitem id="action_process_done_shopee_item_menu"
+                        name="Đối Soát Đơn Hàng"
+                        parent="shoppe_managment_menu_root"
+                        action="action_process_done_shopee"
+                        sequence="70"
+                        groups="ruby.user_manager_shopee_groups"/>
+
+            <!-- This Menu Item Must have a parent -->
+            <menuitem id="shoppe_setting_menu_categ" name="Cài Đặt" parent="shoppe_managment_menu_root" sequence="80" groups="ruby.user_manager_shopee_groups"/>
+            <menuitem id="sale_order_menagement_shopee_shop_menu_act"
+                            name="Shop"
+                            parent="shoppe_setting_menu_categ"
+                            action="sale_order_management_shopee_shop_action"
+                            sequence="10"
+                            groups="ruby.user_manager_shopee_groups"/>
+            
+            <menuitem id="shopee_directory_menu_act"
+                            name="Đường Dẫn Thư Mục"
+                            parent="shoppe_setting_menu_categ"
+                            action="shopee_directory_action"
+                            sequence="20"
+                            groups="ruby.user_manager_shopee_groups"/>
     </data>
 </odoo>

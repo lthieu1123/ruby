@@ -10,10 +10,14 @@ import logging
 import re
 import ctypes
 import json
+import io
 import base64
+import pandas as pd
 
 _logger = logging.getLogger(__name__)
 
+SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
+SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
 
 class ShopAnnounce(models.TransientModel):
     _name = 'shop.announce'
@@ -22,9 +26,19 @@ class ShopAnnounce(models.TransientModel):
     def _get_default_message(self):
         return self.env.context.get('default_message', False)
 
+    def _get_default_cal_fee(self):
+        return self.env.context.get('default_cal_fee', False)
+
+    def _get_default_has_csv(self):
+        return self.env.context.get('has_data_csv', False)
+
     name = fields.Text('name', default=_get_default_message)
     file_data = fields.Binary(string='File')
     file_name = fields.Char('File Name')
+    # csv_file = fields.Binary(string='Chênh lệch phí vận chuyển')
+    # csv_name = fields.Char('CSV File Name', default='phi_van_chuyen.csv')
+    # has_csv = fields.Boolean('Has CSV', default=_get_default_has_csv)
+    is_cal_fee = fields.Boolean('Is Cal Fee', default=_get_default_cal_fee)
 
     @api.multi
     def btn_accept(self):
@@ -46,7 +60,9 @@ class ShopAnnounce(models.TransientModel):
 
     @api.multi
     def btn_new_update(self):
-        vals =  self.env['sale.order.management'].btn_new_update()
+        context = self.env.context
+        default_model = context.get('default_model')
+        vals =  self.env[default_model].btn_new_update()
         vals.update({
             'target': 'main',
         })
@@ -173,13 +189,13 @@ class SetOrderToDelivered(models.TransientModel):
         code_not_found = self.code_not_found or ""
         code_used = self.code_used or ""
         _data = json.loads(str_json) if str_json else {}
-        print('input_data: ', self.input_data)
         if self.input_data:
             _li_code_origin = re.split('[;,\s]', self.input_data)
             _li_code = [code.strip() for code in _li_code_origin]
             _li_code = list(dict.fromkeys(_li_code))
 
             for code in _li_code:
+                code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
                     ('tracking_code', '=', code)
                 ])
@@ -197,11 +213,10 @@ class SetOrderToDelivered(models.TransientModel):
                             _list_show_ids)
                         order_number = _object.mapped(lambda r: r.order_number)
                         delta = list(dict.fromkeys(order_number))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
-                        print('shop_name: ', shop_name)
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -221,8 +236,9 @@ class SetOrderToDelivered(models.TransientModel):
             str_json = rec.json_field
             _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
+                tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', rec.tracking_code_ids),
+                    ('tracking_code', '=', tracking_code),
                     ('state', '=', 'pending')
                 ])
                 tracking_ids = tracking_id.ids
@@ -232,7 +248,7 @@ class SetOrderToDelivered(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['sale.order.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object + rec.tracking_code_show
                     order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)
@@ -305,13 +321,16 @@ class SetOrderToReturned(models.TransientModel):
             _li_code = list(dict.fromkeys(_li_code))
 
             for code in _li_code:
+                code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
                     ('tracking_code', '=', code)
                 ])
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
                 else:
-                    if tracking_ids[0].state != 'pending':
+                    if tracking_ids[0].state == 'pending' or tracking_ids[0].state == 'done':
+                        code_not_found += code+"\r\n"
+                    elif tracking_ids[0].state == 'returned':
                         code_used += code+"\r\n"
                     else:
                         tracking_ids_id = tracking_ids.ids
@@ -322,11 +341,10 @@ class SetOrderToReturned(models.TransientModel):
                             _list_show_ids)
                         order_number = _object.mapped(lambda r: r.order_number)
                         delta = list(dict.fromkeys(order_number))
-                        self.tracking_code_show = self.tracking_code_show + _object
+                        self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
                         shop_name = tracking_ids[0].shop_id.name
-                        print('shop_name: ', shop_name)
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -341,7 +359,6 @@ class SetOrderToReturned(models.TransientModel):
 
     @api.onchange('tracking_code_show')
     def _onchange_tracking_code_show(self):
-        print('_onchange_tracking_code_show')
         str_json = self.json_field
 
         _data = json.loads(str_json) if str_json else {}
@@ -377,8 +394,9 @@ class SetOrderToReturned(models.TransientModel):
             str_json = rec.json_field
             _data = json.loads(str_json) if str_json else {}
             if rec.tracking_code_ids:
+                tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', rec.tracking_code_ids),
+                    ('tracking_code', '=', tracking_code),
                     ('state', '=', 'delivered')
                 ])
                 tracking_ids = tracking_id.ids
@@ -388,7 +406,7 @@ class SetOrderToReturned(models.TransientModel):
                 if len(_list_show_ids):
                     sale_object = self.env['sale.order.management'].browse(
                         _list_show_ids)
-                    rec.tracking_code_show = rec.tracking_code_show + sale_object
+                    rec.tracking_code_show = sale_object +  rec.tracking_code_show
                     order_number = sale_object.mapped(lambda r: r.order_number)
                     delta = list(dict.fromkeys(order_number))
                     rec.delta = len(delta)

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <!-- Add you code here -->
+        <!-- model.name form view -->
+        <record id="lazada_reconcile_fee_view_form" model="ir.ui.view">
+            <field name="name">Đối soát chi phí Lazada</field>
+            <field name="model">lazada.reconcile.fee</field>
+            <field name="arch" type="xml">
+                <form string="Đối Soát Chi Phí">
+                    <field name="state" invisible="1" />
+                    <field name="name" invisible="1"/>
+                    <field name="has_csv" invisible="1"/>
+                    <div states="begin">
+                        <!-- <label for="price_support" class="oe-inline"><p>Chi phí trợ giá:</p> -->
+                        <group>
+                            <div>
+                                <span class="oe_inline" >Chi phí trợ giá: </span>
+                                <field class="oe_inline" name="price_support"/>
+                                <span class="oe_inline" > Nếu giá đơn hàng trên: </span>
+                                <field class="oe_inline" name="price_over"/>
+                            </div>
+                        </group>
+                        <group>
+                            <div>
+                                <span>Vui lòng chọn ngày cần đối soát chi phí. </span>
+                                <span class="oe_inline" >Từ ngày: </span>
+                                <field class="oe_inline" name="date_start" required="1"/>
+                                <span class="oe_inline" > Đến ngày: </span>
+                                <field class="oe_inline" name="date_end" required="1"/>
+                            </div>
+                        </group>
+                        
+                        <field name="file_name" invisible="1"/>
+                        <p>Tải lên tập tin cần đối soát chi phí: <field name="file_data" filename="file_name"/></p>
+                        <p>Lưu ý:</p>
+                            <ul>
+                                <li>Tên tập tin là mã số của shop trên phần mềm.</li>
+                                <li>Chỉ hổ trợ tập tin với định dạng là csv</li>
+                            </ul>
+                    </div>
+                    <div states="end">
+                        <h2>Đối soát hoàn tất</h2>
+                        <div attrs="{'invisible': [('has_csv','=',True)]}">
+                            <p>Đối soát không tìm thấy sự chênh lệch chi phí của khách hàng và shop</p>
+                        </div>
+                        <div attrs="{'invisible': [('has_csv','=',False)]}">
+                            <p>Đối soát tìm thấy sự chênh lệch chi phí của khách hàng và shop.</p>
+                            <p>Tập tin đã đối soát: <field name="csv_file" filename="csv_name" readonly="1"/></p>
+                            <field name="csv_name" invisible="1"/>
+                        </div>
+                    </div>
+                    <footer states="begin">
+                        <button name="btn_reconcile" string="Đối soát" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Hủy" type="object" class="btn-secondary"/>
+                    </footer>
+                    <footer states="end">
+                        <button special="cancel" string="Đóng" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <!-- model.name action window -->
+        <record id="lazada_reconcile_fee_action" model="ir.actions.act_window">
+            <field name="name">Đối Soát Chi Phí</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">lazada.reconcile.fee</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -10,6 +10,7 @@
                 <search string="Search Description">
                     <!-- Add your fields here -->
                     <field name="ma_van_don"/>
+                    <field name="shop_id"/>
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
@@ -34,7 +35,7 @@
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     <span>Tải file sẳn sàng giao mới nhất về máy. Đặt tên lần lượt là 1,2,3,4,5,6…</span>
-                    <span>Lưu vào thư mục: C://tool/newssg</span>
+                    <span>Lưu vào thư mục: C:/shopee/newssg</span>
                 </p><p>
                     <!-- More details about what a user can do with this object will be OK --> 
                 </p>
@@ -47,7 +48,7 @@
             <field name="name">Danh Sách Đơn Hàng</field>
             <field name="model">shopee.management</field>
             <field name="arch" type="xml">
-                <tree delete="false">
+                <tree>
                     <field name="ma_van_don"/>
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
@@ -58,6 +59,7 @@
                     <field name="package_number"/>
                     <field name="state"/>
                     <field name="write_date" string="Cập Nhật Lúc"/>
+                    <field name="shop_id"/>
                 </tree>
             </field>
         </record>

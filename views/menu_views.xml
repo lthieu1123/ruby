@@ -31,28 +31,13 @@
                         action="set_order_to_returned_action"
                         sequence="30"/>
             <!-- This Menu Item Must have a parent -->
-            <menuitem id="sale_order_menagement_shop_menu_act"
-                        name="Shop"
-                        parent="sale_order_management_menu_root"
-                        action="sale_order_management_shop_action"
-                        sequence="40"
-                        groups="ruby.user_manager_groups"/>
-                        
-            <menuitem id="sale_order_report_menu_act"
-                        name="Báo Cáo"
+            
+            <menuitem id="action_reconcile_fee_act"
+                        name="Đối Soát Chi Phí"
                         parent="sale_order_management_menu_root"
                         sequence="50"
+                        action="lazada_reconcile_fee_action"
                         groups="ruby.user_manager_groups"/>
-                <menuitem id="sale_order_delivered_report_sub_menu"
-                            name="Báo Cáo Giao Hàng"
-                            parent="sale_order_report_menu_act"
-                            action="delivered_report_act"
-                            sequence="1"/>
-                <menuitem id="sale_order_returned_report_sub_menu"
-                            name="Báo Cáo Hàng Trả"
-                            parent="sale_order_report_menu_act"
-                            action="returned_report_act"
-                            sequence="2"/>
                             
             <menuitem id="action_calculate_fee_menu"
                         name="Đối Soát Tài Chính"
@@ -66,6 +51,65 @@
                         action="action_process_done"
                         sequence="70"
                         groups="ruby.user_manager_groups"/>
+            
+            <!-- Report -->
+            <menuitem id="lazada_report_sub_menu"
+                        name="Báo Cáo"
+                        parent="sale_order_management_menu_root"
+                        sequence="71"
+                        groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_report_sub_menu_1"
+                        name="Báo Cáo Theo SKU"
+                        parent="lazada_report_sub_menu"
+                        sequence="1"
+                        groups="ruby.user_manager_groups"/>
+                    <menuitem id="sale_sku_delivered_report_sub_menu"
+                                name="Giao Hàng"
+                                parent="lazada_report_sub_menu_1"
+                                action="delivered_report_act"
+                                sequence="40"/>
+                    <menuitem id="sale_sku_returned_report_sub_menu"
+                                name="Trả Hàng"
+                                parent="lazada_report_sub_menu_1"
+                                action="returned_report_act"
+                                sequence="50"/>
 
+                <menuitem id="lazada_report_sub_menu_2"
+                        name="Báo Cáo Theo Đơn Hàng"
+                        parent="lazada_report_sub_menu"
+                        sequence="2"
+                        groups="ruby.user_manager_groups"/>
+                    <menuitem id="order_number_delivered_report_sub_menu"
+                                name="Giao Hàng"
+                                parent="lazada_report_sub_menu_2"
+                                action="lazada_report_order_number_delivered_action"
+                                sequence="40"/>
+                    <menuitem id="order_number_returned_report_sub_menu"
+                                name="Trả Hàng"
+                                parent="lazada_report_sub_menu_2"
+                                action="lazada_report_order_number_returned_action"
+                                sequence="50"/>
+
+            <!-- This Menu Item Must have a parent -->
+            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80" groups="ruby.user_manager_groups"/>
+                <menuitem id="sale_order_menagement_shop_menu_act"
+                            name="Shop"
+                            parent="lazada_setting_menu_categ"
+                            action="sale_order_management_shop_action"
+                            sequence="10"
+                            groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_formula_menu_act"
+                            name="Công Thức Tính Chi Phí"
+                            parent="lazada_setting_menu_categ"
+                            action="lazada_formula_action"
+                            sequence="20"
+                            groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_directory_menu_act"
+                            name="Đường Dẫn Thư Mục"
+                            parent="lazada_setting_menu_categ"
+                            action="lazada_directory_action"
+                            sequence="30"
+                            groups="ruby.user_manager_groups"/>
+                
     </data>
 </odoo>

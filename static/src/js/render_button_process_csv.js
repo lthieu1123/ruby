@@ -63,7 +63,8 @@ odoo.define('ruby.custom_list_view', function (require) {
                     views: [[view_id, 'form']],
                     target: 'new',
                     context: {
-                        default_message: message
+                        default_message: message,
+                        default_model: 'sale.order.management'
                     }
                 })
             })
@@ -157,7 +158,8 @@ odoo.define('ruby.custom_list_view', function (require) {
                     views: [[view_id, 'form']],
                     target: 'new',
                     context: {
-                        default_message: message
+                        default_message: message,
+                        default_model: 'shopee.management'
                     }
                 })
             })

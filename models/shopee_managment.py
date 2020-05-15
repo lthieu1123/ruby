@@ -13,6 +13,8 @@ from odoo.tools.translate import _
 from odoo.addons import decimal_precision as dp
 from ..commons.ruby_constant import *
 
+QUERY_STRING = 'select id from shopee_management order by id desc limit 1'
+
 
 _li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đơn hàng','Nhận xét từ Người mua',\
             'Mã vận đơn','Lựa chọn vận chuyển','Phương thức giao hàng','Loại đơn hàng','Ngày giao hàng dự kiến',\
@@ -87,10 +89,10 @@ class ShopeeManagment(models.Model):
     ghi_chu = fields.Text('Ghi chú')
 
     state = fields.Selection(selection=[
-                                ('pending','Pending'),
-                                ('delivered','Delivered'),
-                                ('returned','Returned'),
-                                ('done','Done')
+                                ('pending','Đang chờ'),
+                                ('delivered','Đã giao'),
+                                ('returned','Hàng trả'),
+                                ('done','Đã nhận tiền')
                             ],string='Trạng Thái Đơn Hàng',default='pending',index=True)
     shop_id = fields.Many2one('sale.order.management.shopee.shop','Shop Name',)
     transaction_date = fields.Date('Transaction Date',index=True)
@@ -130,8 +132,15 @@ class ShopeeManagment(models.Model):
     @api.multi
     def btn_process_excel(self):
         self._cr.execute('SAVEPOINT import')
-        # _import_directory = 'c:/shopee/newssg'
-        _import_directory = '/mnt/c/shopee/newssg'
+        # _import_directory = 'c:/tool/newshopee/newssg'
+        # _import_directory = '/mnt/c/shopee/newssg'
+        _directory = self.env['shopee.directory'].search([
+            ('name','=','update')
+        ])
+        if not _directory.id:
+            raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
+        _import_directory = _directory.directory
+
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
@@ -161,16 +170,17 @@ class ShopeeManagment(models.Model):
             ])
             directory = "{}/{}".format(_import_directory,entry)
             #Reading csv file
-            result = pd.read_excel(directory)
+            result = pd.read_excel(directory,dtype={'Mã vận đơn': str,'Forder ID': str,'Mã đơn hàng': str})
             del_count = 0
             create_count = 0
             #browse data from dataframe pandas
             for index, row in result.iterrows():
                 #Checking existed item in database, if existed -> unlink
-                if str(row['Mã vận đơn']) == 'nan':
+                ma_van_don = str(row['Mã vận đơn'])
+                if  ma_van_don == 'nan':
                     continue
                 existed_item = self.search([
-                    ('ma_van_don','=',row['Mã vận đơn']),
+                    ('ma_van_don','=', ma_van_don),
                     ('new_update_time','!=',update_time)
                 ])
                 if len(existed_item):
@@ -188,7 +198,7 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
-                    _data = row[key]
+                    _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None
                     })
@@ -228,3 +238,70 @@ class ShopeeManagment(models.Model):
             data += '<td>{}</td>'.format(table_data[table])
         table = '<table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped"><tr>'+header_table+'</tr><tr>'+data+'</tr></table>'
         return table
+    
+
+    @api.multi
+    def btn_new_update(self):
+        self._cr.execute(QUERY_STRING)
+        result = self.env.cr.fetchall()
+        update_time = False
+        if len(result):
+            _id = result[0][0]
+            obj = self.browse(int(_id))
+            update_time = obj.new_update_time
+
+        return {
+            'name': 'Cập Nhật Mới',
+            'view_type': 'form',
+            'view_mode': 'tree,graph,pivot',
+            'view_id': False,
+            'res_model': self._name,
+            'target': 'current',
+            'domain': [('new_update_time','=',update_time)],
+            'search_view_id': self.env.ref('ruby.shopee_management_view_search').id,
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.multi
+    def btn_process_reconcile(self):
+        # _sale_done_director = 'c:/tool/newlazada/taichinh'
+        _directory = self.env['shopee.directory'].search([
+            ('name','=','reconcile')
+        ])
+        _li_shop = []
+        if not _directory.id:
+            raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
+        _sale_done_director = _directory.directory
+        
+        try:
+            sale_director_file = os.listdir(_sale_done_director)
+        except Exception as err:
+            raise exceptions.ValidationError(_('Không tìm thấy tập tin trong thư mục "{}"').format(_sale_done_director))
+
+        #Checking shop code before run
+        for entry in sale_director_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shopee.shop'].search([
+                ('code','=',shop_code)
+            ])
+            if not len(shop_id):
+                raise exceptions.ValidationError(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))
+            _li_shop.append(shop_id.id)
+        
+        
+        context = self.env.context.copy()
+        context['default_res_model'] = 'shopee.management'
+        context['default_shop_id'] = _li_shop
+        context['sale_director_file'] = sale_director_file
+        context['sale_done_director'] = _sale_done_director
+        return {
+                'name': 'Đối Soát Đơn Hàng',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': False,
+                'res_model': 'set.reconcile.date',
+                'target': 'new',
+                'type': 'ir.actions.act_window',
+                'context': context
+            }
+                    
