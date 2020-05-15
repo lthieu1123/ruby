@@ -9,7 +9,7 @@
     'author': "Hiếu Lâm",
     'website': "",
     'category': 'rubi',
-    'version': '0.1',
+    'version': '8.0.2',
     'depends': ['base','web','mail','decimal_precision','backend_theme_v12'],
     'data': [
         'security/user_group.xml',
@@ -39,6 +39,6 @@
     'qweb': [
         'static/src/xml/inherit_button_action.xml'
     ],
-    # 'installable': True,
-    # 'auto_install': True,
+    'installable': True,
+    'auto_install': True,
 }
