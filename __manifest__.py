@@ -10,7 +10,7 @@
     'website': "",
     'category': 'rubi',
     'version': '8.0.2',
-    'depends': ['base','web','mail','decimal_precision','backend_theme_v12'],
+    'depends': ['base','web','mail','decimal_precision'],
     'data': [
         'security/user_group.xml',
         'data/directory_data.xml',
