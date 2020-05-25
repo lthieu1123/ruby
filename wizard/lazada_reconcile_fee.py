@@ -81,7 +81,7 @@ class LazadaReconcileFee(models.TransientModel):
 
     def _get_list_order_number_with_date(self):
         date_start = datetime.datetime.combine(self.date_start,datetime.time.min)
-        date_end = datetime.datetime.combine(self.date_end,datetime.time.min)
+        date_end = datetime.datetime.combine(self.date_end,datetime.time.max)
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
         _li_order_number = self.env['sale.order.management'].search([

@@ -39,7 +39,7 @@ class ShopAnnounce(models.TransientModel):
         sale_director_file = context.get('sale_director_file')
         _sale_done_director = context.get('sale_done_director')
         start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
-        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.min)
+        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
@@ -79,7 +79,7 @@ class ShopAnnounce(models.TransientModel):
         sale_director_file = context.get('sale_director_file')
         _sale_done_director = context.get('sale_done_director')
         start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
-        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.min)
+        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')

@@ -5,11 +5,12 @@
         Tool Quản Lý Toàn Diện RUBI""",
     'description': """
         Quản lý các đơn hàng đang xử lý, đã gửi, chuyển hoàn
+        8.0.3: Fix lỗi không chọn các đơn hàng vào ngày cuối cùng trong mục đối soát đơn hàng
     """,
     'author': "Hiếu Lâm",
     'website': "",
     'category': 'rubi',
-    'version': '8.0.2',
+    'version': '8.0.3',
     'depends': ['base','web','mail','decimal_precision'],
     'data': [
         'security/user_group.xml',

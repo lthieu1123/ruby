@@ -21,5 +21,13 @@
             <field name="name">reconcile</field>
             <field name="directory">C:\tool\shopee\reconcile</field>
         </record>
+
+        <!-- <template id="brand_promotion" inherit_id="website.brand_promotion">
+            <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace">
+                <div class="o_brand_promotion_edited">
+                    Powered by <a target="_blank" class="badge badge-danger" href="https://www.facebook.com/lthieu37">lthieu</a>,
+                </div>
+            </xpath>
+        </template> -->
     </data>
 </odoo>
