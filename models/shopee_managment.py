@@ -24,8 +24,8 @@ _li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đ�
             'Tiền đơn hàng (VND)','Mã giảm giá của Shop','Hoàn Xu','Shopee Voucher','Chỉ tiêu combo khuyến mãi','Giảm giá từ combo Shopee',\
             'Giảm giá từ Combo của Shop','Shopee Xu được hoàn','Số tiền được giảm khi thanh toán bằng thẻ Ghi nợ','Phí vận chuyển (dự kiến)',\
             'Phí vận chuyển mà người mua trả','Tổng số tiền','Thời gian hoàn thành đơn hàng','Thời gian đơn hàng được thanh toán',\
-            'Phương thức thanh toán','Phí cố định','Phí Dịch Vụ','Phí giao dịch','Tiền ký quỹ','Username (Buyer)','Tên Người nhận',\
-            'Số điện thoại','Tỉnh/Thành phố','TP / Quận / Huyện','District','Địa chỉ nhận hàng','Quốc gia','Ghi chú',]
+            'Phương thức thanh toán','Phí cố định','Phí Dịch Vụ','Phí giao dịch','Tiền ký quỹ','Người Mua','Tên Người nhận',\
+            'Số điện thoại','Tỉnh/Thành phố','TP / Quận / Huyện','Quận','Địa chỉ nhận hàng','Quốc gia','Ghi chú',]
 
 class ShopeeManagment(models.Model):
     _name = "shopee.management"
@@ -78,12 +78,12 @@ class ShopeeManagment(models.Model):
     phi_dich_vu = fields.Float('Phí Dịch Vụ')
     phi_giao_dich = fields.Float('Phí giao dịch')
     tien_ky_quy = fields.Float('Tiền ký quỹ')
-    username = fields.Char('Username (Buyer)')
+    username = fields.Char('Người Mua')
     ten_nguoi_nhan = fields.Char('Tên Người nhận')
     so_dien_thoai = fields.Char('Số điện thoại')
     tinh_thanh_pho = fields.Char('Tỉnh/Thành phố')
     tp_quan_huyen = fields.Char('TP / Quận / Huyện')
-    district = fields.Char('District')
+    district = fields.Char('Quận')
     dia_chi_nhan_hang = fields.Text('Địa chỉ nhận hàng')
     quoc_gia = fields.Char('Quốc gia')
     ghi_chu = fields.Text('Ghi chú')

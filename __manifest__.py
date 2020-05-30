@@ -4,13 +4,12 @@
     'summary': """
         Tool Quản Lý Toàn Diện RUBI""",
     'description': """
-        Quản lý các đơn hàng đang xử lý, đã gửi, chuyển hoàn
-        8.0.3: Fix lỗi không chọn các đơn hàng vào ngày cuối cùng trong mục đối soát đơn hàng
     """,
     'author': "Hiếu Lâm",
     'website': "",
     'category': 'rubi',
     'version': '8.0.3',
+    'license': 'AGPL-3',
     'depends': ['base','web','mail','decimal_precision'],
     'data': [
         'security/user_group.xml',
@@ -22,6 +21,7 @@
         'wizard/set_reconcile_date_views.xml',
         'wizard/set_order_for_shopee_views.xml',
         'wizard/lazada_reconcile_fee_views.xml',
+        'wizard/module_info.xml',
         'views/sale_order_management_view.xml',
         'static/src/xml/custom_render_formview_template.xml',
         'views/sale_order_management_shop_views.xml',
@@ -40,6 +40,6 @@
     'qweb': [
         'static/src/xml/inherit_button_action.xml'
     ],
-    'installable': True,
-    'auto_install': True,
+    # 'installable': True,
+    # 'auto_install': True,
 }

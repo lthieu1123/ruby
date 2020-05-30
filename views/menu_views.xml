@@ -91,7 +91,7 @@
                                 sequence="50"/>
 
             <!-- This Menu Item Must have a parent -->
-            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80" groups="ruby.user_manager_groups"/>
+            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80"/>
                 <menuitem id="sale_order_menagement_shop_menu_act"
                             name="Shop"
                             parent="lazada_setting_menu_categ"
@@ -109,6 +109,12 @@
                             parent="lazada_setting_menu_categ"
                             action="lazada_directory_action"
                             sequence="30"
+                            groups="ruby.user_manager_groups"/>
+                <menuitem id="lazada_module_information"
+                            name="Thông tin"
+                            parent="lazada_setting_menu_categ"
+                            action="rubi_module_info_action"
+                            sequence="40"
                             groups="ruby.user_manager_groups"/>
                 
     </data>
