@@ -118,8 +118,8 @@ class ShopAnnounce(models.TransientModel):
                 fee_name = row[FEE_NAME].strip()
                 if fee_name != ITEM_PRICE:
                     continue
-                order_id = str(row[ODER_ITEM_NO])
-                rec = rec_ids.filtered(lambda r: r.order_item_id == order_id)
+                order_id = int(row[ODER_ITEM_NO])
+                rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
                 if rec.id:
                     rec.update({
                         'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
