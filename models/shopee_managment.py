@@ -198,6 +198,11 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
+                    if key == 'Người Mua' or key == 'Quận':
+                        try:
+                            _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
+                        except Exception as err:
+                            key = 'Username (Buyer)' if key == 'Người Mua' else 'District'
                     _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None

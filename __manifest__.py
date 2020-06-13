@@ -8,7 +8,7 @@
     'author': "Hiếu Lâm",
     'website': "",
     'category': 'rubi',
-    'version': '8.0.4',
+    'version': '8.0.6',
     'license': 'AGPL-3',
     'depends': ['base','web','mail','decimal_precision'],
     'data': [
