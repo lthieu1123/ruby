@@ -16,14 +16,25 @@ from ..commons.ruby_constant import *
 QUERY_STRING = 'select id from shopee_management order by id desc limit 1'
 
 
-_li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đơn hàng','Nhận xét từ Người mua',\
-            'Mã vận đơn','Lựa chọn vận chuyển','Phương thức giao hàng','Loại đơn hàng','Ngày giao hàng dự kiến',\
+# _li_key = ['Mã đơn hàng','Forder ID','Ngày đặt hàng','Tình trạng đơn hàng','Nhận xét từ Người mua',\
+#             'Mã vận đơn','Lựa chọn vận chuyển','Phương thức giao hàng','Loại đơn hàng','Ngày giao hàng dự kiến',\
+#             'Ngày gửi hàng','Thời gian giao hàng','Tình trạng Trả hàng / Hoàn tiền','SKU sản phẩm','Tên sản phẩm',\
+#             'Cân nặng sản phẩm','Tổng cân nặng','Cân nặng sản phẩm.1','SKU phân loại hàng','Tên phân loại hàng','Giá gốc',\
+#             'Người bán tự giảm','Được Shopee trợ giá','Được người bán trợ giá','Giá ưu đãi','Số lượng','Product Subtotal',\
+#             'Tiền đơn hàng (VND)','Mã giảm giá của Shop','Hoàn Xu','Shopee Voucher','Chỉ tiêu combo khuyến mãi','Giảm giá từ combo Shopee',\
+#             'Giảm giá từ Combo của Shop','Shopee Xu được hoàn','Số tiền được giảm khi thanh toán bằng thẻ Ghi nợ','Phí vận chuyển (dự kiến)',\
+#             'Phí vận chuyển mà người mua trả','Tổng số tiền','Thời gian hoàn thành đơn hàng','Thời gian đơn hàng được thanh toán',\
+#             'Phương thức thanh toán','Phí cố định','Phí Dịch Vụ','Phí giao dịch','Tiền ký quỹ','Người Mua','Tên Người nhận',\
+#             'Số điện thoại','Tỉnh/Thành phố','TP / Quận / Huyện','Quận','Địa chỉ nhận hàng','Quốc gia','Ghi chú',]
+
+_li_key = ['Mã đơn hàng','Mã Kiện Hàng','Ngày đặt hàng','Trạng Thái Đơn Hàng','Nhận xét từ Người mua',\
+            'Mã vận đơn','Đơn Vị Vận Chuyển','Phương thức giao hàng','Loại đơn hàng','Ngày giao hàng dự kiến',\
             'Ngày gửi hàng','Thời gian giao hàng','Tình trạng Trả hàng / Hoàn tiền','SKU sản phẩm','Tên sản phẩm',\
             'Cân nặng sản phẩm','Tổng cân nặng','Cân nặng sản phẩm.1','SKU phân loại hàng','Tên phân loại hàng','Giá gốc',\
-            'Người bán tự giảm','Được Shopee trợ giá','Được người bán trợ giá','Giá ưu đãi','Số lượng','Product Subtotal',\
-            'Tiền đơn hàng (VND)','Mã giảm giá của Shop','Hoàn Xu','Shopee Voucher','Chỉ tiêu combo khuyến mãi','Giảm giá từ combo Shopee',\
+            'Người bán trợ giá','Được Shopee trợ giá','Tổng số tiền được người bán trợ giá','Giá ưu đãi','Số lượng','Tổng giá bán (sản phẩm)',\
+            'Tổng giá trị đơn hàng (VND)','Mã giảm giá của Shop','Hoàn Xu','Mã giảm giá của Shopee','Chỉ tiêu combo khuyến mãi','Giảm giá từ combo Shopee',\
             'Giảm giá từ Combo của Shop','Shopee Xu được hoàn','Số tiền được giảm khi thanh toán bằng thẻ Ghi nợ','Phí vận chuyển (dự kiến)',\
-            'Phí vận chuyển mà người mua trả','Tổng số tiền','Thời gian hoàn thành đơn hàng','Thời gian đơn hàng được thanh toán',\
+            'Phí vận chuyển mà người mua trả','Tổng số tiền người mua thanh toán','Thời gian hoàn thành đơn hàng','Thời gian đơn hàng được thanh toán',\
             'Phương thức thanh toán','Phí cố định','Phí Dịch Vụ','Phí giao dịch','Tiền ký quỹ','Người Mua','Tên Người nhận',\
             'Số điện thoại','Tỉnh/Thành phố','TP / Quận / Huyện','Quận','Địa chỉ nhận hàng','Quốc gia','Ghi chú',]
 
@@ -33,7 +44,7 @@ class ShopeeManagment(models.Model):
     _rec_name = "ma_van_don"
 
     ma_don_hang = fields.Char('Mã đơn hàng', index=True)
-    forder_id = fields.Char('Forder ID')
+    forder_id = fields.Char('Mã Kiện Hàng')
     ngay_dat_hang = fields.Datetime('Ngày đặt hàng')
     tinh_trang_don_hang = fields.Text('Tình trạng đơn hàng')
     nhan_xet_tu_nguoi_mua = fields.Text('Nhận xét từ Người mua')
@@ -170,7 +181,7 @@ class ShopeeManagment(models.Model):
             ])
             directory = "{}/{}".format(_import_directory,entry)
             #Reading csv file
-            result = pd.read_excel(directory,dtype={'Mã vận đơn': str,'Forder ID': str,'Mã đơn hàng': str})
+            result = pd.read_excel(directory,dtype={'Mã vận đơn': str,'Mã Kiện Hàng': str,'Mã đơn hàng': str})
             del_count = 0
             create_count = 0
             #browse data from dataframe pandas
@@ -198,14 +209,10 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
-                    if key == 'Người Mua' or key == 'Quận':
-                        try:
-                            _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
-                        except Exception as err:
-                            key = 'Username (Buyer)' if key == 'Người Mua' else 'District'
-                    _data = row[key] if _header != 'Mã vận đơn' else str(row[key]).upper()
+                    _data = row[key] if row[key] != 'nan' else None
+                    _data = _data if _header != 'Mã vận đơn' else str(_data).upper()
                     vals.update({
-                        _header :  _data if str(_data) != 'nan' else None
+                        _header :  _data
                     })
                 #Create new data
                 try:
