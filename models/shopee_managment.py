@@ -209,8 +209,8 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
-                    _data = row[key] if row[key] != 'nan' else None
-                    _data = _data if _header != 'Mã vận đơn' else str(_data).upper()
+                    _data = str(row[key]) if str(row[key]) != 'nan' else None
+                    _data = _data if _header != 'Mã vận đơn' else _data.upper()
                     vals.update({
                         _header :  _data
                     })
