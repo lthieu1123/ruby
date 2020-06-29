@@ -243,8 +243,8 @@ class SaleOrderManagment(models.Model):
                 for key in _li_key:
                     _header = header.get(key)
                     _data = row[key]
-                    # if key == 'Tracking Code' and _data != 'nan':
-                    #     _data = _data.upper()
+                    if key == 'Tracking Code' and str(_data) != 'nan':
+                        _data = str(_data).upper()
                     vals.update({
                         _header :  _data if str(_data) != 'nan' else None
                     })
@@ -444,4 +444,13 @@ class SaleOrderManagment(models.Model):
     def _remove_blank_tracking_code(self):
         return self.search([
             ('tracking_code','=',False)
-        ]).unlink()
+        ]).unlink()    
+    
+    @api.model
+    def set_duplicate_records(self):
+        query = """ select som.order_item_id
+                from sale_order_management som 
+                group by som.order_item_id
+                having count(*) >1"""
+        self._cr.execute(query)
+        result = self.env.cr.fetchall()
