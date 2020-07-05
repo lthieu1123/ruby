@@ -446,11 +446,26 @@ class SaleOrderManagment(models.Model):
             ('tracking_code','=',False)
         ]).unlink()    
     
-    @api.model
-    def set_duplicate_records(self):
+    @api.multi
+    def btn_find_duplicate_records(self):
         query = """ select som.order_item_id
                 from sale_order_management som 
                 group by som.order_item_id
                 having count(*) >1"""
         self._cr.execute(query)
         result = self.env.cr.fetchall()
+        order_item_dup = [a[0] for a in result]
+        context = self.env.context.copy()
+        context['group_by'] = 'order_item_id'
+        return {
+            'name': 'Sản phẩm trùng',
+            'view_type': 'form',
+            'view_mode': 'tree,graph,pivot',
+            'view_id': False,
+            'res_model': self._name,
+            'target': 'current',
+            'domain': [('order_item_id','=',order_item_dup)],
+            'context': context,
+            'search_view_id': self.env.ref('ruby.sale_order_managment_view_search').id,
+            'type': 'ir.actions.act_window',
+        }

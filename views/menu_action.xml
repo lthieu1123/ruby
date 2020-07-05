@@ -56,5 +56,13 @@
             <field name="state">code</field>
             <field name="code">action = model.tiki_warning()</field>
         </record>
+
+        <record id="action_find_duplicate" model="ir.actions.server">
+            <field name="name">Sản phẩm trùng</field>
+                        <!-- here the name of the module containing mail_message model-->
+            <field name="model_id" ref="model_sale_order_management"/>
+            <field name="state">code</field>
+            <field name="code">action = model.btn_find_duplicate_records()</field>
+        </record>
     </data>
 </odoo>
