@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <record id="shopee_report_order_number_delivered_view_pivot" model="ir.ui.view">
+            <field name="name">Báo cáo giá trung bình sản phẩm Shopee</field>
+            <field name="model">shopee.price.avg.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot Order Number">
+                    <!-- Add your fields here -->
+                    <field name="sku_san_pham" type="row"/>
+                    <field name="ten_san_pham" type="row"/>
+                    <field name="row" interval="day" type="col"/>
+                    <field name="measure" type="measure"/>
+                    <field name="price_total" type="measure"/>
+                    <field name="price_avg" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        
+        <record id="shopee_view_delivered_report_search" model="ir.ui.view">
+            <field name="name">Báo cáo giá trung bình sản phẩm Shopee</field>
+            <field name="model">shopee.price.avg.report</field>
+            <field name="arch" type="xml">
+                <search string="Delivered Report">
+                    <field name="row"/>
+                    <field name="sku_san_pham"/>
+                    <field name="ten_san_pham"/>
+                    <filter name="today" string="To day"
+                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="sku_san_pham" string="SKU sản phẩm" domain="[]" context="{'group_by': 'sku_san_pham'}"/>
+                        <filter name="ten_san_pham" string="Tên sản phẩm" domain="[]" context="{'group_by': 'ten_san_pham'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="shopee_sku_price_avg_action" model="ir.actions.act_window">
+            <field name="name">Báo cáo giá trung bình sản phẩm Shopee</field>
+            <field name="res_model">shopee.price.avg.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot</field>
+            <field name="context">{'search_default_today': 1}</field>
+            <field name="search_view_id" ref="shopee_view_delivered_report_search"/>
+            <field name="help">Báo cáo các sản phẩm đã giao trong ngày</field>
+        </record>
+    </data>
+</odoo>

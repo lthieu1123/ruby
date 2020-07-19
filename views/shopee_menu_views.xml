@@ -38,6 +38,13 @@
                         sequence="70"
                         groups="ruby.user_manager_shopee_groups"/>
 
+            <menuitem id="action_report_shopee_item_menu"
+                        name="Báo Cáo"
+                        parent="shoppe_managment_menu_root"
+                        action="shopee_sku_price_avg_action"
+                        sequence="72"
+                        groups="ruby.user_manager_shopee_groups"/>
+
             <!-- This Menu Item Must have a parent -->
             <menuitem id="shoppe_setting_menu_categ" name="Cài Đặt" parent="shoppe_managment_menu_root" sequence="80"/>
             <menuitem id="sale_order_menagement_shopee_shop_menu_act"
