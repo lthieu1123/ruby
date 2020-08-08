@@ -27,8 +27,8 @@ class ShopAnnounce(models.TransientModel):
     def _get_default_res_model(self):
         return self.env.context.get('default_res_model',False)
 
-    date_start = fields.Date('Từ ngày')
-    date_end = fields.Date('Đến ngày')
+    date_start = fields.Datetime('Từ ngày')
+    date_end = fields.Datetime('Đến ngày')
     res_model = fields.Char('res_model', default=_get_default_res_model)
 
     @api.multi
@@ -38,8 +38,10 @@ class ShopAnnounce(models.TransientModel):
         _li_shop = context.get('default_shop_id')
         sale_director_file = context.get('sale_director_file')
         _sale_done_director = context.get('sale_done_director')
-        start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
-        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
+        # start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
+        # end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
+        start_datetime = self.date_start
+        end_datetime = self.date_end
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
@@ -78,8 +80,10 @@ class ShopAnnounce(models.TransientModel):
         _li_shop = context.get('default_shop_id')
         sale_director_file = context.get('sale_director_file')
         _sale_done_director = context.get('sale_done_director')
-        start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
-        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
+        # start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
+        # end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
+        start_datetime = self.date_start
+        end_datetime = self.date_end
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')

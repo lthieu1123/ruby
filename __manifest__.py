@@ -15,7 +15,7 @@
         'security/user_group.xml',
         'data/directory_data.xml',
         'data/discuss.xml',
-        'data/lazada_remove_blank_tracking_code.xml',
+        'data/functions.xml',
         'security/ir.model.access.csv',
         'wizard/set_order_to_delivered_returned_views.xml',
         'wizard/set_reconcile_date_views.xml',

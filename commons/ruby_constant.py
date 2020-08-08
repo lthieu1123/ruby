@@ -2,6 +2,9 @@
 
 from odoo.tools.translate import _
 
+#Delta time
+DELTA_TIME = 7
+
 header = {
     'Order Item Id': 'order_item_id',
     'Order Type': 'order_type',

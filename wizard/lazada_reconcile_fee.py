@@ -46,8 +46,8 @@ class LazadaReconcileFee(models.TransientModel):
     _description = 'Lazada Reconcile Fee'
 
     name = fields.Text('name',default='Đói soát chi phí')
-    date_start = fields.Date('Từ ngày')
-    date_end = fields.Date('Đến ngày')
+    date_start = fields.Datetime('Từ ngày')
+    date_end = fields.Datetime('Đến ngày')
     price_support = fields.Float('Trợ Giá')
     price_over = fields.Float('Price Over')
     file_data = fields.Binary(string='File')
@@ -80,8 +80,10 @@ class LazadaReconcileFee(models.TransientModel):
             return False
 
     def _get_list_order_number_with_date(self):
-        date_start = datetime.datetime.combine(self.date_start,datetime.time.min)
-        date_end = datetime.datetime.combine(self.date_end,datetime.time.max)
+        # date_start = datetime.datetime.combine(self.date_start,datetime.time.min)
+        # date_end = datetime.datetime.combine(self.date_end,datetime.time.max)
+        date_start = self.date_start
+        date_end = self.date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
         _li_order_number = self.env['sale.order.management'].search([

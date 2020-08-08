@@ -38,6 +38,8 @@ _li_key = ['Mã đơn hàng','Mã Kiện Hàng','Ngày đặt hàng','Trạng Th
             'Phương thức thanh toán','Phí cố định','Phí Dịch Vụ','Phí giao dịch','Tiền ký quỹ','Người Mua','Tên Người nhận',\
             'Số điện thoại','Tỉnh/Thành phố','TP / Quận / Huyện','Quận','Địa chỉ nhận hàng','Quốc gia','Ghi chú',]
 
+_logger = logging.getLogger(__name__)
+
 class ShopeeManagment(models.Model):
     _name = "shopee.management"
     _description = "Shopee Management"
@@ -115,6 +117,14 @@ class ShopeeManagment(models.Model):
     @api.model
     def create(self,vals):
         res = super().create(vals)
+        if self._context.get('is_import', False):
+            res['ngay_dat_hang'] = res['ngay_dat_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['ngay_dat_hang'] else False
+            res['ngay_giao_hang_du_kien'] = res['ngay_giao_hang_du_kien'] - datetime.timedelta(hours=DELTA_TIME) if res['ngay_giao_hang_du_kien'] else False
+            res['ngay_gui_hang'] = res['ngay_gui_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['ngay_gui_hang'] else False
+            res['thoi_gian_giao_hang'] = res['thoi_gian_giao_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_giao_hang'] else False
+            res['thoi_gian_hoan_thang_don_hang'] = res['thoi_gian_hoan_thang_don_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_hoan_thang_don_hang'] else False
+            res['thoi_gian_don_hang_duoc_thanh_toan'] = res['thoi_gian_don_hang_duoc_thanh_toan'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_don_hang_duoc_thanh_toan'] else False
+            
         #update external id
         _datetime = datetime.datetime.now()
         model_name = self._name
@@ -216,7 +226,7 @@ class ShopeeManagment(models.Model):
                     })
                 #Create new data
                 try:
-                    self.create(vals)
+                    self.with_context({'is_import': True}).create(vals)
                     create_count += 1
                 except Exception as err:
                     return {
@@ -317,3 +327,19 @@ class ShopeeManagment(models.Model):
                 'context': context
             }
                     
+    @api.model
+    def _update_time_to_utc(self):
+        _logger.info('==============================================')
+        _logger.info('UPDATE TIME TO UTC')
+        res_ids = self.search([])
+        for rec in res_ids:
+            rec.write({
+                'ngay_dat_hang': rec.ngay_dat_hang - datetime.timedelta(hours=DELTA_TIME) if rec.ngay_dat_hang else False,
+                'ngay_giao_hang_du_kien': rec.ngay_giao_hang_du_kien - datetime.timedelta(hours=DELTA_TIME) if rec.ngay_giao_hang_du_kien else False,
+                'ngay_gui_hang': rec.ngay_gui_hang - datetime.timedelta(hours=DELTA_TIME) if rec.ngay_gui_hang else False,
+                'thoi_gian_giao_hang': rec.thoi_gian_giao_hang - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_giao_hang else False,
+                'thoi_gian_hoan_thang_don_hang': rec.thoi_gian_hoan_thang_don_hang - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_hoan_thang_don_hang else False,
+                'thoi_gian_don_hang_duoc_thanh_toan': rec.thoi_gian_don_hang_duoc_thanh_toan - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_don_hang_duoc_thanh_toan else False,
+            })
+        _logger.info('COMPLEDTED UPDATE TIME TO UTC')
+        _logger.info('==============================================')

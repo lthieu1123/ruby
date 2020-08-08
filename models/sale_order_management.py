@@ -3,7 +3,7 @@
 # Import libs
 import os
 import pandas as pd
-import datetime
+import datetime, pytz
 import base64
 import io
 import logging
@@ -37,8 +37,6 @@ TRANSACTION_DATE = 'Transaction Date'
 FEE_NAME = 'Fee Name'
 AMOUNT = 'Amount'
 
-
-
 _li_key = ['Order Item Id','Order Type','Order Flag','Lazada Id','Seller SKU',\
             'Lazada SKU','Created at','Updated at','Order Number','Invoice Required',\
                 'Customer Name','Customer Email','National Registration Number','Shipping Name',\
@@ -65,9 +63,9 @@ class SaleOrderManagment(models.Model):
     order_item_id = fields.Char('Order Item Id',required=True, index=True)
     order_type = fields.Char('Order Type')
     order_flag = fields.Char('Order Flag')
-    lazada_id = fields.Char('Lazada Id')
-    seller_sku = fields.Char('Seller SKU')
-    lazada_sku = fields.Char('Lazada SKU')
+    lazada_id = fields.Char('Lazada Id',index=True)
+    seller_sku = fields.Char('Seller SKU',index=True)
+    lazada_sku = fields.Char('Lazada SKU',index=True)
     created_at = fields.Datetime('Created at',index=True)
     updated_at = fields.Datetime('Updated at')
     order_number = fields.Char('Order Number', index=True)
@@ -147,6 +145,9 @@ class SaleOrderManagment(models.Model):
     def create(self,vals):
         res = super().create(vals)
         #update external id
+        if self._context.get('is_import', False):
+            res['created_at'] = res['created_at'] - datetime.timedelta(hours=DELTA_TIME)
+            res['updated_at'] = res['updated_at'] - datetime.timedelta(hours=DELTA_TIME),
         _datetime = datetime.datetime.now()
         model_name = self._name
         self.env['ir.model.data'].sudo().create({
@@ -250,7 +251,7 @@ class SaleOrderManagment(models.Model):
                     })
                 #Create new data
                 try:
-                    self.create(vals)
+                    self.with_context({'is_import': True}).create(vals)
                 except Exception as err:
                     return {
                         'messages': [{
@@ -469,3 +470,16 @@ class SaleOrderManagment(models.Model):
             'search_view_id': self.env.ref('ruby.sale_order_managment_view_search').id,
             'type': 'ir.actions.act_window',
         }
+    
+    @api.model
+    def _update_time_to_utc(self):
+        _logger.info('==============================================')
+        _logger.info('UPDATE TIME TO UTC')
+        res_ids = self.search([])
+        for rec in res_ids:
+            rec.write({
+                'created_at': rec.created_at - datetime.timedelta(hours=DELTA_TIME),
+                'updated_at': rec.updated_at - datetime.timedelta(hours=DELTA_TIME)
+            })
+        _logger.info('COMPLEDTED UPDATE TIME TO UTC')
+        _logger.info('==============================================')
