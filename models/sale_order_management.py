@@ -143,17 +143,11 @@ class SaleOrderManagment(models.Model):
 
     @api.model
     def create(self,vals):
-        print('create data')
         res = super().create(vals)
-        print('Data has been created')
         #update external id
         if self._context.get('is_import', False):
-            print('Proceed datetime')
-            print('res.created_at', res['created_at'])
-
-            res['created_at'] = res['created_at'] - datetime.timedelta(hours=DELTA_TIME)
-            res['updated_at'] = res['updated_at'] - datetime.timedelta(hours=DELTA_TIME),
-        print('Proceed datetime completed')
+            res['created_at'] = res['created_at'] - datetime.timedelta(hours=DELTA_TIME) if res['created_at'] else False
+            res['updated_at'] = res['updated_at'] - datetime.timedelta(hours=DELTA_TIME) if res['updated_at'] else False
         _datetime = datetime.datetime.now()
         model_name = self._name
         self.env['ir.model.data'].sudo().create({
