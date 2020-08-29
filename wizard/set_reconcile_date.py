@@ -11,6 +11,7 @@ import logging
 import re
 import ctypes
 
+REGEX = "\d+\.(\w+)"
 
 _logger = logging.getLogger(__name__)
 
@@ -134,7 +135,15 @@ class ShopAnnounce(models.TransientModel):
     def _reconcile_shopee_data(self, rec_ids, sale_director_file, _sale_done_director):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8')
+            match = re.search(REGEX,entry)
+            if match:
+                extension = match.group(1)
+            if extension == "csv":
+                result = pd.read_csv(directory,sep=',',encoding='utf8')
+            elif extension == "xlsx" or extension == "xls":
+                result = pd.read_excel(directory,dtype={'Mã đơn hàng': str})
+            else:
+                raise exceptions.ValidationError('Định dạng file phải là: [cvs,xls,xlsx]')
             max_row = 10
             max_row = len(result) if max_row > len(result) else max_row
             header_index = 0
@@ -149,7 +158,7 @@ class ShopAnnounce(models.TransientModel):
                 if 'Mã đơn hàng' == _li_header[i]:
                     column_index = i
                     break
-            for i in range(_li_header+1,len(result)):
+            for i in range(column_index+1,len(result)):
                 ma_don_hang = result.loc[i][column_index]
                 item = self.env['shopee.management'].search([
                     ('ma_don_hang','=',ma_don_hang)
