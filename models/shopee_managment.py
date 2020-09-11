@@ -113,6 +113,7 @@ class ShopeeManagment(models.Model):
     new_update_time = fields.Float('New Update',index=True,)
     deliver_date = fields.Date('Ngày Giao Hàng',index=True)
     return_date = fields.Date('Ngày Trả Hàng',index=True)
+    convert_to_utc = fields.Boolean('converto utc')
     
     @api.model
     def create(self,vals):
@@ -124,7 +125,8 @@ class ShopeeManagment(models.Model):
             res['thoi_gian_giao_hang'] = res['thoi_gian_giao_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_giao_hang'] else False
             res['thoi_gian_hoan_thang_don_hang'] = res['thoi_gian_hoan_thang_don_hang'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_hoan_thang_don_hang'] else False
             res['thoi_gian_don_hang_duoc_thanh_toan'] = res['thoi_gian_don_hang_duoc_thanh_toan'] - datetime.timedelta(hours=DELTA_TIME) if res['thoi_gian_don_hang_duoc_thanh_toan'] else False
-            
+            res['convert_to_utc'] = True
+
         #update external id
         _datetime = datetime.datetime.now()
         model_name = self._name
@@ -340,6 +342,7 @@ class ShopeeManagment(models.Model):
                 'thoi_gian_giao_hang': rec.thoi_gian_giao_hang - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_giao_hang else False,
                 'thoi_gian_hoan_thang_don_hang': rec.thoi_gian_hoan_thang_don_hang - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_hoan_thang_don_hang else False,
                 'thoi_gian_don_hang_duoc_thanh_toan': rec.thoi_gian_don_hang_duoc_thanh_toan - datetime.timedelta(hours=DELTA_TIME) if rec.thoi_gian_don_hang_duoc_thanh_toan else False,
+                'convert_to_utc': True
             })
         _logger.info('COMPLEDTED UPDATE TIME TO UTC')
         _logger.info('==============================================')

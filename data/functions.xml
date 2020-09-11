@@ -3,7 +3,7 @@
     <data noupdate="0">
         <!-- Add you code here -->
         <!-- <function model="sale.order.management" name="_remove_blank_tracking_code"/> -->
-        <!-- <function model="sale.order.management" name="_update_time_to_utc"/>
-        <function model="shopee.management" name="_update_time_to_utc"/> -->
+        <function model="sale.order.management" name="_update_time_to_utc"/>
+        <function model="shopee.management" name="_update_time_to_utc"/>
     </data>
 </odoo>

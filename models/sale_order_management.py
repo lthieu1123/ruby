@@ -139,6 +139,7 @@ class SaleOrderManagment(models.Model):
     deliver_date = fields.Date('Ngày Giao Hàng',index=True)
     return_date = fields.Date('Ngày Trả Hàng',index=True)
     notes = fields.Char('Ghi Chú')
+    convert_to_utc = fields.Boolean('converto utc')
     
 
     @api.model
@@ -148,6 +149,7 @@ class SaleOrderManagment(models.Model):
         if self._context.get('is_import', False):
             res['created_at'] = res['created_at'] - datetime.timedelta(hours=DELTA_TIME) if res['created_at'] else False
             res['updated_at'] = res['updated_at'] - datetime.timedelta(hours=DELTA_TIME) if res['updated_at'] else False
+            res['convert_to_utc'] = True
         _datetime = datetime.datetime.now()
         model_name = self._name
         self.env['ir.model.data'].sudo().create({
@@ -479,7 +481,8 @@ class SaleOrderManagment(models.Model):
         for rec in res_ids:
             rec.write({
                 'created_at': rec.created_at - datetime.timedelta(hours=DELTA_TIME),
-                'updated_at': rec.updated_at - datetime.timedelta(hours=DELTA_TIME)
+                'updated_at': rec.updated_at - datetime.timedelta(hours=DELTA_TIME),
+                'convert_to_utc': True
             })
         _logger.info('COMPLEDTED UPDATE TIME TO UTC')
         _logger.info('==============================================')
