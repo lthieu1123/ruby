@@ -164,7 +164,7 @@ class ShopAnnounce(models.TransientModel):
                     ('ma_don_hang','=',ma_don_hang)
                 ])
                 item = rec_ids.filtered(lambda r: r.ma_don_hang == ma_don_hang)
-                if item.id:
+                if len(item):
                     item.write({
                         'state': 'done'
                     })

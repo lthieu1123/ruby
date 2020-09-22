@@ -463,7 +463,7 @@ class SaleOrderManagment(models.Model):
         return {
             'name': 'Sản phẩm trùng',
             'view_type': 'form',
-            'view_mode': 'tree,graph,pivot',
+            'view_mode': 'tree',
             'view_id': False,
             'res_model': self._name,
             'target': 'current',
