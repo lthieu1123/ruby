@@ -20,6 +20,11 @@ TRANSACTION_DATE = 'Transaction Date'
 FEE_NAME = 'Fee Name'
 AMOUNT = 'Amount'
 ITEM_PRICE = 'Item Price Credit'
+#KEY HEADER
+
+AMOUNT = 'Amount'
+ORDER_NO = 'Order No.'
+ORDER_STATUS = 'Order Item Status'
 
 class ShopAnnounce(models.TransientModel):
     _name = 'set.reconcile.date'
@@ -31,6 +36,24 @@ class ShopAnnounce(models.TransientModel):
     date_start = fields.Datetime('Từ ngày')
     date_end = fields.Datetime('Đến ngày')
     res_model = fields.Char('res_model', default=_get_default_res_model)
+
+    @api.model
+    def _calculate_price_by_order_number(self, rec_ids, sale_director_file, _sale_done_director):
+        for entry in sale_director_file:
+            directory = "{}/{}".format(_sale_done_director,entry)
+            result = pd.read_csv(directory,sep=',',encoding='utf8')
+            
+            for index, row in result.iterrows():
+                fee_name = row[FEE_NAME].strip()
+                if fee_name != ITEM_PRICE:
+                    continue
+                order_id = int(row[ODER_ITEM_NO])
+                rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
+                if rec.id:
+                    rec.update({
+                        'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
+                        'state': 'done'
+                    })
 
     @api.multi
     def btn_reconcile(self):

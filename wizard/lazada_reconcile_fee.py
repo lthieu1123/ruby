@@ -13,6 +13,7 @@ import json
 import base64
 import io
 import pandas as pd
+import math
 
 _logger = logging.getLogger(__name__)
 
@@ -62,14 +63,20 @@ class LazadaReconcileFee(models.TransientModel):
             order_number = []
             fee_by_cus = []
             fee_by_seller = []
+            fee_voucher = []
+            fee_support = []
             for key in data_csv:
                 order_number.append(key)
                 fee_by_cus.append(data_csv[key][SHIP_FEE_BY_CUS])
                 fee_by_seller.append(data_csv[key][SHIP_FEE_BY_SELLER])
+                fee_voucher.append(data_csv[key][SHIP_FEE_VOUCHER_LAZADA])
+                fee_support.append(data_csv[key]['tro_gia'])
             df = pd.DataFrame({
                 'Order No.': order_number,
                 SHIP_FEE_BY_CUS: fee_by_cus,
                 SHIP_FEE_BY_SELLER: fee_by_seller,
+                SHIP_FEE_VOUCHER_LAZADA: fee_voucher,
+                'Price Support': fee_support,
 
             })
             df.to_csv('file_csv.csv',encoding='utf-8')
@@ -118,16 +125,17 @@ class LazadaReconcileFee(models.TransientModel):
 
             fee_name = row[FEE_NAME]
             amount = abs(float(row[AMOUNT]))
-            if fee_name == SHIP_FEE_BY_CUS or fee_name == SHIP_FEE_BY_SELLER or fee_name == ITEM_PRICE:
+            if fee_name == SHIP_FEE_BY_CUS or fee_name == SHIP_FEE_BY_SELLER or fee_name == ITEM_PRICE or fee_name == SHIP_FEE_VOUCHER_LAZADA:
                 
                 if data_csv.get(order_number, False):
-                    data_csv[order_number][fee_name] = round(data_csv[order_number][fee_name] + amount)
+                    data_csv[order_number][fee_name] = data_csv[order_number][fee_name] + amount
                 else:
                     data_csv.update({
                         order_number: {
                             SHIP_FEE_BY_CUS: 0.0,
                             SHIP_FEE_BY_SELLER: 0.0,
                             ITEM_PRICE: 0.0,
+                            SHIP_FEE_VOUCHER_LAZADA: 0.0,
                         }
                     })
                     data_csv[order_number][fee_name] = amount
@@ -136,10 +144,12 @@ class LazadaReconcileFee(models.TransientModel):
         _li_key = []
         for order_number in data_csv:
             if data_csv[order_number][ITEM_PRICE] >= self.price_over:
-                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - self.price_support
+                data_csv[order_number].update({'tro_gia': self.price_support})
+                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA] - self.price_support
             else:
-                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER]
-            if sum_total==0:
+                data_csv[order_number].update({'tro_gia': 0.0})
+                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA]
+            if round(sum_total) == 0:
                 _li_key.append(order_number)
         for key in _li_key:
             del data_csv[key]

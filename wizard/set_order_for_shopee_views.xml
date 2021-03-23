@@ -96,6 +96,7 @@
                             <group>
                                 <group>
                                     <field name="input_type"/>
+                                    <field name="method_send"/>
                                 </group>
                             </group>
                         </group>
@@ -192,6 +193,7 @@
                             <group>
                                 <group>
                                     <field name="input_type"/>
+                                    <field name="method_send"/>
                                 </group>
                             </group>
                         </group>

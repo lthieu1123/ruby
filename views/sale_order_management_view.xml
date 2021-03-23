@@ -71,6 +71,7 @@
                         <field name="updated_at"/>
                         <field name="shipping_provider_type"/>
                         <field name="seller_sku"/>
+                        <field name="customer_name"/>
                         <field name="billing_phone_number"/>
                         <field name="item_name"/>
                         <field name="created_at"/>

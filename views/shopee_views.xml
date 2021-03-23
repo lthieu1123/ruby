@@ -59,6 +59,8 @@
                     <field name="package_number"/>
                     <field name="state"/>
                     <field name="write_date" string="Cập Nhật Lúc"/>
+                    <field name="ten_nguoi_nhan"/>
+                    <field name="so_dien_thoai"/>
                     <field name="shop_id"/>
                 </tree>
             </field>
