@@ -89,6 +89,11 @@
                                 parent="lazada_report_sub_menu_2"
                                 action="lazada_report_order_number_returned_action"
                                 sequence="50"/>
+                    <menuitem id="lazada_sum_fee_report_sub_menu"
+                                name="Tổng chi phí đơn hàng"
+                                parent="lazada_report_sub_menu_2"
+                                action="model_lazada_sum_amount_report_action"
+                                sequence="60"/>
 
             <!-- This Menu Item Must have a parent -->
             <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80"/>

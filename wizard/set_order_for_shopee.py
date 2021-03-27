@@ -25,7 +25,8 @@ class SetOrderAsb(models.AbstractModel):
     def find_order(self, args):
         tracking_id = None
         result = {}
-        method_send = args.get('method_send')
+        _method_send = args.get('method_send')
+        method_send = re.sub(r'"','',_method_send)
         order_number = args.get('order_number')
         if self._name == 'set.order.to.delivered.shopee':
             _first_state = 'pending'
@@ -185,12 +186,12 @@ class SetOrderToDeliveredShopee(models.TransientModel):
             if rec.tracking_code_ids:
                 if self.method_send == 'tracking_code':
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_van_don', 'in', rec.tracking_code_ids),
+                        ('ma_van_don', '=', rec.tracking_code_ids),
                         ('state', '=', 'pending')
                     ])
                 else:
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_don_hang', 'in', rec.tracking_code_ids),
+                        ('ma_don_hang', '=', rec.tracking_code_ids),
                         ('state', '=', 'pending')
                     ])
                 # tracking_ids = tracking_id.ids

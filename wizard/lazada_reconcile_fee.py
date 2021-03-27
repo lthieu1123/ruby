@@ -149,7 +149,7 @@ class LazadaReconcileFee(models.TransientModel):
             else:
                 data_csv[order_number].update({'tro_gia': 0.0})
                 sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA]
-            if round(sum_total) == 0:
+            if abs(sum_total) <= 1e-4:
                 _li_key.append(order_number)
         for key in _li_key:
             del data_csv[key]

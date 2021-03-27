@@ -10,6 +10,7 @@ import datetime
 import logging
 import re
 import ctypes
+import json
 
 REGEX = "\d+\.(\w+)"
 
@@ -25,6 +26,43 @@ ITEM_PRICE = 'Item Price Credit'
 AMOUNT = 'Amount'
 ORDER_NO = 'Order No.'
 ORDER_STATUS = 'Order Item Status'
+
+PAYMENT_FEE =  'Payment Fee'
+SHIPPING_FEE_PAID_BY_CUSTOMER =  'Shipping Fee (Paid By Customer)'
+ITEM_PRICE_CREDIT =  'Item Price Credit'
+PROMOTIONAL_CHARGES_VOUCHERS =  'Promotional Charges Vouchers'
+SHIPPING_FEE_VOUCHER_BY_LAZADA =  'Shipping Fee Voucher (by Lazada)'
+SHIPPING_FEE_PAID_BY_SELLER =  'Shipping Fee Paid by Seller'
+PROMOTIONAL_CHARGES_FLEXICOMBO =  'Promotional Charges Flexi-Combo'
+MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING =  'Marketing solution /social media advertising'
+REVERSAL_ITEM_PRICE =  'Reversal Item Price'
+REVERSAL_SHIPPING_FEE_PAID_BY_CUSTOMER =  'Reversal shipping Fee (Paid by Customer)'
+REVERSAL_PROMOTIONAL_CHARGES_FLEXICOMBO =  'Reversal Promotional Charges Flexi-Combo'
+REVERSAL_SHIPPING_FEE_VOUCHER_BY_LAZADA =  'Reversal Shipping Fee Voucher (by Lazada)'
+REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS =  'Reversal Promotional Charges Vouchers'
+LAZADA_BONUS =  'Lazada Bonus'
+LAZADA_BONUS_LZD_COFUND =  'Lazada Bonus - LZD co-fund'
+SPONSORED_DISCOVERY_TOP_UP =  'Sponsored Discovery - Top up'
+
+_str_to_field = {
+    PAYMENT_FEE: 'payment_fee',
+    SHIPPING_FEE_PAID_BY_CUSTOMER: 'shipping_fee_paid_by_customer',
+    ITEM_PRICE_CREDIT: 'item_price_credit',
+    PROMOTIONAL_CHARGES_VOUCHERS: 'promotional_charges_vouchers',
+    SHIPPING_FEE_VOUCHER_BY_LAZADA: 'shipping_fee_voucher_by_lazada',
+    SHIPPING_FEE_PAID_BY_SELLER: 'shipping_fee_paid_by_seller',
+    PROMOTIONAL_CHARGES_FLEXICOMBO: 'promotional_charges_flexi_combo',
+    MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING: 'marketing_solution_social_media_adv',
+    REVERSAL_ITEM_PRICE: 'reversal_item_price',
+    REVERSAL_SHIPPING_FEE_PAID_BY_CUSTOMER: 'reversal_shipping_fee_by_customer',
+    REVERSAL_PROMOTIONAL_CHARGES_FLEXICOMBO: 'reversal_promotional_charges_flexi_combo',
+    REVERSAL_SHIPPING_FEE_VOUCHER_BY_LAZADA: 'reversal_shipping_fee_voucher_lazada',
+    REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS: 'reversal_promotional_charges_vouchers',
+    LAZADA_BONUS: 'lazada_bouns',
+    LAZADA_BONUS_LZD_COFUND: 'lazada_bouns_lzd_co_fund',
+    SPONSORED_DISCOVERY_TOP_UP: 'sponsored_discoverty_top_up',
+}
+
 
 class ShopAnnounce(models.TransientModel):
     _name = 'set.reconcile.date'
@@ -141,9 +179,40 @@ class ShopAnnounce(models.TransientModel):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
             result = pd.read_csv(directory,sep=',',encoding='utf8')
-            
+            create_data = {}
             for index, row in result.iterrows():
+                order_no = row[ORDER_NO].strip()
+                order_dict = create_data.get(order_no,False)
+                if not order_dict:
+                    order_dict = {}
+                item_no = row[ODER_ITEM_NO].strip()
+                item_dict = order_dict.get(item_no,False)
+                if not item_dict:
+                    item_dict = {
+                        PAYMENT_FEE: 0.0,
+                        SHIPPING_FEE_PAID_BY_CUSTOMER: 0.0,
+                        ITEM_PRICE_CREDIT: 0.0,
+                        PROMOTIONAL_CHARGES_VOUCHERS: 0.0,
+                        SHIPPING_FEE_VOUCHER_BY_LAZADA: 0.0,
+                        SHIPPING_FEE_PAID_BY_SELLER: 0.0,
+                        PROMOTIONAL_CHARGES_FLEXICOMBO: 0.0,
+                        MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING: 0.0,
+                        REVERSAL_ITEM_PRICE: 0.0,
+                        REVERSAL_SHIPPING_FEE_PAID_BY_CUSTOMER: 0.0,
+                        REVERSAL_PROMOTIONAL_CHARGES_FLEXICOMBO: 0.0,
+                        REVERSAL_SHIPPING_FEE_VOUCHER_BY_LAZADA: 0.0,
+                        REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS: 0.0,
+                        LAZADA_BONUS: 0.0,
+                        LAZADA_BONUS_LZD_COFUND: 0.0,
+                        SPONSORED_DISCOVERY_TOP_UP: 0.0,
+                    }
                 fee_name = row[FEE_NAME].strip()
+                _amount = item_dict.get(fee_name,0.0)
+                item_dict.update({
+                    fee_name: _amount + row[AMOUNT]
+                })
+                item_no.update({item_no: item_dict})
+                create_data.update({order_no: order_dict})
                 if fee_name != ITEM_PRICE:
                     continue
                 order_id = int(row[ODER_ITEM_NO])
@@ -153,7 +222,17 @@ class ShopAnnounce(models.TransientModel):
                         'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                         'state': 'done'
                     })
+            self._create_lzd_sum(data=create_data)
     
+    def _create_lzd_sum(self,data=None):
+        if data is None:
+            return True
+        for order_no,item_no in data.items():
+            for k,v in item_no.items():
+                _vals = {**{'order_number': order_no},**{'order_item_id': k},**v}
+                _res = self.env['lazada.sum.amount.report'].create(_vals)
+        return True
+
     @api.model
     def _reconcile_shopee_data(self, rec_ids, sale_director_file, _sale_done_director):
         for entry in sale_director_file:

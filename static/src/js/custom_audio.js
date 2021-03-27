@@ -33,12 +33,18 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                         tracking_code_count_id[0].addEventListener("change",function(){
                             var current = $(this).val().toUpperCase();
                             var _model = d.model;
+                            var _method_send_ele = document.getElementsByName('method_send');
+                            var _method_send = "";
+                            if (_method_send_ele && _method_send_ele.length){
+                                _method_send = _method_send_ele[0].value
+                            }
                             _self._rpc({
                                 model: _model,
                                 method: "find_order",
                                 args: [
                                     {
-                                    order_number: current
+                                    order_number: current,
+                                    method_send: _method_send
                                     }
                                 ]
                             }).then(function(result){
@@ -100,13 +106,19 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                             tracking_code_count_id[0].addEventListener("change",function(){
                                 var current = $(this).val().toUpperCase();
                                 var changes = _self.model.localData[d.id];
+                                var _method_send_ele = document.getElementsByName('method_send');
+                                var _method_send = "";
+                                if (_method_send_ele && _method_send_ele.length){
+                                    _method_send = _method_send_ele[0].value
+                                }
                                 var _model = d.model;
                                 _self._rpc({
                                     model: _model,
                                     method: "find_order",
                                     args: [
                                         {
-                                        order_number: current
+                                        order_number: current,
+                                        method_send: _method_send
                                         }
                                     ]
                                 }).then(function(result){
