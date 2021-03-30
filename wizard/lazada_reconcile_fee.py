@@ -2,7 +2,7 @@
 from odoo import SUPERUSER_ID
 from odoo import api, fields, models, exceptions
 from odoo.tools.translate import _
-
+from ..commons.ruby_constant import *
 
 import time
 import datetime
@@ -17,36 +17,11 @@ import math
 
 _logger = logging.getLogger(__name__)
 
-
-#FEE NAME
-SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
-ITEM_PRICE = 'Item Price Credit'
-SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
-SHIP_FEE_VOUCHER_LAZADA = 'Shipping Fee Voucher (by Lazada)'
-PROMOTION_CHARGES_VOUCHER = 'Promotional Charges Vouchers'
-ADJ_PAYMENT_FEE = 'Adjustments Payment Fee'
-PAYMENT_FEE = 'Payment Fee'
-SPON_PRODUCT_FEE = 'Sponsored Product Fee'
-REVERSAL_SHIP_FEE = 'Reversal shipping Fee (Paid by Customer)'
-REVERSAL_ITEM_PRICE = 'Reversal Item Price'
-ADJ_SHIP_FEE = 'Adjustments Shipping Fee'
-SHIP_FEE_CLAIM = 'Shipping Fee Claims'
-SHIP_FEE_SUBSIDY = 'Auto. Shipping fee subsidy (by Lazada)'
-
-#KEY HEADER
-ODER_ITEM_NO = 'Order Item No.'
-TRANSACTION_DATE = 'Transaction Date'
-FEE_NAME = 'Fee Name'
-AMOUNT = 'Amount'
-ORDER_NO = 'Order No.'
-ORDER_STATUS = 'Order Item Status'
-
-
 class LazadaReconcileFee(models.TransientModel):
     _name = 'lazada.reconcile.fee'
     _description = 'Lazada Reconcile Fee'
 
-    name = fields.Text('name',default='Đói soát chi phí')
+    name = fields.Text('name',default='Đối soát chi phí')
     date_start = fields.Datetime('Từ ngày')
     date_end = fields.Datetime('Đến ngày')
     price_support = fields.Float('Trợ Giá')
@@ -65,19 +40,22 @@ class LazadaReconcileFee(models.TransientModel):
             fee_by_seller = []
             fee_voucher = []
             fee_support = []
+            delta_price = []
             for key in data_csv:
                 order_number.append(key)
                 fee_by_cus.append(data_csv[key][SHIP_FEE_BY_CUS])
                 fee_by_seller.append(data_csv[key][SHIP_FEE_BY_SELLER])
                 fee_voucher.append(data_csv[key][SHIP_FEE_VOUCHER_LAZADA])
                 fee_support.append(data_csv[key]['tro_gia'])
+                _support_price = data_csv[key][SHIP_FEE_BY_SELLER] - data_csv[key][SHIP_FEE_BY_CUS] - data_csv[key]['tro_gia'] - data_csv[key][SHIP_FEE_VOUCHER_LAZADA]
+                delta_price.append(_support_price)
             df = pd.DataFrame({
                 'Order No.': order_number,
                 SHIP_FEE_BY_CUS: fee_by_cus,
                 SHIP_FEE_BY_SELLER: fee_by_seller,
                 SHIP_FEE_VOUCHER_LAZADA: fee_voucher,
                 'Price Support': fee_support,
-
+                'Chênh lệch': delta_price
             })
             df.to_csv('file_csv.csv',encoding='utf-8')
             _file = open('file_csv.csv','rb')
@@ -145,10 +123,10 @@ class LazadaReconcileFee(models.TransientModel):
         for order_number in data_csv:
             if data_csv[order_number][ITEM_PRICE] >= self.price_over:
                 data_csv[order_number].update({'tro_gia': self.price_support})
-                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA] - self.price_support
+                sum_total = data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA] - self.price_support
             else:
                 data_csv[order_number].update({'tro_gia': 0.0})
-                sum_total = data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA]
+                sum_total = data_csv[order_number][SHIP_FEE_BY_SELLER] - data_csv[order_number][SHIP_FEE_BY_CUS] - data_csv[order_number][SHIP_FEE_VOUCHER_LAZADA]
             if abs(sum_total) <= 1e-4:
                 _li_key.append(order_number)
         for key in _li_key:

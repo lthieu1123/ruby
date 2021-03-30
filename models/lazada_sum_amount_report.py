@@ -40,8 +40,8 @@ class LazadaSumAmoutReport(models.Model):
         string='Shipping Fee Paid by Seller', digits=dp.get_precision('Product Price'), default=0.0)
     promotional_charges_flexi_combo = fields.Float(
         string='Promotional Charges Flexi-Combo', digits=dp.get_precision('Product Price'), default=0.0)
-    marketing_solution_social_media_adv = fields.Float(
-        string='Marketing solution /social media advertising', digits=dp.get_precision('Product Price'), default=0.0)
+    # marketing_solution_social_media_adv = fields.Float(
+    #     string='Marketing solution /social media advertising', digits=dp.get_precision('Product Price'), default=0.0)
     reversal_item_price = fields.Float(
         string='Reversal Item Price', digits=dp.get_precision('Product Price'), default=0.0)
     reversal_shipping_fee_by_customer = fields.Float(
@@ -75,15 +75,15 @@ class LazadaSumAmoutReport(models.Model):
             self.update_field(name=_name,description=field_name)
         return True
     
-    @api.model
-    def create(self,vals):
-        res = super().create(vals)
-        item_id = self.env['sale.order.management'].search([
-            ('order_item_id','=',res.order_item_id),
-            ('order_number','=',res.order_number)
-        ])
-        if item_id.id:
-            res['created_at'] = item_id.created_at
-        return res
+    # @api.model
+    # def create(self,vals):
+    #     res = super().create(vals)
+    #     item_id = self.env['sale.order.management'].search([
+    #         ('order_item_id','=',res.order_item_id),
+    #         ('order_number','=',res.order_number)
+    #     ])
+    #     if item_id.id:
+    #         res['created_at'] = item_id.created_at
+    #     return res
         
     

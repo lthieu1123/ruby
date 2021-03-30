@@ -131,3 +131,46 @@ shopee_header = {
     'Quốc gia': 'quoc_gia',
     'Ghi chú': 'ghi_chu',
 }
+
+
+#FEE NAME
+SHIP_FEE_BY_CUS = 'Shipping Fee (Paid By Customer)'
+ITEM_PRICE = 'Item Price Credit'
+SHIP_FEE_BY_SELLER = 'Shipping Fee Paid by Seller'
+SHIP_FEE_VOUCHER_LAZADA = 'Shipping Fee Voucher (by Lazada)'
+PROMOTION_CHARGES_VOUCHER = 'Promotional Charges Vouchers'
+ADJ_PAYMENT_FEE = 'Adjustments Payment Fee'
+PAYMENT_FEE = 'Payment Fee'
+SPON_PRODUCT_FEE = 'Sponsored Product Fee'
+REVERSAL_SHIP_FEE = 'Reversal shipping Fee (Paid by Customer)'
+REVERSAL_ITEM_PRICE = 'Reversal Item Price'
+ADJ_SHIP_FEE = 'Adjustments Shipping Fee'
+SHIP_FEE_CLAIM = 'Shipping Fee Claims'
+SHIP_FEE_SUBSIDY = 'Auto. Shipping fee subsidy (by Lazada)'
+
+#KEY HEADER
+ODER_ITEM_NO = 'Order Item No.'
+TRANSACTION_DATE = 'Transaction Date'
+FEE_NAME = 'Fee Name'
+AMOUNT = 'Amount'
+ORDER_NO = 'Order No.'
+ORDER_STATUS = 'Order Item Status'
+ITEM_PRICE = 'Item Price Credit'
+
+
+#PRICE FOR LAZADA
+SHIPPING_FEE_PAID_BY_CUSTOMER =  'Shipping Fee (Paid By Customer)'
+ITEM_PRICE_CREDIT =  'Item Price Credit'
+PROMOTIONAL_CHARGES_VOUCHERS =  'Promotional Charges Vouchers'
+SHIPPING_FEE_VOUCHER_BY_LAZADA =  'Shipping Fee Voucher (by Lazada)'
+SHIPPING_FEE_PAID_BY_SELLER =  'Shipping Fee Paid by Seller'
+PROMOTIONAL_CHARGES_FLEXICOMBO =  'Promotional Charges Flexi-Combo'
+MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING =  'Marketing solution /social media advertising'
+REVERSAL_ITEM_PRICE =  'Reversal Item Price'
+REVERSAL_SHIPPING_FEE_PAID_BY_CUSTOMER =  'Reversal shipping Fee (Paid by Customer)'
+REVERSAL_PROMOTIONAL_CHARGES_FLEXICOMBO =  'Reversal Promotional Charges Flexi-Combo'
+REVERSAL_SHIPPING_FEE_VOUCHER_BY_LAZADA =  'Reversal Shipping Fee Voucher (by Lazada)'
+REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS =  'Reversal Promotional Charges Vouchers'
+LAZADA_BONUS =  'Lazada Bonus'
+LAZADA_BONUS_LZD_COFUND =  'Lazada Bonus - LZD co-fund'
+SPONSORED_DISCOVERY_TOP_UP =  'Sponsored Discovery - Top up'
