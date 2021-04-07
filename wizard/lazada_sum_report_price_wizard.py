@@ -94,7 +94,7 @@ class LazadaSumAmoutReport(models.Model):
                 item_dict = order_dict.get(order_id,False)
                 if not item_dict:
                     item_dict = {
-                        PAYMENT_FEE = 0.0,
+                        PAYMENT_FEE: 0.0,
                         SHIPPING_FEE_PAID_BY_CUSTOMER: 0.0,
                         ITEM_PRICE_CREDIT: 0.0,
                         PROMOTIONAL_CHARGES_VOUCHERS: 0.0,

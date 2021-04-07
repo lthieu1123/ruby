@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
-    <data>
+    <data noupdate="0">
         <!-- This Menu Item will appear in the Upper bar, that's why It needs NO parent or action -->
         <menuitem id="sale_order_management_menu_root" name="Lazada" sequence="1" web_icon="ruby,static/description/icon_lazada.png"/>
             <!-- This Menu Item must have a parent and an action -->
@@ -32,11 +32,18 @@
                         sequence="30"/>
             <!-- This Menu Item Must have a parent -->
             
-            <menuitem id="action_reconcile_fee_act"
+            <menuitem id="action_reconcile_fee_act_menu"
                         name="Đối Soát Chi Phí"
                         parent="sale_order_management_menu_root"
                         sequence="50"
                         action="lazada_reconcile_fee_action"
+                        groups="ruby.user_manager_groups"/>
+            
+            <menuitem id="lazada_sum_amount_report_act"
+                        name="Báo Cáo Chi Phí"
+                        parent="sale_order_management_menu_root"
+                        sequence="55"
+                        action="lazada_sum_amount_report_action"
                         groups="ruby.user_manager_groups"/>
                             
             <menuitem id="action_calculate_fee_menu"
@@ -45,6 +52,7 @@
                         action="financial_control_action"
                         sequence="60"
                         groups="ruby.user_manager_groups"/>
+
             <menuitem id="action_process_done_item_menu"
                         name="Đối Soát Đơn Hàng"
                         parent="sale_order_management_menu_root"
@@ -89,11 +97,7 @@
                                 parent="lazada_report_sub_menu_2"
                                 action="lazada_report_order_number_returned_action"
                                 sequence="50"/>
-                    <menuitem id="lazada_sum_fee_report_sub_menu"
-                                name="Tổng chi phí đơn hàng"
-                                parent="lazada_report_sub_menu_2"
-                                action="model_lazada_sum_amount_report_action"
-                                sequence="60"/>
+                    
 
             <!-- This Menu Item Must have a parent -->
             <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80"/>
