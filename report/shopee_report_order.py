@@ -33,8 +33,8 @@ class ShopeeAvgPrice(models.Model):
                     min(sm.id) as id,
                     sm.deliver_date as row,
                     sum(sm.so_luong) as measure,
-                    sum(sm.gia_goc * sm.so_luong)::decimal(16,2) as price_total,
-                    (sum(sm.gia_goc * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,
+                    sum(sm.gia_uu_dai * sm.so_luong)::decimal(16,2) as price_total,
+                    (sum(sm.gia_uu_dai * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,
                     sm.sku_san_pham as sku_san_pham,
                     sm.ten_san_pham as ten_san_pham
             """

@@ -174,3 +174,5 @@ REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS =  'Reversal Promotional Charges Vouchers'
 LAZADA_BONUS =  'Lazada Bonus'
 LAZADA_BONUS_LZD_COFUND =  'Lazada Bonus - LZD co-fund'
 SPONSORED_DISCOVERY_TOP_UP =  'Sponsored Discovery - Top up'
+
+SELLER_SKU = 'Seller SKU'

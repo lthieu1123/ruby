@@ -53,10 +53,11 @@
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
-                    <field name="gia_goc"/>
+                    <field name="ngay_dat_hang"/>
+                    <field name="gia_uu_dai"/>
                     <field name="so_luong"/>
-                    <field name="tien_don_hang"/>
-                    <field name="package_number"/>
+                    <!-- <field name="tien_don_hang"/>
+                    <field name="package_number"/> -->
                     <field name="state"/>
                     <field name="write_date" string="Cập Nhật Lúc"/>
                     <field name="ten_nguoi_nhan"/>

@@ -58,16 +58,15 @@ class LazadaSumAmoutReport(models.TransientModel):
             ('created_at','>=',start_datetime),
             ('created_at','<=',end_datetime),
             # ('state','=','delivered'),
-            ('shop_id','in',_li_shop)
+            # ('shop_id','in',_li_shop)
         ])
-        print('rec_ids: ',rec_ids)
         return self._calculate_lazada_price_product(rec_ids)
     
     def _calculate_lazada_price_product(self, rec_ids):
         create_data = {}
         data_file = base64.b64decode(self.file_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS,ODER_ITEM_NO], dtype={ORDER_NO: int})
+        result = pd.read_csv(csv_filelike,sep=',',encoding='utf-8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS,ODER_ITEM_NO, SELLER_SKU], dtype={ORDER_NO: int})
         for index, row in result.iterrows():
             fee_name = row[FEE_NAME].strip()
             if fee_name == MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING:
@@ -97,7 +96,8 @@ class LazadaSumAmoutReport(models.TransientModel):
                     REVERSAL_PROMOTIONAL_CHARGES_VOUCHERS: 0.0,
                     LAZADA_BONUS: 0.0,
                     LAZADA_BONUS_LZD_COFUND: 0.0,
-                    SPONSORED_DISCOVERY_TOP_UP: 0.0
+                    SPONSORED_DISCOVERY_TOP_UP: 0.0,
+                    SELLER_SKU: row[SELLER_SKU],
                 }
             _amount = item_dict.get(fee_name,0.0)
             item_dict.update({
@@ -105,7 +105,9 @@ class LazadaSumAmoutReport(models.TransientModel):
             })
             order_dict.update({order_id: item_dict})
             create_data.update({order_no: order_dict})
+        print('create_data: ', create_data)
         csv_data = self._create_lzd_sum(data=create_data)
+        print('csv_data: ',csv_data)
         csv_file = self._create_csv_file(csv_data=csv_data)
         vals = {
             'has_csv': False,
@@ -143,7 +145,24 @@ class LazadaSumAmoutReport(models.TransientModel):
         if csv_data is None:
             return False
         
-        order_no = order_item_no = payment_fee = shipping_fee_paid_by_customer = item_price_credit = promotional_charges_vouchers = shipping_fee_voucher_by_lazada = shipping_fee_paid_by_seller = promotional_charges_flexi_combo = reversal_item_price = reversal_shipping_fee_by_customer = reversal_promotional_charges_flexi_combo = reversal_shipping_fee_voucher_lazada = reversal_promotional_charges_vouchers = lazada_bouns = lazada_bouns_lzd_co_fund = sponsored_discoverty_top_up = []
+        order_no = [] 
+        order_item_no = [] 
+        payment_fee = [] 
+        shipping_fee_paid_by_customer = [] 
+        item_price_credit = [] 
+        promotional_charges_vouchers = [] 
+        shipping_fee_voucher_by_lazada = [] 
+        shipping_fee_paid_by_seller = [] 
+        promotional_charges_flexi_combo = [] 
+        reversal_item_price = [] 
+        reversal_shipping_fee_by_customer = [] 
+        reversal_promotional_charges_flexi_combo = [] 
+        reversal_shipping_fee_voucher_lazada = [] 
+        reversal_promotional_charges_vouchers = [] 
+        lazada_bouns = [] 
+        lazada_bouns_lzd_co_fund = [] 
+        sponsored_discoverty_top_up = []
+        seller_sku = []
         for item in csv_data:
             order_no.append(item['order_number'])
             order_item_no.append(item['order_item_id'])
@@ -162,10 +181,12 @@ class LazadaSumAmoutReport(models.TransientModel):
             lazada_bouns.append(item[LAZADA_BONUS])
             lazada_bouns_lzd_co_fund.append(item[LAZADA_BONUS_LZD_COFUND])
             sponsored_discoverty_top_up.append(item[SPONSORED_DISCOVERY_TOP_UP])
+            seller_sku.append(item[SELLER_SKU])
 
         df = pd.DataFrame({
             ORDER_NO: order_no,
             ODER_ITEM_NO: order_item_no,
+            SELLER_SKU: seller_sku,
             PAYMENT_FEE: payment_fee,
             SHIPPING_FEE_PAID_BY_CUSTOMER: shipping_fee_paid_by_customer,
             ITEM_PRICE_CREDIT: item_price_credit,
