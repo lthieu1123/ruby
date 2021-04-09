@@ -68,6 +68,7 @@
             <field name="res_model">lazada.reconcile.fee</field>
             <field name="view_mode">form</field>
             <field name="view_type">form</field>
+            <field name="view_id" ref="lazada_reconcile_fee_view_form"/>
             <field name="target">new</field>
         </record>
     </data>

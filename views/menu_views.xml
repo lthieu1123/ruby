@@ -39,11 +39,11 @@
                         action="lazada_reconcile_fee_action"
                         groups="ruby.user_manager_groups"/>
             
-            <menuitem id="lazada_sum_amount_report_act"
+            <menuitem id="lazada_sum_amount_report_act_view_wizard"
                         name="Báo Cáo Chi Phí"
                         parent="sale_order_management_menu_root"
                         sequence="55"
-                        action="lazada_sum_amount_report_action"
+                        action="lazada_sum_amount_report_action_wizard"
                         groups="ruby.user_manager_groups"/>
                             
             <menuitem id="action_calculate_fee_menu"
@@ -64,7 +64,7 @@
             <menuitem id="lazada_report_sub_menu"
                         name="Báo Cáo"
                         parent="sale_order_management_menu_root"
-                        sequence="71"
+                        sequence="80"
                         groups="ruby.user_manager_groups"/>
                 <menuitem id="lazada_report_sub_menu_1"
                         name="Báo Cáo Theo SKU"
@@ -97,10 +97,11 @@
                                 parent="lazada_report_sub_menu_2"
                                 action="lazada_report_order_number_returned_action"
                                 sequence="50"/>
+                
                     
 
             <!-- This Menu Item Must have a parent -->
-            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="80"/>
+            <menuitem id="lazada_setting_menu_categ" name="Cài Đặt" parent="sale_order_management_menu_root" sequence="90"/>
                 <menuitem id="lazada_find_duplicate"
                             name="Sản phẩm trùng"
                             parent="lazada_setting_menu_categ"
