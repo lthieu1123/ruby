@@ -128,17 +128,17 @@ class ShopeeManagment(models.Model):
             res['convert_to_utc'] = True
 
         #update external id
-        _datetime = datetime.datetime.now()
-        model_name = self._name
-        self.env['ir.model.data'].sudo().create({
-            'noupdate': True,
-            'name': '{}_{}'.format(model_name,res.id),
-            'date_init': _datetime,
-            'date_update': _datetime,
-            'module': 'ruby',
-            'model': model_name,
-            'res_id': res.id
-        })
+        # _datetime = datetime.datetime.now()
+        # model_name = self._name
+        # self.env['ir.model.data'].sudo().create({
+        #     'noupdate': True,
+        #     'name': '{}_{}'.format(model_name,res.id),
+        #     'date_init': _datetime,
+        #     'date_update': _datetime,
+        #     'module': 'ruby',
+        #     'model': model_name,
+        #     'res_id': res.id
+        # })
     
     @api.multi
     def unlink(self):
@@ -167,6 +167,8 @@ class ShopeeManagment(models.Model):
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
+            self._cr.execute('ROLLBACK TO SAVEPOINT import')
+            self.pool.reset_changes()
             raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
@@ -178,6 +180,8 @@ class ShopeeManagment(models.Model):
                 ('code','=',shop_code)
             ])
             if not len(shop_id):
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
                 return {
                     'messages': [{
                         'type': 'Error',
@@ -231,6 +235,8 @@ class ShopeeManagment(models.Model):
                     self.with_context({'is_import': True}).create(vals)
                     create_count += 1
                 except Exception as err:
+                    self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                    self.pool.reset_changes()
                     return {
                         'messages': [{
                             'type': 'Error',

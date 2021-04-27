@@ -132,22 +132,18 @@ class ShopAnnounce(models.TransientModel):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
             result = pd.read_csv(directory,sep=',',encoding='utf8')
-            create_data = {}
+            
             for index, row in result.iterrows():
                 fee_name = row[FEE_NAME].strip()
                 if fee_name != ITEM_PRICE:
                     continue
                 order_id = int(row[ODER_ITEM_NO])
                 rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
-                if not rec.id:
-                    continue
-                rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
                 if rec.id:
                     rec.update({
                         'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                         'state': 'done'
                     })
-            self._create_lzd_sum(data=create_data)
     
     @api.model
     def _reconcile_shopee_data(self, rec_ids, sale_director_file, _sale_done_director):

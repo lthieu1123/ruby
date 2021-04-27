@@ -18,7 +18,10 @@
             <t t-if="widget !== undefined">
                 <button t-if="widget.modelName == 'sale.order.management'"
                         class="btn btn-primary o_button_process_csv"
-                        type="button">Cập Nhật Hàng Mới</button>
+                        type="button">Cập Nhật Hàng Mới (CSV)</button>
+                <button t-if="widget.modelName == 'sale.order.management'"
+                        class="btn btn-primary o_button_process_excel_lzd"
+                        type="button">Cập Nhật Hàng Mới (EXCEL)</button>
                 <button t-if="widget.modelName == 'shopee.management'"
                         class="btn btn-primary o_button_process_excel"
                         type="button">Cập Nhật Hàng Mới</button>

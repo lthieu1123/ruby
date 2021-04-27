@@ -4,8 +4,11 @@ from odoo.tools.translate import _
 
 #Delta time
 DELTA_TIME = 7
+EXCEL_XLSX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+EXCEL_XLS_MIMETYPE = 'application/vnd.ms-excel'
+CSV_MIMETYPE = 'text/csv'
 
-header = {
+LZD_HEADER = {
     'Order Item Id': 'order_item_id',
     'Order Type': 'order_type',
     'Order Flag': 'order_flag',
@@ -73,6 +76,87 @@ header = {
     'Bundle Discount': 'bundle_discount',
     'Refund Amount': 'refund_amount'
 }
+
+LZD_HEADER_EXCEL = {
+    'orderItemId': 'order_item_id',
+    'orderType': 'order_type',
+    'Guarantee': 'guarantee',
+    'deliveryType': 'delivery_type',
+    'lazadaId': 'lazada_id',
+    'sellerSku': 'seller_sku',
+    'lazadaSku': 'lazada_sku',
+    'wareHouse': 'ware_house',
+    'createTime': 'create_at',
+    'updateTime': 'update_at',
+    'rtsSla': 'rts_sla',
+    'ttsSla': 'tts_sla',
+    'orderNumber': 'order_number',
+    'invoiceNumber': 'invoice_number',
+    'deliveredDate': 'deliver_date',
+    'customerName': 'customer_name',
+    'customerEmail': 'customer_email',
+    'nationalRegistrationNumber': 'national_registration_number',
+    'shippingName': 'shipping_name',
+    'shippingAddress': 'shipping_address',
+    'shippingAddress2': 'shipping_address2',
+    'shippingAddress3': 'shipping_address3',
+    'shippingAddress4': 'shipping_address4',
+    'shippingAddress5': 'shipping_address5',
+    'shippingPhone': 'shipping_phone_number',
+    'shippingPhone2': 'shipping_phone_number2',
+    'shippingCity': 'shipping_city',
+    'shippingPostCode': 'shipping_postcode',
+    'shippingCountry': 'shipping_country',
+    'shippingRegion': 'shipping_region',
+    'billingName': 'billing_name',
+    'billingAddr': 'billing_address',
+    'billingAddr2': 'billing_address2',
+    'billingAddr3': 'billing_address3',
+    'billingAddr4': 'billing_address4',
+    'billingAddr5': 'billing_address5',
+    'billingPhone': 'billing_phone_number',
+    'billingPhone2': 'billing_phone_number2',
+    'billingCity': 'billing_city',
+    'billingPostCode': 'billing_postcode',
+    'billingCountry': 'billing_country',
+    'taxCode': 'tax_code',
+    'branchNumber': 'branch_number',
+    'taxInvoiceRequested': 'tax_invoice_requested',
+    'payMethod': 'payment_method',
+    'paidPrice': 'paid_price',
+    'unitPrice': 'unit_price',
+    'shippingFee': 'shipping_fee',
+    'walletCredit': 'wallet_credits',
+    'itemName': 'item_name',
+    'variation': 'variation',
+    'cdShippingProvider': 'cd_shipping_provider',
+    'shippingProvider': 'shipping_provider',
+    'shipmentTypeName': 'shipment_type_name',
+    'shippingProviderType': 'shipping_provider_type',
+    'cdTrackingCode': 'cd_tracking_code',
+    'trackingCode': 'tracking_code',
+    'trackingUrl': 'tracking_url',
+    'shippingProviderFM': 'shipping_provider_first_mile',
+    'shippingName': 'shipping_name',
+    'trackingUrlFM': 'tracking_url_first_mile',
+    'promisedShippingTime': 'promised_shipping_time',
+    'premium': 'premium',
+    'status': 'status',
+    'cancelReturnInitiator': 'cancel_return_initiator',
+    'cancelReason': 'reason',
+    'cancelDetail': 'reason_detail',
+    'cancelUserName': 'reason_user',
+    'bundleId': 'bundle_id',
+    'bundleDiscount': 'bundle_discount',
+    'refundAmount': 'refund_amount'
+}
+
+TRACKING_CODE_EX = 'trackingCode'
+TRACKING_CODE = 'Tracking Code'
+ORDER_ITEM_ID_EX = 'orderItemId'
+ORDER_ITEM_ID = 'Order Item Id'
+
+
 
 shopee_header = {
     'Mã đơn hàng': 'ma_don_hang',
@@ -156,6 +240,7 @@ AMOUNT = 'Amount'
 ORDER_NO = 'Order No.'
 ORDER_STATUS = 'Order Item Status'
 ITEM_PRICE = 'Item Price Credit'
+COMMENT = 'Comment'
 
 
 #PRICE FOR LAZADA

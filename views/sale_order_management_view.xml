@@ -60,23 +60,23 @@
                 <tree>
                         <field name="tracking_code"/>
                         <field name="order_number"/>
-                        <field name="lazada_id"/>
+                        <!-- <field name="lazada_id"/> -->
                         <field name="order_item_id"/>
                         <field name="unit_price"/>
-                        <field name="shipment_type_name"/>
-                        <field name="payment_method"/>
+                        <!-- <field name="shipment_type_name"/> -->
+                        <!-- <field name="payment_method"/> -->
                         <field name="shipping_provider"/>
-                        <field name="package_number"/>
+                        <!-- <field name="package_number"/> -->
                         <field name="status"/>
-                        <field name="updated_at"/>
-                        <field name="shipping_provider_type"/>
+                        <!-- <field name="updated_at"/> -->
+                        <!-- <field name="shipping_provider_type"/> -->
                         <field name="seller_sku"/>
                         <field name="customer_name"/>
                         <field name="billing_phone_number"/>
                         <field name="item_name"/>
                         <field name="created_at"/>
                         <field name="deliver_date"/>
-                        <field name="notes"/>
+                        <!-- <field name="notes"/> -->
                         <field name="state"/>
                         <field name="write_date" string="Cập Nhật Lúc"/>
                         <field name="shop_id"/>

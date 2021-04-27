@@ -7,6 +7,8 @@ import datetime, pytz
 import base64
 import io
 import logging
+import mimetypes
+import traceback
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
@@ -136,10 +138,19 @@ class SaleOrderManagment(models.Model):
     transaction_date = fields.Date('Transaction Date',index=True)
     package_number = fields.Char('Package Number')
     new_update_time = fields.Float('New Update',index=True,)
-    deliver_date = fields.Date('Ngày Giao Hàng',index=True)
-    return_date = fields.Date('Ngày Trả Hàng',index=True)
+    deliver_date = fields.Datetime('Ngày Giao Hàng',index=True)
+    return_date = fields.Datetime('Ngày Trả Hàng',index=True)
     notes = fields.Char('Ghi Chú')
     convert_to_utc = fields.Boolean('converto utc')
+
+    #New fields excel:
+    guarantee = fields.Char('guarantee')
+    delivery_type = fields.Char('Delivery Type')
+    ware_house = fields.Char('Warehouse')
+    rts_sla = fields.Char('rtsSla')
+    tts_sla = fields.Char('ttsSla')
+    invoice_number = fields.Char('Invoice Number')
+    reason_user = fields.Char('Reason User')
     
 
     @api.model
@@ -150,17 +161,19 @@ class SaleOrderManagment(models.Model):
             res['created_at'] = res['created_at'] - datetime.timedelta(hours=DELTA_TIME) if res['created_at'] else False
             res['updated_at'] = res['updated_at'] - datetime.timedelta(hours=DELTA_TIME) if res['updated_at'] else False
             res['convert_to_utc'] = True
-        _datetime = datetime.datetime.now()
-        model_name = self._name
-        self.env['ir.model.data'].sudo().create({
-            'noupdate': True,
-            'name': '{}_{}'.format(model_name,res.id),
-            'date_init': _datetime,
-            'date_update': _datetime,
-            'module': 'ruby',
-            'model': model_name,
-            'res_id': res.id
-        })
+        
+        #update external id
+        # _datetime = datetime.datetime.now()
+        # model_name = self._name
+        # self.env['ir.model.data'].sudo().create({
+        #     'noupdate': True,
+        #     'name': '{}_{}'.format(model_name,res.id),
+        #     'date_init': _datetime,
+        #     'date_update': _datetime,
+        #     'module': 'ruby',
+        #     'model': model_name,
+        #     'res_id': res.id
+        # })
     
     @api.multi
     def unlink(self):
@@ -183,23 +196,39 @@ class SaleOrderManagment(models.Model):
             ('name','=','update')
         ])
         if not _directory.id:
+            self._cr.execute('ROLLBACK TO SAVEPOINT import')
+            self.pool.reset_changes()
             raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
         _import_directory = _directory.directory
 
         try:
             import_directory_file = os.listdir(_import_directory)
         except Exception as err:
+            self._cr.execute('ROLLBACK TO SAVEPOINT import')
+            traceback.print_exc()
             raise exceptions.ValidationError(_('Không tìm thấy tập tin trong thư mục "{}"').format(_import_directory))
         msg = []
         update_time = round(datetime.datetime.now().timestamp(),2)
         #Checking shop code before run
         view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
+            if not self._validate_mimetype(entry):
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
+                return {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': [(_('"{}" Không đúng định dạng là file CSV').format(entry))],
+                        'view_id': view_id
+                    }]
+                }
             shop_code = entry.split('.')[0]
             shop_id = self.env['sale.order.management.shop'].search([
                 ('code','=',shop_code)
             ])
             if not len(shop_id):
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
                 return {
                     'messages': [{
                         'type': 'Error',
@@ -217,51 +246,56 @@ class SaleOrderManagment(models.Model):
             directory = "{}/{}".format(_import_directory,entry)
             #Reading csv file
             result = pd.read_csv(directory,sep=';',encoding='utf8')
-            del_count = 0
-            skip_count = 0
+            del_count = skip_count = index = 0
+            _err = None
             #browse data from dataframe pandas
-            for index, row in result.iterrows():
-                #If tracking code is blank, move to next row
-                if row['Tracking Code'] == 'nan':
-                    continue
+            del_count, skip_count, index, _err = self._handle_process_data(excel=True,shop_id=shop_id,update_time=update_time,result=result)
+            # for index, row in result.iterrows():
+            #     #If tracking code is blank, move to next row
+            #     if row['Tracking Code'] == 'nan':
+            #         continue
 
-                #Checking existed item in database, if existed -> unlink
-                existed_item = self.search([
-                    ('order_item_id','=',row['Order Item Id']),
-                ])
-                if existed_item.id:
-                    if existed_item.state == 'pending':
-                        existed_item.unlink()
-                        del_count +=1
-                    else:
-                        skip_count+=1
-                        continue
+            #     #Checking existed item in database, if existed -> unlink
+            #     existed_item = self.search([
+            #         ('order_item_id','=',row['Order Item Id']),
+            #     ])
+            #     if existed_item.id:
+            #         if existed_item.state == 'pending':
+            #             existed_item.unlink()
+            #             del_count +=1
+            #         else:
+            #             skip_count+=1
+            #             continue
 
-                #Adding shop_id in vals before add vals from csv
-                vals = {
-                    'shop_id': shop_id.id,
-                    'new_update_time': update_time
-                }
-                #Get data from csv row and add it to dict
-                for key in _li_key:
-                    _header = header.get(key)
-                    _data = row[key]
-                    if key == 'Tracking Code' and str(_data) != 'nan':
-                        _data = str(_data).upper()
-                    vals.update({
-                        _header :  _data if str(_data) != 'nan' else None
-                    })
-                #Create new data
-                try:
-                    self.with_context({'is_import': True}).create(vals)
-                except Exception as err:
-                    return {
-                        'messages': [{
-                            'type': 'Error',
-                            'message': [(_('Cannot create data as error: {}').format(str(err)))],
-                            'view_id': view_id
-                        }]
-                    }
+            #     #Adding shop_id in vals before add vals from csv
+            #     vals = {
+            #         'shop_id': shop_id.id,
+            #         'new_update_time': update_time
+            #     }
+            #     #Get data from csv row and add it to dict
+            #     for key in _li_key:
+            #         _header = header.get(key)
+            #         _data = row[key]
+            #         if key == 'Tracking Code' and str(_data) != 'nan':
+            #             _data = str(_data).upper()
+            #         vals.update({
+            #             _header :  _data if str(_data) != 'nan' else None
+            #         })
+            #     #Create new data
+            #     try:
+            #         self.with_context({'is_import': True}).create(vals)
+            #     except Exception as err:
+            #         return {
+            #             'messages': [{
+            #                 'type': 'Error',
+            #                 'message': [(_('Cannot create data as error: {}').format(str(err)))],
+            #                 'view_id': view_id
+            #             }]
+            #         }
+            if _err:
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
+                return _err
             values = {
                 'shop': shop_id.name,
                 'create':index+1-skip_count,
@@ -292,6 +326,7 @@ class SaleOrderManagment(models.Model):
         try:
             sale_director_file = os.listdir(_sale_done_director)
         except Exception as err:
+            traceback.print_exc()
             raise exceptions.ValidationError(_('Không tìm thấy đường dẫn thư mục "{}"').format(_sale_done_director))
         
         if not len(sale_director_file):
@@ -486,3 +521,148 @@ class SaleOrderManagment(models.Model):
             })
         _logger.info('COMPLEDTED UPDATE TIME TO UTC')
         _logger.info('==============================================')
+    
+
+    @api.multi
+    def btn_process_excel(self):
+        self._cr.execute('SAVEPOINT import')
+        _directory = self.env['lazada.directory'].search([
+            ('name','=','update')
+        ])
+        if not _directory.id:
+            self._cr.execute('ROLLBACK TO SAVEPOINT import')
+            self.pool.reset_changes()
+            raise exceptions.ValidationError('Không tìm thấy thư mục đã cài đặt trước. Vui lòng vào "Đường dẫn thư mục" để cài đặt đường dẫn')
+        _import_directory = _directory.directory
+        try:
+            import_directory_file = os.listdir(_import_directory)
+        except Exception as err:
+            self._cr.execute('ROLLBACK TO SAVEPOINT import')
+            self.pool.reset_changes()
+            traceback.print_exc()
+            raise exceptions.ValidationError(_('Không tìm thấy thư mục "{}"').format(_import_directory))
+        msg = []
+        update_time = round(datetime.datetime.now().timestamp(),2)
+
+        #Checking shop code before run
+        view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
+        for entry in import_directory_file:
+            if not self._validate_mimetype(entry):
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
+                return {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': [(_('"{}" Không đúng định dạng là file Excel').format(entry))],
+                        'view_id': view_id
+                    }]
+                }
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shop'].search([
+                ('code','=',shop_code)
+            ])
+            if not len(shop_id):
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
+                return {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': [(_('Không tìm thấy shop có mã là: "[{}]"').format(shop_code))],
+                        'view_id': view_id
+                    }]
+                }
+        
+        for entry in import_directory_file:
+            shop_code = entry.split('.')[0]
+            shop_id = self.env['sale.order.management.shopee.shop'].search([
+                ('code','=',shop_code)
+            ])
+            directory = "{}/{}".format(_import_directory,entry)
+            #Reading excel file
+            result = pd.read_excel(directory,dtype={'Mã vận đơn': str,'Mã Kiện Hàng': str,'Mã đơn hàng': str})
+            del_count = skip_count = index = 0
+            _err = None
+            del_count, skip_count, index, _err = self._handle_process_data(excel=True,shop_id=shop_id,update_time=update_time,result=result)
+            if _err:
+                self._cr.execute('ROLLBACK TO SAVEPOINT import')
+                self.pool.reset_changes()
+                return _err
+            values = {
+                'shop': shop_id.name,
+                'create':index+1-skip_count,
+                'del':del_count
+            }
+            msg.append(values)
+        self._cr.execute('RELEASE SAVEPOINT import')
+        #Return mess when done
+        return {
+            'messages': [{
+                'type': 'Completed',
+                'message': msg,
+                'view_id': view_id
+            }]
+        }
+    
+    def _validate_mimetype(self,file,csv=False):
+        mimetype = mimetypes.guess_type(file)[0]
+        if csv:
+            return mimetype == CSV_MIMETYPE
+        else:
+            return mimetype in [EXCEL_XLS_MIMETYPE,EXCEL_XLSX_MIMETYPE]
+
+    def _handle_process_data(self,excel=False,shop_id=None,update_time=None,result=None):
+        tracking_code = TRACKING_CODE
+        order_item_id = ORDER_ITEM_ID
+        _header = LZD_HEADER
+        _del_count = 0
+        _skip_count = 0
+        if excel:
+            tracking_code = TRACKING_CODE_EX
+            order_item_id = ORDER_ITEM_ID_EX
+            _header = LZD_HEADER_EXCEL
+        if result is None:
+            raise exceptions.ValidationError("Không tìm thấy được dữ liệu")
+        for index, row in result.iterrows():
+            #If tracking code is blank, move to next row
+            if row[tracking_code] == 'nan':
+                continue
+            
+            #Checking existed item in database, if existed -> unlink
+            existed_item = self.search([
+                ('order_item_id','=',row[order_item_id]),
+            ])
+            if existed_item.id:
+                if existed_item.state == 'pending':
+                    existed_item.unlink()
+                    _del_count +=1
+                else:
+                    _skip_count+=1
+                    continue
+
+            #Adding shop_id in vals before add vals from csv
+            vals = {
+                'shop_id': shop_id.id,
+                'new_update_time': update_time
+            }
+            #Get data from csv row and add it to dict
+            for k,v in _header.items():
+                _data = row[k]
+                if k == tracking_code and str(_data) != 'nan':
+                    _data = str(_data).upper()
+                vals.update({
+                    v :  _data if str(_data) != 'nan' else None
+                })
+            #Create new data
+            try:
+                self.with_context({'is_import': True}).create(vals)
+            except Exception as err:
+                traceback.print_exc()
+                return 0, 0, 0, {
+                    'messages': [{
+                        'type': 'Error',
+                        'message': [(_('Cannot create data as error: {}').format(str(err)))],
+                        'view_id': self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
+                    }]
+                }
+        return _del_count,_skip_count,index,None
+        
