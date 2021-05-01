@@ -43,7 +43,7 @@
                         name="Báo Cáo Chi Phí"
                         parent="sale_order_management_menu_root"
                         sequence="55"
-                        action="lazada_sum_amount_report_action_wizard"
+                        action="model_lzd_sum_price_report_wizard_action"
                         groups="ruby.user_manager_groups"/>
                             
             <menuitem id="action_calculate_fee_menu"

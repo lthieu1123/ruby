@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <!-- model.name action window -->
+        <record id="model_lzd_sum_price_report_wizard_action" model="ir.actions.act_window">
+            <field name="name">lzd.sum.price.report.wizard.action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">lzd.sum.price.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p>
+                <p>
+                    <!-- More details about what a user can do with this object will be OK -->
+                </p>
+            </field>
+        </record>
+
+        <!-- model.name form view -->
+        <record id="model_lzd_sum_price_report_wizard_view_form" model="ir.ui.view">
+            <field name="name">lzd.sum.price.report.wizard.action</field>
+            <field name="model">lzd.sum.price.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Báo Cáo Chi Phí">
+                    <field name="state" invisible="1" />
+                    <field name="name" invisible="1"/>
+                    <field name="has_file" invisible="1"/>
+                    <div states="begin">
+                        <div>
+                            <div>
+                                <span>Vui lòng chọn ngày cần đối soát chi phí. </span>
+                                <span class="oe_inline">Từ ngày: </span>
+                                <field class="oe_inline" name="date_start" required="1"/>
+                                <span class="oe_inline"> Đến ngày: </span>
+                                <field class="oe_inline" name="date_end" required="1"/>
+                            </div>
+                        </div>
+
+                        <field name="file_name" invisible="1"/>
+                        <p>Tải lên tập tin cần đối soát chi phí: <field name="file_data" filename="file_name"/>
+                        </p>
+                        <p>Lưu ý:</p>
+                        <ul>
+                            <li>Tên tập tin là mã số của shop trên phần mềm.</li>
+                            <li>Chỉ hổ trợ tập tin với định dạng là csv</li>
+                        </ul>
+                    </div>
+                    <div states="proceed">
+                        <h1>Cập nhật giá gốc</h1>
+                        <field name="origin_price_ids">
+                            <tree create="false" delete="false" editable="bottom">
+                                <field name="sum_report_id" invisible="1"/>
+                                <field name="seller_sku" readonly="1"/>
+                                <field name="origin_price"/>
+                            </tree>
+                        </field>
+                    </div>
+                    <div states="end">
+                        <h2>Đối soát hoàn tất</h2>
+                        <div attrs="{'invisible': [('has_file','=',False)]}">
+                            <p>Bảng báo cáo chi tiết chi phí</p>
+                            <p>Tập tin đã đối soát: <field name="excel_file" filename="excel_name" readonly="1"/>
+                            </p>
+                            <field name="excel_name" invisible="1"/>
+                        </div>
+                    </div>
+                    <footer states="begin">
+                        <button name="btn_reconcile" string="Đối soát" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Hủy" type="object" class="btn-secondary"/>
+                    </footer>
+                    <footer states="proceed">
+                        <button name="btn_apply" string="Đối soát" type="object" class="btn-primary"/>
+                        <button name="btn_bypass" string="Bỏ qua" type="object" class="btn-secondary"/>
+                    </footer>
+                    <footer states="end">
+                        <button special="cancel" string="Đóng" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
