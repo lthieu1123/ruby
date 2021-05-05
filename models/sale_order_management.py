@@ -212,7 +212,7 @@ class SaleOrderManagment(models.Model):
         #Checking shop code before run
         view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
-            if not self._validate_mimetype(entry):
+            if not self._validate_mimetype(entry,csv=True):
                 self._cr.execute('ROLLBACK TO SAVEPOINT import')
                 self.pool.reset_changes()
                 return {
@@ -249,7 +249,7 @@ class SaleOrderManagment(models.Model):
             del_count = skip_count = index = 0
             _err = None
             #browse data from dataframe pandas
-            del_count, skip_count, index, _err = self._handle_process_data(excel=True,shop_id=shop_id,update_time=update_time,result=result)
+            del_count, skip_count, index, _err = self._handle_process_data(excel=False,shop_id=shop_id,update_time=update_time,result=result)
             # for index, row in result.iterrows():
             #     #If tracking code is blank, move to next row
             #     if row['Tracking Code'] == 'nan':
