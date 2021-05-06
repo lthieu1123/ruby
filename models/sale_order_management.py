@@ -9,6 +9,8 @@ import io
 import logging
 import mimetypes
 import traceback
+import platform
+import re
 
 from odoo import api, models, fields, exceptions
 from odoo.tools.translate import _
@@ -604,8 +606,14 @@ class SaleOrderManagment(models.Model):
         }
     
     def _validate_mimetype(self,file,csv=False):
+        system = platform.system()
         mimetype = mimetypes.guess_type(file)[0]
+            
         if csv:
+            if system == WINDOWS and mimetype != CSV_MIMETYPE:
+                _regex = r"\.csv$"
+                _match = re.search(_regex,file)
+                return True if _match else False
             return mimetype == CSV_MIMETYPE
         else:
             return mimetype in [EXCEL_XLS_MIMETYPE,EXCEL_XLSX_MIMETYPE]

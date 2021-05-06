@@ -261,3 +261,8 @@ LAZADA_BONUS_LZD_COFUND =  'Lazada Bonus - LZD co-fund'
 SPONSORED_DISCOVERY_TOP_UP =  'Sponsored Discovery - Top up'
 
 SELLER_SKU = 'Seller SKU'
+
+
+LINUX = "Linux"
+WINDOWS = "Windows"
+MAC = "Darwin"
