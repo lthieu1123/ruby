@@ -105,9 +105,7 @@ class LazadaSumAmoutReport(models.TransientModel):
             })
             order_dict.update({order_id: item_dict})
             create_data.update({order_no: order_dict})
-        print('create_data: ', create_data)
         csv_data = self._create_lzd_sum(data=create_data)
-        print('csv_data: ',csv_data)
         csv_file = self._create_csv_file(csv_data=csv_data)
         vals = {
             'has_csv': False,

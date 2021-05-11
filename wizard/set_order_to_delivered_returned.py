@@ -171,7 +171,7 @@ class SetOrderToDelivered(models.TransientModel):
                     shop_name = rec.shop_id.name
                     if rec.order_number not in _li_order_number:
                         _data.update({
-                            shop_name: _data.get(shop_name) - 1
+                            shop_name: _data.get(shop_name,"Không xác định") - 1
                         })
                         count -= 1
                 self.json_field = json.dumps(_data)
@@ -216,7 +216,8 @@ class SetOrderToDelivered(models.TransientModel):
                         self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
-                        shop_name = tracking_ids[0].shop_id.name
+                        _shop_name = tracking_ids[0].shop_id.name
+                        shop_name = "Không xác định" if not _shop_name else _shop_name
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -254,7 +255,8 @@ class SetOrderToDelivered(models.TransientModel):
                     rec.delta = len(delta)
                     rec.tracking_code_count = rec.tracking_code_count + \
                         len(delta)
-                    shop_name = tracking_id[0].shop_id.name
+                    _shop_name = tracking_id[0].shop_id.name
+                    shop_name = "Không xác định" if not _shop_name else _shop_name
                     new_delta = len(delta)
                     if _data.get(shop_name, False):
                         new_delta = _data.get(shop_name) + new_delta
@@ -344,7 +346,8 @@ class SetOrderToReturned(models.TransientModel):
                         self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
-                        shop_name = tracking_ids[0].shop_id.name
+                        _shop_name = tracking_ids[0].shop_id.name
+                        shop_name = "Không xác định" if not _shop_name else _shop_name
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -377,7 +380,7 @@ class SetOrderToReturned(models.TransientModel):
                     shop_name = rec.shop_id.name
                     if rec.order_number not in _li_order_number:
                         _data.update({
-                            shop_name: _data.get(shop_name) - 1
+                            shop_name: _data.get(shop_name,"Không xác định") - 1
                         })
                         count -= 1
                 self.json_field = json.dumps(_data)

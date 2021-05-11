@@ -89,13 +89,17 @@ class LazadaReportOrderNumberReturned(models.Model):
     _auto = False
 
     # Allow override model fields
-    row = fields.Date(string='Ngày trả')
+    row = fields.Date(string='Ngày trả',search='_search_date')
     measure = fields.Float('# số lượng', required=True)
     order_number = fields.Char('Order Number', required=True)
     shop_id = fields.Many2one('sale.order.management.shop','Shop')
 
 
     # --------------------------------------- functions -------------------------------------------------
+    @api.multi
+    def _search_date(self, operator, value):
+        print('operator: ',operator)
+        print('value: ',value)
 
     def _select(self, sql = ''):
         """ SQL to select fields

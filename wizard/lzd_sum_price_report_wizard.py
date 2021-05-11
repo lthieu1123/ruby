@@ -131,7 +131,6 @@ class LzaSumPriceReport(models.TransientModel):
         }
 
     def _create_pivot_table(self, df=None):
-        print("df: ",df)
         table = pd.pivot_table(df, values=[AMOUNT], index=[ORDER_NO, SELLER_SKU], columns=[
                                FEE_NAME], aggfunc=np.sum, margins=True)
         _tmp_sum_table = pd.concat([d.append(d.sum().rename((k, 'Total')))for k, d in table.groupby(
@@ -154,7 +153,6 @@ class LzaSumPriceReport(models.TransientModel):
     @api.multi
     def btn_apply(self):
         self.ensure_one()
-        print('self.origin_price_ids.origin_price: ',self.origin_price_ids.mapped('origin_price'))
         _data = json.loads(self.data) if self.data else {}
         seller_sku = _data.get('seller_sku')
         order_number = _data.get('order_number')

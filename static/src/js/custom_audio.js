@@ -49,6 +49,8 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                 ]
                             }).then(function(result){
                                 var _res = result.result
+                                console.log('result: ',result)
+                                console.log('_res: ',_res)
                                 if (_res === true){
                                     var el = $("[name='existed_tracking_code']")[0]
                                     var isFoundInTable = false;
@@ -122,6 +124,8 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                         }
                                     ]
                                 }).then(function(result){
+                                    console.log('result: ',result)
+                                    console.log('_res: ',_res)
                                     var _res = result.result
                                     if (_res === true){
                                         var el = $("[name='existed_tracking_code']")[0]

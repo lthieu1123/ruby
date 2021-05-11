@@ -55,16 +55,17 @@ class SetOrderAsb(models.AbstractModel):
             ]
         }[method_send]
 
-        if self._name == 'set.order.to.delivered.shopee':
-            tracking_id = self.env['shopee.management'].search(_first_domain)
-            if not len(tracking_id):
-                existed = self.env['shopee.management'].search(_second_domain)
-                if len(existed):
-                    result.update({'result': 'existed'})
-                else:
-                    result.update({'result': False})
+        # if self._name == 'set.order.to.delivered.shopee':
+        tracking_id = self.env['shopee.management'].search(_first_domain)
+        if not len(tracking_id):
+            existed = self.env['shopee.management'].search(_second_domain)
+            if len(existed):
+                result.update({'result': 'existed'})
             else:
-                result.update({'result': True})
+                result.update({'result': False})
+        else:
+            result.update({'result': True})
+
 
         # if self._name == 'set.order.to.returned.shopee':
         #     tracking_id = self.env['shopee.management'].search([
@@ -114,7 +115,7 @@ class SetOrderToDeliveredShopee(models.TransientModel):
                     shop_name = rec.shop_id.name
                     if rec.ma_don_hang not in _li_ma_don_hang:
                         _data.update({
-                            shop_name: _data.get(shop_name) - 1
+                            shop_name: _data.get(shop_name,'Không xác định') - 1
                         })
                         count -= 1
                 self.json_field = json.dumps(_data)
@@ -164,7 +165,8 @@ class SetOrderToDeliveredShopee(models.TransientModel):
                         self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
-                        shop_name = tracking_ids[0].shop_id.name
+                        _shop_name = tracking_ids[0].shop_id.name
+                        shop_name = "Không xác định" if not _shop_name else _shop_name
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
@@ -282,7 +284,7 @@ class SetOrderToReturnedShopp(models.TransientModel):
                     shop_name = rec.shop_id.name
                     if rec.ma_don_hang not in _li_ma_don_hang:
                         _data.update({
-                            shop_name: _data.get(shop_name) - 1
+                            shop_name: _data.get(shop_name,'Không xác định') - 1
                         })
                         count -= 1
                 self.json_field = json.dumps(_data)
@@ -331,7 +333,8 @@ class SetOrderToReturnedShopp(models.TransientModel):
                         self.tracking_code_show = _object + self.tracking_code_show
                         new_delta = len(delta)
                         self.tracking_code_count = self.tracking_code_count + new_delta
-                        shop_name = tracking_ids[0].shop_id.name
+                        _shop_name = tracking_ids[0].shop_id.name
+                        shop_name = "Không xác định" if not _shop_name else _shop_name
                         if _data.get(shop_name, False):
                             new_delta = _data.get(shop_name) + new_delta
                         _data.update({
