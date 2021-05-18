@@ -38,7 +38,8 @@
         'views/directory_shop_views.xml',
         'views/shopee_menu_views.xml',
         'views/menu_views.xml',
-        'views/sendo_tiki_views.xml'
+        'views/sendo_tiki_views.xml',
+        'report/functions.xml'
     ],
     'demo': [],
     'qweb': [

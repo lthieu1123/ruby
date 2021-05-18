@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <!-- Add you code here -->
+        <function model="lazada.report.order.number.delivered" name="update_report"/>
+        <function model="lazada.report.order.number.returned" name="update_report"/>
+        <function model="sale.order.management.returned.report" name="update_report"/>
+        <function model="sale.order.management.delivered.report" name="update_report"/>
+        <function model="shopee.price.avg.report" name="update_report"/>        
+    </data>
+</odoo>

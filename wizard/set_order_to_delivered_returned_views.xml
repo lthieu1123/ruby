@@ -126,13 +126,15 @@
                             </ul>
                         </div>
                         <group>
-                            <field name="existed_tracking_code" invisible="1"/>
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
                             <group>
                                 <group>
                                     <field name="input_type"/>
+                                </group>
+                                <group>
+                                    <field name="existed_tracking_code" invisible="0" readonly="1"/>
                                 </group>
                             </group>
                         </group>
@@ -236,13 +238,16 @@
                             </ul>
                         </div>
                         <group>
-                            <field name="existed_tracking_code" invisible="1"/>
+                            <!-- <field name="existed_tracking_code" invisible="1"/> -->
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
                             <group>
                                 <group>
                                     <field name="input_type"/>
+                                </group>
+                                <group>
+                                    <field name="existed_tracking_code" invisible="0" readonly="1"/>
                                 </group>
                             </group>
                         </group>

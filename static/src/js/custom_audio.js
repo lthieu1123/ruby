@@ -48,16 +48,26 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                     }
                                 ]
                             }).then(function(result){
-                                var _res = result.result
-                                console.log('result: ',result)
-                                console.log('_res: ',_res)
+                                var _res = result.result;
                                 if (_res === true){
-                                    var el = $("[name='existed_tracking_code']")[0]
+                                    var el = $("[name='existed_tracking_code']")[0];
+                                    var el1 = $("[name='existed_order_code']")[0];
                                     var isFoundInTable = false;
-                                    var text = el.value;
-                                    if (text.includes(current)){
-                                        isFoundInTable = true;
+                                    var text = el.innerText;
+                                    if (el1 && el1 !== undefined) {
+                                        var text1 = el1.innerText;
                                     }
+                                                                        
+                                    if (_method_send && _method_send.includes('order_code')){
+                                        if(text1.includes(current)){
+                                            isFoundInTable = true;
+                                        }
+                                    }else{
+                                        if(text.includes(current)){
+                                            isFoundInTable = true;
+                                        }
+                                    }
+
                                     if (isFoundInTable){
                                         var e = document.getElementById("audioDuplicated");
                                         e.play();
@@ -77,7 +87,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                         _self.addListenerToTrackingCode = true;
                         if (iid) clearInterval(iid);
                     }else{
-                        tracking_code_count_id = document.getElementsByName('tracking_code_ids')
+                        tracking_code_count_id = document.getElementsByName('tracking_code_ids');
                         if (loopCount++ > 30 && iid) clearInterval(iid);
                     }
                 },100);
@@ -124,15 +134,23 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                                         }
                                     ]
                                 }).then(function(result){
-                                    console.log('result: ',result)
-                                    console.log('_res: ',_res)
-                                    var _res = result.result
+                                    var _res = result.result;
                                     if (_res === true){
-                                        var el = $("[name='existed_tracking_code']")[0]
+                                        var el = $("[name='existed_tracking_code']")[0];
+                                        var el1 = $("[name='existed_order_code']")[0];
                                         var isFoundInTable = false;
-                                        var text = el.value;
-                                        if (text.includes(current)){
-                                            isFoundInTable = true;
+                                        var text = el.innerText;
+                                        if (el1 && el1 !== undefined) {
+                                            var text1 = el1.innerText;
+                                        }
+                                        if (_method_send && _method_send.includes('order_code')){
+                                            if(text1.includes(current)){
+                                                isFoundInTable = true;
+                                            }
+                                        }else{
+                                            if(text.includes(current)){
+                                                isFoundInTable = true;
+                                            }
                                         }
                                         if (isFoundInTable){
                                             var e = document.getElementById("audioDuplicated");
@@ -152,7 +170,7 @@ odoo.define('ecc_approval_process.FormController', function (require) {
                             });
                             if (iid) clearInterval(iid);
                         }else{
-                            tracking_code_count_id = document.getElementsByName('tracking_code_ids')
+                            tracking_code_count_id = document.getElementsByName('tracking_code_ids');
                             if (loopCount++ > 30 && iid) clearInterval(iid);
                         }
                     },100);

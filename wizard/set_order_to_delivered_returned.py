@@ -107,12 +107,12 @@ class SetOrderAsb(models.AbstractModel):
         result = {}
         if self._name == 'set.order.to.delivered':
             tracking_id = self.env['sale.order.management'].search([
-                ('tracking_code', '=', args.get('order_number')),
+                ('tracking_code', '=ilike', args.get('order_number')),
                 ('state', '=', 'pending')
             ])
             if not len(tracking_id):
                 existed = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', args.get('order_number')),
+                    ('tracking_code', '=ilike', args.get('order_number')),
                     ('state', '=', 'delivered')
                 ])
                 if len(existed):
@@ -124,12 +124,12 @@ class SetOrderAsb(models.AbstractModel):
 
         if self._name == 'set.order.to.returned':
             tracking_id = self.env['sale.order.management'].search([
-                ('tracking_code', '=', args.get('order_number')),
+                ('tracking_code', '=ilike', args.get('order_number')),
                 ('state', '=', 'delivered')
             ])
             if not len(tracking_id):
                 existed = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', args.get('order_number')),
+                    ('tracking_code', '=ilike', args.get('order_number')),
                     ('state', '=', 'returned')
                 ])
                 if len(existed):
@@ -197,7 +197,7 @@ class SetOrderToDelivered(models.TransientModel):
             for code in _li_code:
                 code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', code)
+                    ('tracking_code', '=ilike', code)
                 ])
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
@@ -239,7 +239,7 @@ class SetOrderToDelivered(models.TransientModel):
             if rec.tracking_code_ids:
                 tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', tracking_code),
+                    ('tracking_code', '=ilike', tracking_code),
                     ('state', '=', 'pending')
                 ])
                 tracking_ids = tracking_id.ids
@@ -325,7 +325,7 @@ class SetOrderToReturned(models.TransientModel):
             for code in _li_code:
                 code = code.upper()
                 tracking_ids = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', code)
+                    ('tracking_code', '=ilike', code)
                 ])
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
@@ -399,7 +399,7 @@ class SetOrderToReturned(models.TransientModel):
             if rec.tracking_code_ids:
                 tracking_code = rec.tracking_code_ids.upper()
                 tracking_id = self.env['sale.order.management'].search([
-                    ('tracking_code', '=', tracking_code),
+                    ('tracking_code', '=ilike', tracking_code),
                     ('state', '=', 'delivered')
                 ])
                 tracking_ids = tracking_id.ids

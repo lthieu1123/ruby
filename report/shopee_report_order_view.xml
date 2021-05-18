@@ -26,7 +26,7 @@
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
                     <filter name="today" string="To day"
-                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                        domain="[('row', '=', context_today().strftime('%Y-%m-%d'))]"/>
                     <group expand="0" string="Group By">
                         <filter name="sku_san_pham" string="SKU sản phẩm" domain="[]" context="{'group_by': 'sku_san_pham'}"/>
                         <filter name="ten_san_pham" string="Tên sản phẩm" domain="[]" context="{'group_by': 'ten_san_pham'}"/>

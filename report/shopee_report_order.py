@@ -31,7 +31,7 @@ class ShopeeAvgPrice(models.Model):
             """
                 select
                     min(sm.id) as id,
-                    sm.deliver_date as row,
+                    (sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row,
                     sum(sm.so_luong) as measure,
                     sum(sm.gia_uu_dai * sm.so_luong)::decimal(16,2) as price_total,
                     (sum(sm.gia_uu_dai * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,

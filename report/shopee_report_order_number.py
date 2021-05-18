@@ -31,7 +31,7 @@ class ShopeeReportOrderNumberDelivered(models.Model):
                     count (distinct sm.order_number) as measure,
                     sm.order_number as order_number,
                     sm.shop_id as shop_id,
-                    sm.deliver_date as row
+                    (sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row
             """
         ]
         return super()._select(sql)
@@ -108,7 +108,7 @@ class LazadaReportOrderNumberReturned(models.Model):
                     count(*) as measure,
                     sm.order_number as order_number,
                     sm.shop_id as shop_id,
-                    sm.deliver_date as row
+                    (sm.return_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row
             """
         ]
         return super()._select(sql)
@@ -131,7 +131,7 @@ class LazadaReportOrderNumberReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.deliver_date,
+                    sm.return_date,
                     sm.shop_id,
                     sm.order_number
             """

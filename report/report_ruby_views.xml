@@ -34,7 +34,7 @@
                     <field name="row"/>
                     <field name="seller_sku"/>
                     <filter name="today" string="To day"
-                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                        domain="[('row', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 </search>
             </field>
         </record>
@@ -84,7 +84,7 @@
                     <field name="row"/>
                     <field name="seller_sku"/>
                     <filter name="today" string="To day"
-                        domain="[('row', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('row','&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                        domain="[('row', '=', context_today().strftime('%Y-%m-%d'))]"/>
                 </search>
             </field>
         </record>

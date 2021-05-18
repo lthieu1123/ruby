@@ -130,3 +130,7 @@ class BaseReport(models.AbstractModel):
         if len(result) == 1:
             return result
         return list(filter(lambda group: group.get('__count',False),result))   
+
+    @api.model
+    def update_report(self):
+        self.execute_query_to_create_view()

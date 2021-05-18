@@ -20,6 +20,7 @@ class SetOrderAsb(models.AbstractModel):
     _description = "Set Order Abstract"
 
     method_send = fields.Selection(string='Phương thức gửi',selection=[('order_code','Mã đơn hàng'),('tracking_code','Mã vận đơn')], required=True, default='tracking_code')
+    existed_order_code = fields.Text('Existed Order Code')
 
     @api.model
     def find_order(self, args):
@@ -36,21 +37,21 @@ class SetOrderAsb(models.AbstractModel):
             _second_state = 'returned'
         _first_domain = {
             'tracking_code': [
-                ('ma_van_don', '=', order_number),
+                ('ma_van_don', '=ilike', order_number),
                 ('state', '=', _first_state)
             ],
             'order_code': [
-                ('ma_don_hang', '=', order_number),
+                ('ma_don_hang', '=ilike', order_number),
                 ('state', '=', _first_state)
             ]
         }[method_send]
         _second_domain = {
             'tracking_code': [
-                ('ma_van_don', '=', order_number),
+                ('ma_van_don', '=ilike', order_number),
                 ('state', '=', _second_state)
             ],
             'order_code': [
-                ('ma_don_hang', '=', order_number),
+                ('ma_don_hang', '=ilike', order_number),
                 ('state', '=', _second_state)
             ]
         }[method_send]
@@ -122,8 +123,12 @@ class SetOrderToDeliveredShopee(models.TransientModel):
                 self.note = self._create_table(_data)
                 self.tracking_code_count = count
                 self.existed_tracking_data = current_data
-        self.existed_tracking_code = self.tracking_code_show.mapped(
+        existed_order_code = self.tracking_code_show.mapped(
             lambda r: r.ma_don_hang)
+        self.existed_order_code = ','.join(map(str,existed_order_code))
+        existed_tracking_code = self.tracking_code_show.mapped(
+            lambda r: r.ma_van_don)
+        self.existed_tracking_code = ','.join(map(str,existed_tracking_code))
 
     @api.onchange('input_data')
     def _onchange_input_data(self):
@@ -141,11 +146,11 @@ class SetOrderToDeliveredShopee(models.TransientModel):
             for code in _li_code:
                 if self.method_send == 'tracking_code':
                     tracking_ids = self.env['shopee.management'].search([
-                        ('ma_van_don', '=', code)
+                        ('ma_van_don', '=ilike', code)
                     ])
                 else:
                     tracking_ids = self.env['shopee.management'].search([
-                        ('ma_don_hang', '=', code)
+                        ('ma_don_hang', '=ilike', code)
                     ])
 
                 if not len(tracking_ids):
@@ -188,12 +193,12 @@ class SetOrderToDeliveredShopee(models.TransientModel):
             if rec.tracking_code_ids:
                 if self.method_send == 'tracking_code':
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_van_don', '=', rec.tracking_code_ids),
+                        ('ma_van_don', '=ilike', rec.tracking_code_ids),
                         ('state', '=', 'pending')
                     ])
                 else:
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_don_hang', '=', rec.tracking_code_ids),
+                        ('ma_don_hang', '=ilike', rec.tracking_code_ids),
                         ('state', '=', 'pending')
                     ])
                 # tracking_ids = tracking_id.ids
@@ -291,8 +296,12 @@ class SetOrderToReturnedShopp(models.TransientModel):
                 self.note = self._create_table(_data)
                 self.tracking_code_count = count
                 self.existed_tracking_data = current_data
-        self.existed_tracking_code = self.tracking_code_show.mapped(
+        existed_order_code = self.tracking_code_show.mapped(
             lambda r: r.ma_don_hang)
+        self.existed_order_code = ','.join(map(str,existed_order_code))
+        existed_tracking_code = self.tracking_code_show.mapped(
+            lambda r: r.ma_van_don)
+        self.existed_tracking_code = ','.join(map(str,existed_tracking_code))
 
     @api.onchange('input_data')
     def _onchange_input_data(self):
@@ -310,11 +319,11 @@ class SetOrderToReturnedShopp(models.TransientModel):
             for code in _li_code:
                 if self.method_send == 'tracking_code':
                     tracking_ids = self.env['shopee.management'].search([
-                        ('ma_van_don', '=', code)
+                        ('ma_van_don', '=ilike', code)
                     ])
                 else:
                     tracking_ids = self.env['shopee.management'].search([
-                        ('ma_don_hang', '=', code)
+                        ('ma_don_hang', '=ilike', code)
                     ])
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
@@ -356,12 +365,12 @@ class SetOrderToReturnedShopp(models.TransientModel):
             if rec.tracking_code_ids:
                 if self.method_send == 'tracking_code':
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_van_don', '=', rec.tracking_code_ids),
+                        ('ma_van_don', '=ilike', rec.tracking_code_ids),
                         ('state', '=', 'delivered')
                     ])
                 else:
                     tracking_id = self.env['shopee.management'].search([
-                        ('ma_don_hang', '=', rec.tracking_code_ids),
+                        ('ma_don_hang', '=ilike', rec.tracking_code_ids),
                         ('state', '=', 'delivered')
                     ])
                 tracking_ids = tracking_id.ids

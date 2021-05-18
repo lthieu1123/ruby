@@ -31,7 +31,7 @@ class LazadaReportOrderNumberDelivered(models.Model):
                     count (distinct sm.order_number) as measure,
                     sm.order_number as order_number,
                     sm.shop_id as shop_id,
-                    sm.deliver_date as row
+                    (sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row
             """
         ]
         return super()._select(sql)
@@ -89,17 +89,13 @@ class LazadaReportOrderNumberReturned(models.Model):
     _auto = False
 
     # Allow override model fields
-    row = fields.Date(string='Ngày trả',search='_search_date')
+    row = fields.Date(string='Ngày trả')
     measure = fields.Float('# số lượng', required=True)
     order_number = fields.Char('Order Number', required=True)
     shop_id = fields.Many2one('sale.order.management.shop','Shop')
 
 
     # --------------------------------------- functions -------------------------------------------------
-    @api.multi
-    def _search_date(self, operator, value):
-        print('operator: ',operator)
-        print('value: ',value)
 
     def _select(self, sql = ''):
         """ SQL to select fields
@@ -112,7 +108,7 @@ class LazadaReportOrderNumberReturned(models.Model):
                     count(*) as measure,
                     sm.order_number as order_number,
                     sm.shop_id as shop_id,
-                    sm.deliver_date as row
+                    (sm.return_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row
             """
         ]
         return super()._select(sql)
@@ -135,7 +131,7 @@ class LazadaReportOrderNumberReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.deliver_date,
+                    sm.return_date,
                     sm.shop_id,
                     sm.order_number
             """

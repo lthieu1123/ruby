@@ -89,7 +89,6 @@
                             </ul>
                         </div>
                         <group>
-                            <field name="existed_tracking_code" invisible="1"/>
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
@@ -97,6 +96,10 @@
                                 <group>
                                     <field name="input_type"/>
                                     <field name="method_send"/>
+                                </group>
+                                <group>
+                                    <field name="existed_tracking_code" invisible="1" readonly="1" string="Mã vận đơn"/>
+                                    <field name="existed_order_code" invisible="0" readonly="1" string="Mã đơn hàng"/>
                                 </group>
                             </group>
                         </group>
@@ -178,15 +181,14 @@
                         </group>
                         <field name="delta" invisible="1"/>
                         <field name="tracking_code_not_found" invisible="1"/>                        
-                        <field name="delta" invisible="1"/>
-                        <field name="tracking_code_not_found" invisible="1"/>
                         <div>
                             <ul>
                                 <li>Bắn mã code thứ 2 vào ô Mã vận đơn</li>
                             </ul>
                         </div>
                         <group>
-                            <field name="existed_tracking_code" invisible="1"/>
+                            <!-- <field name="existed_tracking_code" invisible="0" readonly="1" string="Mã vận đơn"/>
+                            <field name="existed_order_code" invisible="0" readonly="1" string="Mã đơn hàng"/> -->
                             <field name="existed_tracking_data" invisible="1" widget="many2many_tags"/>
                         </group>
                         <group>
@@ -194,6 +196,10 @@
                                 <group>
                                     <field name="input_type"/>
                                     <field name="method_send"/>
+                                </group>
+                                <group>
+                                    <field name="existed_tracking_code" invisible="1" readonly="1" string="Mã vận đơn"/>
+                                    <field name="existed_order_code" invisible="0" readonly="1" string="Mã đơn hàng"/>
                                 </group>
                             </group>
                         </group>

@@ -29,7 +29,7 @@ class RubyReportDelivered(models.Model):
             """
                 select row_number() OVER () as id,
                 count(*) as measure,
-                sm.deliver_date as row,
+                (sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row,
                 sm.unit_price as unit_price,
                 sm.seller_sku as seller_sku,
                 sm.id as _id
@@ -105,7 +105,7 @@ class RubyReportReturned(models.Model):
             """
                 select row_number() OVER () as id,
                 count(*) as measure,
-                sm.return_date as row,
+                (sm.return_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row,
                 sm.unit_price as unit_price,
                 sm.seller_sku as seller_sku,
                 sm.id as _id
@@ -131,7 +131,7 @@ class RubyReportReturned(models.Model):
         sql = [
             """
                 group by
-                    sm.deliver_date,
+                    sm.return_date,
                     sm.seller_sku,
                     sm.id
             """
