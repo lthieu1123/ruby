@@ -66,7 +66,10 @@ class LazadaSumAmoutReport(models.TransientModel):
         create_data = {}
         data_file = base64.b64decode(self.file_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike,sep=',',encoding='utf-8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS,ODER_ITEM_NO, SELLER_SKU], dtype={ORDER_NO: int})
+        try:
+            result = pd.read_csv(csv_filelike,sep=',',encoding='utf-8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS,ODER_ITEM_NO, SELLER_SKU], dtype={ORDER_NO: int})
+        except:
+            result = pd.read_csv(csv_filelike,sep=';',encoding='utf-8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS,ODER_ITEM_NO, SELLER_SKU], dtype={ORDER_NO: int})
         for index, row in result.iterrows():
             fee_name = row[FEE_NAME].strip()
             if fee_name == MARKETING_SOLUTION_SOCIAL_MEDIA_ADVERTISING:

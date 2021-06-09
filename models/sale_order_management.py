@@ -247,7 +247,10 @@ class SaleOrderManagment(models.Model):
             ])
             directory = "{}/{}".format(_import_directory,entry)
             #Reading csv file
-            result = pd.read_csv(directory,sep=';',encoding='utf8')
+            try:
+                result = pd.read_csv(directory,sep=';',encoding='utf8')
+            except:
+                result = pd.read_csv(directory,sep=',',encoding='utf8')
             del_count = skip_count = index = 0
             _err = None
             #browse data from dataframe pandas
@@ -385,7 +388,10 @@ class SaleOrderManagment(models.Model):
         
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
+        try:
+            result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
+        except:
+            result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
         lazada_formula_ids = self.env['lazada.formula'].search([])
         data = {}
         # data_csv = {}
@@ -576,7 +582,7 @@ class SaleOrderManagment(models.Model):
         
         for entry in import_directory_file:
             shop_code = entry.split('.')[0]
-            shop_id = self.env['sale.order.management.shopee.shop'].search([
+            shop_id = self.env['sale.order.management.shop'].search([
                 ('code','=',shop_code)
             ])
             directory = "{}/{}".format(_import_directory,entry)

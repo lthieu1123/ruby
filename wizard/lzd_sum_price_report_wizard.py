@@ -69,8 +69,12 @@ class LzaSumPriceReport(models.TransientModel):
         context = self.env.context.copy()
         data_file = base64.b64decode(self.file_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike, sep=',', encoding='utf-8', usecols=[
-                             FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS, ODER_ITEM_NO, SELLER_SKU, COMMENT], dtype={ORDER_NO: str})
+        try:
+            result = pd.read_csv(csv_filelike, sep=',', encoding='utf-8', usecols=[
+                                FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS, ODER_ITEM_NO, SELLER_SKU, COMMENT], dtype={ORDER_NO: str})
+        except:
+            result = pd.read_csv(csv_filelike, sep=';', encoding='utf-8', usecols=[
+                             FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS, ODER_ITEM_NO, SELLER_SKU, COMMENT], dtype={ORDER_NO: str})                    
         _now = datetime.datetime.timestamp(datetime.datetime.now())
         order_number = []
         seller_sku = []

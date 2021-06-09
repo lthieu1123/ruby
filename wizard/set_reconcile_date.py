@@ -32,7 +32,10 @@ class ShopAnnounce(models.TransientModel):
     def _calculate_price_by_order_number(self, rec_ids, sale_director_file, _sale_done_director):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8')
+            try:
+                result = pd.read_csv(directory,sep=',',encoding='utf8')
+            except:
+                result = pd.read_csv(directory,sep=';',encoding='utf8')
             
             for index, row in result.iterrows():
                 fee_name = row[FEE_NAME].strip()
@@ -131,7 +134,10 @@ class ShopAnnounce(models.TransientModel):
     def _reconcile_lazada_data(self, rec_ids, sale_director_file, _sale_done_director):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
-            result = pd.read_csv(directory,sep=',',encoding='utf8')
+            try:
+                result = pd.read_csv(directory,sep=',',encoding='utf8')
+            except:
+                result = pd.read_csv(directory,sep=';',encoding='utf8')
             
             for index, row in result.iterrows():
                 fee_name = row[FEE_NAME].strip()
@@ -153,7 +159,10 @@ class ShopAnnounce(models.TransientModel):
             if match:
                 extension = match.group(1)
             if extension == "csv":
-                result = pd.read_csv(directory,sep=',',encoding='utf8')
+                try:
+                    result = pd.read_csv(directory,sep=',',encoding='utf8')
+                except:
+                    result = pd.read_csv(directory,sep=';',encoding='utf8')
             elif extension == "xlsx" or extension == "xls":
                 result = pd.read_excel(directory,dtype={'Mã đơn hàng': str})
             else:

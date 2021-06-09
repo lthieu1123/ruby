@@ -89,7 +89,10 @@ class LazadaReconcileFee(models.TransientModel):
         
         data_file = base64.b64decode(self.file_data)
         csv_filelike = io.BytesIO(data_file)
-        result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
+        try:
+            result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
+        except:
+            result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
         data_csv = {}
         
         for index, row in result.iterrows():
