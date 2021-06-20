@@ -660,7 +660,11 @@ class SaleOrderManagment(models.Model):
             }
             #Get data from csv row and add it to dict
             for k,v in _header.items():
-                _data = row[k]
+                try:
+                    _data = row[k]
+                except Exception as err:
+                    _logger.warning('Không tìm thấy cột có header là: [{}]'.format(k))
+                    _data = None
                 if k == tracking_code and str(_data) != 'nan':
                     _data = str(_data).upper()
                 vals.update({
