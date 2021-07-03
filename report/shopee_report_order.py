@@ -17,7 +17,7 @@ class ShopeeAvgPrice(models.Model):
     # unit_price = fields.Float('Giá trung bình', required=True, digits=dp.get_precision('Vietnam Dong Digit'))
     price_avg = fields.Float('Giá trung bình', required=True, group_operator='avg')
     price_total = fields.Float('Giá Tổng',)
-    sku_san_pham = fields.Char('SKU sản phẩm',)
+    sku_san_pham = fields.Char('SKU phân loại hàng',)
     ten_san_pham = fields.Char('Tên sản phẩm')
 
 
@@ -35,7 +35,7 @@ class ShopeeAvgPrice(models.Model):
                     sum(sm.so_luong) as measure,
                     sum(sm.gia_uu_dai * sm.so_luong)::decimal(16,2) as price_total,
                     (sum(sm.gia_uu_dai * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,
-                    sm.sku_san_pham as sku_san_pham,
+                    sm.sku_phan_loai_hang as sku_san_pham,
                     sm.ten_san_pham as ten_san_pham
             """
         ]
@@ -59,11 +59,11 @@ class ShopeeAvgPrice(models.Model):
         sql = [
             """
                 group by
-                    sm.sku_san_pham,
+                    sm.sku_phan_loai_hang,
                     sm.deliver_date,
                     sm.so_luong,
                     sm.ten_san_pham,
-                    sm.sku_san_pham
+                    sm.sku_phan_loai_hang
             """
         ]
         return super()._select(sql)
