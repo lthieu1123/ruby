@@ -225,7 +225,11 @@ class ShopeeManagment(models.Model):
                 #Get data from csv row and add it to dict
                 for key in _li_key:
                     _header = shopee_header.get(key)
-                    _data = str(row[key]) if str(row[key]) != 'nan' else None
+                    try:
+                        _data = str(row[key]) if str(row[key]) != 'nan' else None
+                    except Exception as err:
+                        _logger.warning('Không tìm thấy cột có header là: [{}]'.format(key))
+                        _data = None
                     _data = _data if _header != 'Mã vận đơn' else _data.upper()
                     vals.update({
                         _header :  _data
