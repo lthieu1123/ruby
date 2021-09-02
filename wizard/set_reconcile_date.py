@@ -64,15 +64,16 @@ class ShopAnnounce(models.TransientModel):
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
         #Verify date end data will be import first
+        #change created_at to deliver_date
         count = so_mgt.search_count([
-            ('created_at','>=',end_datetime)
+            ('deliver_date','>=',end_datetime)
         ])
         if not (count):
             raise exceptions.ValidationError(_('Không tìm thấy dữ liệu đến ngày kết thúc {}').format(str(self.date_end)))
         #Find all import data from start date to end date
         rec_ids = so_mgt.search([
-            ('created_at','>=',start_datetime),
-            ('created_at','<=',end_datetime),
+            ('deliver_date','>=',start_datetime),
+            ('deliver_date','<=',end_datetime),
             ('state','=','delivered'),
             ('shop_id','in',_li_shop)
         ])
