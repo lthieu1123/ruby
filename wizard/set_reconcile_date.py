@@ -135,17 +135,20 @@ class ShopAnnounce(models.TransientModel):
     def _reconcile_lazada_data(self, rec_ids, sale_director_file, _sale_done_director):
         for entry in sale_director_file:
             directory = "{}/{}".format(_sale_done_director,entry)
-            try:
-                result = pd.read_csv(directory,sep=',',encoding='utf8')
-            except:
-                result = pd.read_csv(directory,sep=';',encoding='utf8')
-            
+            # try:
+            #     result = pd.read_csv(directory,sep=',',encoding='utf8')
+            # except:
+            #     result = pd.read_csv(directory,sep=';',encoding='utf8')
+            result = pd.read_excel(directory,dtype={ORDER_NO: str,})
             for index, row in result.iterrows():
                 fee_name = row[FEE_NAME].strip()
                 if fee_name != ITEM_PRICE:
                     continue
-                order_id = int(row[ODER_ITEM_NO])
-                rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
+                # order_id = int(row[ODER_ITEM_NO])
+                # rec = rec_ids.filtered(lambda r: r.order_item_id == str(order_id))
+                #Change search data from order item number to order number
+                order_no = int(row[ORDER_NO])
+                rec = rec_ids.filtered(lambda r: r.order_number == str(order_no))
                 if rec.id:
                     rec.update({
                         'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),

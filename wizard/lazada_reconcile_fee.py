@@ -90,13 +90,13 @@ class LazadaReconcileFee(models.TransientModel):
         data_file = base64.b64decode(self.file_data)
         csv_filelike = io.BytesIO(data_file)
         try:
-            result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
-            #result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', dtype={ORDER_NO: str,})
+            #result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
+            result = pd.read_excel(csv_filelike,dtype={ORDER_NO: str,})
         except:
-            result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
-            #result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', dtype={ORDER_NO: str,})
+            #result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=[FEE_NAME, AMOUNT, ORDER_NO, ORDER_STATUS], dtype={ORDER_NO: str,})
+            result = pd.read_excel(csv_filelike,dtype={ORDER_NO: str,})
         data_csv = {}
-        
+        print('going to loop')
         for index, row in result.iterrows():
             if row[ORDER_STATUS] == 'Pending':
                 continue
@@ -138,15 +138,17 @@ class LazadaReconcileFee(models.TransientModel):
             del data_csv[key]
         
         csv_file = self._create_csv_file(data_csv)
+        print('out loop to loop')
         vals = {
             'has_csv': False,
+            'state': 'end',
         }
         if csv_file:
             vals.update({
                 'has_csv': True,
-                'state': 'end',
                 'csv_file': csv_file
             })
+        print('Vals: ',vals)
         self.write(vals)
         return {
             'name': 'Đối Soát Chi Phí',

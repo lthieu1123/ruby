@@ -14,6 +14,7 @@
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
+                    <field name="so_dien_thoai"/>
                     <field name="gia_goc"/>
                     <field name="so_luong"/>
                     <field name="tien_don_hang"/>

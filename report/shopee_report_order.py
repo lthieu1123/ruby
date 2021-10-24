@@ -27,16 +27,18 @@ class ShopeeAvgPrice(models.Model):
         """ SQL to select fields
             @param {SQL} Query
         """
+        #Change 
         sql = [
             """
                 select
                     min(sm.id) as id,
-                    (sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row,
+                --	(sm.deliver_date at time zone 'utc' at time zone 'Asia/Ho_Chi_Minh')::date as row,
+                    sm.deliver_date as row,
                     sum(sm.so_luong) as measure,
                     sum(sm.gia_uu_dai * sm.so_luong)::decimal(16,2) as price_total,
                     (sum(sm.gia_uu_dai * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,
                     sm.sku_phan_loai_hang as sku_san_pham,
-                    sm.ten_san_pham as ten_san_pham
+                    sm.ten_san_pham as ten_san_pham from shopee_management sm
             """
         ]
         return super()._select(sql)

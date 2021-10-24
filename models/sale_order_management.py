@@ -388,10 +388,11 @@ class SaleOrderManagment(models.Model):
         
         data_file = base64.b64decode(fiel_data)
         csv_filelike = io.BytesIO(data_file)
-        try:
-            result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
-        except:
-            result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
+        # try:
+        #     result = pd.read_csv(csv_filelike,sep=',',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
+        # except:
+        #     result = pd.read_csv(csv_filelike,sep=';',encoding='utf8', usecols=['Fee Name','Amount', 'Order No.', 'Order Item Status'], dtype={'Order No.': str,})
+        result = pd.read_excel(csv_filelike,dtype={ORDER_NO: str,})
         lazada_formula_ids = self.env['lazada.formula'].search([])
         data = {}
         # data_csv = {}

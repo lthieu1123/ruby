@@ -328,7 +328,7 @@ class SetOrderToReturnedShopp(models.TransientModel):
                 if not len(tracking_ids):
                     code_not_found += code+"\r\n"
                 else:
-                    if tracking_ids[0].state != 'pending':
+                    if tracking_ids[0].state != 'delivered':
                         code_used += code+"\r\n"
                     else:
                         tracking_ids_id = tracking_ids.ids
