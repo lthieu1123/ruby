@@ -54,6 +54,7 @@
                     <field name="ma_don_hang"/>
                     <field name="sku_san_pham"/>
                     <field name="ten_san_pham"/>
+                    <field name="sku_phan_loai_hang"/>
                     <field name="ngay_dat_hang"/>
                     <field name="gia_uu_dai"/>
                     <field name="so_luong"/>

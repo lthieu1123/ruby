@@ -266,3 +266,5 @@ SELLER_SKU = 'Seller SKU'
 LINUX = "Linux"
 WINDOWS = "Windows"
 MAC = "Darwin"
+
+OPENED_FILED_REGEX = r'^\~\$'

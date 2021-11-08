@@ -4,7 +4,7 @@
 import os
 import pandas as pd
 import datetime
-import base64
+import re
 import io
 import logging
 
@@ -176,6 +176,8 @@ class ShopeeManagment(models.Model):
         view_id = self.env.ref('ruby.ecc_contract_announce_view_form_cal_amount').id
         for entry in import_directory_file:
             shop_code = entry.split('.')[0]
+            if re.search(OPENED_FILED_REGEX, shop_code):
+                continue
             shop_id = self.env['sale.order.management.shopee.shop'].search([
                 ('code','=',shop_code)
             ])
@@ -315,6 +317,8 @@ class ShopeeManagment(models.Model):
         #Checking shop code before run
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
+            if re.search(OPENED_FILED_REGEX, shop_code):
+                continue
             shop_id = self.env['sale.order.management.shopee.shop'].search([
                 ('code','=',shop_code)
             ])

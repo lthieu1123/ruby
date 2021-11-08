@@ -99,10 +99,10 @@ class ShopAnnounce(models.TransientModel):
         _li_shop = context.get('default_shop_id')
         sale_director_file = context.get('sale_director_file')
         _sale_done_director = context.get('sale_done_director')
-        # start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
-        # end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
-        start_datetime = self.date_start
-        end_datetime = self.date_end
+        start_datetime = datetime.datetime.combine(self.date_start,datetime.time.min)
+        end_datetime = datetime.datetime.combine(self.date_end,datetime.time.max)
+        #start_datetime = self.date_start
+        #end_datetime = self.date_end
         #Veiry date_start < date_end
         if self.date_start > self.date_end:
             raise exceptions.ValidationError('Ngày bắt đầu phải bé hơn hoặc bằng ngày kết thúc')
@@ -149,7 +149,7 @@ class ShopAnnounce(models.TransientModel):
                 #Change search data from order item number to order number
                 order_no = int(row[ORDER_NO])
                 rec = rec_ids.filtered(lambda r: r.order_number == str(order_no))
-                if rec.id:
+                if len(rec):
                     rec.update({
                         'transaction_date': pd.to_datetime(row[TRANSACTION_DATE]).date(),
                         'state': 'done'
@@ -168,7 +168,7 @@ class ShopAnnounce(models.TransientModel):
                 except:
                     result = pd.read_csv(directory,sep=';',encoding='utf8')
             elif extension == "xlsx" or extension == "xls":
-                result = pd.read_excel(directory,dtype={'Mã đơn hàng': str})
+                result = pd.read_excel(directory)
             else:
                 raise exceptions.ValidationError('Định dạng file phải là: [cvs,xls,xlsx]')
             max_row = 10

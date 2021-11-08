@@ -225,6 +225,8 @@ class SaleOrderManagment(models.Model):
                     }]
                 }
             shop_code = entry.split('.')[0]
+            if re.search(OPENED_FILED_REGEX, shop_code):
+                continue
             shop_id = self.env['sale.order.management.shop'].search([
                 ('code','=',shop_code)
             ])
@@ -340,6 +342,8 @@ class SaleOrderManagment(models.Model):
         #Checking shop code before run
         for entry in sale_director_file:
             shop_code = entry.split('.')[0]
+            if re.search(OPENED_FILED_REGEX, shop_code):
+                continue
             shop_id = self.env['sale.order.management.shop'].search([
                 ('code','=',shop_code)
             ])
@@ -567,6 +571,8 @@ class SaleOrderManagment(models.Model):
                     }]
                 }
             shop_code = entry.split('.')[0]
+            if re.search(OPENED_FILED_REGEX, shop_code):
+                continue
             shop_id = self.env['sale.order.management.shop'].search([
                 ('code','=',shop_code)
             ])

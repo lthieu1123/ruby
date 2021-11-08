@@ -38,7 +38,7 @@ class ShopeeAvgPrice(models.Model):
                     sum(sm.gia_uu_dai * sm.so_luong)::decimal(16,2) as price_total,
                     (sum(sm.gia_uu_dai * sm.so_luong)/sum(sm.so_luong))::decimal(16,2) as price_avg,
                     sm.sku_phan_loai_hang as sku_san_pham,
-                    sm.ten_san_pham as ten_san_pham from shopee_management sm
+                    sm.ten_san_pham as ten_san_pham
             """
         ]
         return super()._select(sql)
