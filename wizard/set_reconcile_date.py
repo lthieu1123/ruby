@@ -186,12 +186,13 @@ class ShopAnnounce(models.TransientModel):
                     column_index = i
                     break
             for i in range(column_index+1,len(result)):
-                ma_don_hang = result.loc[i][column_index]
+                ma_don_hang = str(result.loc[i][column_index]).strip()
                 item = self.env['shopee.management'].search([
-                    ('ma_don_hang','=',ma_don_hang)
+                    ('ma_don_hang','ilike',ma_don_hang)
                 ])
-                item = rec_ids.filtered(lambda r: r.ma_don_hang == ma_don_hang)
+                item = rec_ids.filtered(lambda r: r.ma_don_hang.lower() == ma_don_hang.lower())
                 if len(item):
                     item.write({
                         'state': 'done'
                     })
+            return rec_ids
